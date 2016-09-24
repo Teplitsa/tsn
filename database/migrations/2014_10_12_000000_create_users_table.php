@@ -20,10 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->string('city');
             $table->string('avatar_url')->nullable();
             $table->string('password')->nullable();
-
             $table->rememberToken();
             $table->timestamps();
         });
