@@ -1,0 +1,72 @@
+stages:
+  - dependencies
+  - lint
+  - nodejs
+  - testing
+  - deploy
+  
+composer:
+  stage: dependencies
+  script: composer install
+  except:
+  - release
+  tags:
+  - local
+  artifacts:
+    paths:
+    - vendor/
+  
+node:
+  stage: nodejs
+  script:
+  - npm install
+  - npm run prod
+  except:
+  - release
+  tags:
+  - local
+  artifacts:
+    paths:
+    - node_modules/
+    - public/build
+
+phpcs:
+  stage: lint
+  script: ./vendor/bin/phpcs --standard=PSR2 --encoding=UTF-8 app
+  except:
+  - release
+  tags:
+  - local
+  
+phpunit_unit:
+  stage: testing
+  script: ./vendor/bin/phpunit tests/unit
+  except:
+  - release
+  tags:
+  - local
+
+phpunit_features:
+  stage: testing
+  script: 
+  - cp .env.example .env
+  - php artisan key:generate
+  - ./vendor/bin/phpunit tests/features
+  except:
+  - release
+  tags:
+  - local
+  
+master_upload:
+  stage: deploy
+  script:
+  - cd $FILE_PATH$
+  - git pull origin master
+  - composer install
+  - php artisan migrate --force
+  - npm install
+  - npm run prod
+  only: 
+  - master
+  tags:
+  - mdev

@@ -1,0 +1,2 @@
+window.Helpers = {};
+require('./theme')
