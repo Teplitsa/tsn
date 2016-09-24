@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dev;
 
+use App\Role;
 use Hash;
 use App\Models\User;
 use Faker\Generator;
@@ -31,9 +32,9 @@ class Account extends Controller
                 'first_name'     => $faker->name,
                 'middle_name'     => $faker->name,
                 'last_name'     => $faker->name,
-                'password' => Hash::make('123456'),
+                'password' => \Hash::make('123456'),
                 'email'    => $faker->email,
-                'city' => $faker->city
+                'role_id' => Role::all()->random()->id
             ]
         );
         $user->save();

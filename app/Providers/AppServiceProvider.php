@@ -13,7 +13,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Using Closure based composers...
+        \View::composer('layouts.partials.sidebar_tenant', function ($view) {
+
+        });
     }
 
     /**
