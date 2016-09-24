@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\Users\NewColleague;
 use App\Notifications\Users\Registered;
+use App\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Hash;
 use Illuminate\Notifications\Notifiable;
@@ -24,7 +25,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'phone',
-        'city',
+        'role_id',
         'api_token',
         'role_id',
         'password',
@@ -84,5 +85,10 @@ class User extends Authenticatable
     public function scopeNot(Builder $builder, $user)
     {
         return $builder->where($this->primaryKey, '!=', $user->getKey());
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }
