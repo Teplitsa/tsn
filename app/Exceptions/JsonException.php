@@ -9,7 +9,7 @@ class JsonException
     private $exception;
     private $statusCode;
 
-    public function __construct(\Throwable $exception, $statusCode)
+    public function __construct(\Exception $exception, $statusCode)
     {
         $this->exception = $exception;
         $this->statusCode = $statusCode;

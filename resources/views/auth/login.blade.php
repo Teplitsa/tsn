@@ -1,68 +1,65 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-                        {{ csrf_field() }}
+    <div class="loginColumns animated fadeInDown">
+        <div class="row">
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+            <div class="col-md-6">
+                <h2 class="font-bold">Добро пожаловать в Ананас.ЖКХ</h2>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" autofocus>
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember"> Remember Me
-                                    </label>
+            </div>
+            <div class="col-md-6">
+                <div class="ibox-content">
+                    <auth-form inline-template>
+                        <form class="m-t" role="form" action="/login">
+                            <div class="form-group">
+                                <div :class="{'form-group': true, 'has-error': form.errors.has('email') }">
+                                    <input type="email" class="form-control" v-model="form['email']"
+                                           placeholder="Введите ваш email" required/>
+                                    <span class="help-block" v-show="form.errors.has('email')">
+                                    <strong>@{{ form.errors.get('email') }}</strong>
+                                </span>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">
-                                    Forgot Your Password?
-                                </a>
+                            <div class="form-group">
+                                <input type="password" class="form-control" v-model="form['password']"
+                                       placeholder="Введите пароль" required/>
+                                <span class="help-block" v-show="form.errors.has('password')">
+                                <strong>@{{ form.errors.get('password') }}</strong>
+                            </span>
                             </div>
-                        </div>
-                    </form>
+                            <button
+                                    type="submit"
+                                    class="btn btn-primary block full-width m-b"
+                                    v-on:click.prevent="submit()"
+                            >
+                                Войти
+                            </button>
+                            <a type="submit" href="/register" class="btn btn-white block full-width m-b">
+                                Зарегистрироваться
+                            </a>
+                            <a href="{!! route('auth.forgot') !!}">
+                                <small>Забыли пароль?</small>
+                            </a>
+                            <hr>
+
+                            <a class="btn btn-sm btn-success btn-block" href="{!! route('esia.auth') !!}">
+                                Авторизация через гос.услуги
+                            </a>
+                        </form>
+                    </auth-form>
                 </div>
             </div>
         </div>
+        <hr/>
+        <div class="row">
+            <div class="col-md-6">
+                Компания Ананас.
+            </div>
+            <div class="col-md-6 text-right">
+                <small>© {!! issued_dates() !!}</small>
+            </div>
+        </div>
     </div>
-</div>
-@endsection
+@stop

@@ -12,16 +12,19 @@
 */
 
 use Illuminate\Routing\Router;
-/** @var Router $router */
-Route::get('/', ['as'=>'index', function () {
-    return view('welcome');
-}]);
 
 Auth::routes();
+$router->get('/forgot-password', ['as'=>'auth.forgot', 'uses' => 'Auth@forget']);
+$router->post('/forgot-password', ['as'=>'auth.forgot.post', 'uses' => 'Auth@forgetHandler']);
+$router->post('/esia', ['as'=>'esia.auth', 'uses' => 'Auth@esia']);
 
-Route::get('/home', ['as'=>'home', 'uses' => 'HomeController@index']);
+
 
 $router->group(['middleware'=>'auth'], function(Router $router){
+    $router->get('logout', 'Auth\LoginController@logout');
+    $router->get('/', ['as'=>'index', 'uses' => 'HomeController@index']);
+    $router->get('/home', ['as'=>'home', 'uses' => 'HomeController@index']);
+
     $router->resource('employees', 'Employees');
     $router->get('notification/{notification}', ['as'=>'notifications.read', 'uses'=>'Notifications@read']);
     $router->get('/stub-avatar/{email}', ['as'=>'employees.stub-avatar', 'uses' => 'Employees@stubAvatar']);

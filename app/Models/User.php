@@ -26,6 +26,8 @@ class User extends Authenticatable
         'phone',
         'city',
         'api_token',
+        'role_id',
+        'password',
 
 
     ];
