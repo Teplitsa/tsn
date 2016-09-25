@@ -5,7 +5,7 @@
         <div class="text-center loginscreen animated fadeInDown loginColumns animated fadeInDown">
             <div>
 
-                <h3>Зарегистрироваться в Ананас.ЖКХ</h3>
+                <h3>Зарегистрироваться в Ананас.ТСЖ</h3>
                 <form class="form-horizontal" role="form" action="/new-company">
                     <app-email
                             display="Email"
