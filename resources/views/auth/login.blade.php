@@ -5,7 +5,7 @@
         <div class="row">
 
             <div class="col-md-6">
-                <h2 class="font-bold">Добро пожаловать в Ананас.ЖКХ</h2>
+                <h2 class="font-bold">Добро пожаловать в Ананас.ТСЖ</h2>
 
 
             </div>
