@@ -5,7 +5,7 @@
         <div class="middle-box text-center loginscreen   animated fadeInDown">
             <div>
 
-                <h3>Зарегистрироваться в Ананас.ЖКХ</h3>
+                <h3>Зарегистрироваться в Ананас.ТСЖ</h3>
                 <form class="m-t" role="form" action="/register">
                     <div :class="{'form-group': true, 'has-error': form.errors.has('first_name') }">
                         <input type="text" class="form-control" v-model="form['first_name']"
