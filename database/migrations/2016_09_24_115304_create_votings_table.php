@@ -15,8 +15,10 @@ class CreateVotingsTable extends Migration
     {
         Schema::create('votings', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('vote_item_id')->unsigned();
-            $table->foreign('vote_item_id')->references('id')->on('vote_items');
+            $table->string('name');
+            $table->integer('house_id')->unsigned();
+            $table->foreign('house_id')->references('id')->on('houses');
+            $table->dateTime('closed_at');
             $table->timestamps();
             $table->softDeletes();
         });
