@@ -12,7 +12,7 @@ class UserBlock
             'fullName' => $user->full_name,
             'id' => $user->id,
             'email' => $user->email,
-            'duty' => $user->role_name,
+            'duty' => $user->role->role,
             'avatarUrl' => $user->avatar_url
         ];
     }

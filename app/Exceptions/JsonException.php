@@ -28,8 +28,10 @@ class JsonException
     public function getJson($data = null)
     {
         $data = [
-            'data'    => $data,
-            'toastrs' => [toastr('error', $this->exception->getMessage(), get_class($this->exception))],
+            'data' => $data,
+            'meta' => [
+                'toastrs' => [toastr('error', $this->exception->getMessage(), get_class($this->exception))],
+            ],
         ];
 
         if (app()->environment('local', 'testing')) {

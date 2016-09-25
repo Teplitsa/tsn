@@ -44,8 +44,8 @@
                             </a>
                             <hr>
 
-                            <a class="btn btn-sm btn-success btn-block" href="{!! route('esia.auth') !!}">
-                                Авторизация через гос.услуги
+                            <a class="btn btn-sm btn-success btn-block" href="{!! route('new-company') !!}">
+                                Зарегистрировать ТСЖ
                             </a>
                         </form>
                     </auth-form>

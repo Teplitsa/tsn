@@ -16,7 +16,9 @@ use Illuminate\Routing\Router;
 Auth::routes();
 $router->get('/forgot-password', ['as'=>'auth.forgot', 'uses' => 'Auth@forget']);
 $router->post('/forgot-password', ['as'=>'auth.forgot.post', 'uses' => 'Auth@forgetHandler']);
-$router->post('/esia', ['as'=>'esia.auth', 'uses' => 'Auth@esia']);
+$router->get('/new-company', ['as'=>'new-company', 'uses' => 'Auth\RegisterController@newCompany']);
+$router->post('/new-company', ['as'=>'new-company', 'uses' => 'Auth\RegisterController@newCompanyHandle']);
+$router->get('/new-company/{inn}', ['as'=>'new-company.search', 'uses' => 'Auth\RegisterController@inn']);
 
 
 
@@ -24,6 +26,11 @@ $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('logout', 'Auth\LoginController@logout');
     $router->get('/', ['as'=>'index', 'uses' => 'HomeController@index']);
     $router->get('/home', ['as'=>'home', 'uses' => 'HomeController@index']);
+
+    $router->resource('houses', 'HousesController');
+
+    $router->get('flats/attach', ['as'=>'flats.attach', 'uses'=>'FlatController@attach']);
+    $router->post('flats/attach', ['as'=>'flats.attach.post', 'uses'=>'FlatController@attachHandler']);
 
     $router->resource('employees', 'Employees');
     $router->get('notification/{notification}', ['as'=>'notifications.read', 'uses'=>'Notifications@read']);

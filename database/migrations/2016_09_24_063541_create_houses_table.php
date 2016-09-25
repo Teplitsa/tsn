@@ -18,9 +18,6 @@ class CreateHousesTable extends Migration
             $table->text('address');
             $table->text('area');
             
-            $table->integer('city_id')->unsigned();
-            $table->foreign('city_id')->references('id')->on('cities');
-            
             $table->timestamps();
         });
     }
