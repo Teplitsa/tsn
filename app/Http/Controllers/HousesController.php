@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Flat;
+use App\House;
+use App\Sensor;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -25,24 +28,58 @@ class HousesController extends Controller
      */
     public function create()
     {
-        return view('houses.index');
+        $active_new_house = 'active';
+        $pageTitle = 'Добавление дома';
+        $component = 'app-create-house';
+        return view('houses.create', compact('pageTitle', 'component', 'active_new_house'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @throws \Throwable
+     * @throws \Exception
      */
-    public function store(Request $request)
+    public function store(Requests\NewHouse $request)
     {
-        //
+        $house = null;
+        \DB::transaction(function () use (&$house, &$request) {
+            $house = new House();
+            $house->address = $request->input('address');
+            $house->company_id = auth()->user()->company_id;
+            $house->area = '';
+            $house->save();
+
+            collect($request->input('flats', []))->each(function ($item, $i) use (&$house) {
+                $flat = new Flat();
+                $flat->number = $i + 1;
+                $flat->account_number = $item['account_number'];
+                $flat->men_count = 1;
+
+                $house->flats()->save($flat);
+
+                collect(['cold_water', 'warm_water', 'gas'])->filter(function ($type) use ($item) {
+                    return trim(array_get($item, $type, '')) !== '';
+                })->each(function ($item) use (&$flat) {
+                    $sensor = new Sensor([
+                        'type'   => 'cold_water',
+                        'number' => array_get($item, 'cold_water', ''),
+                    ]);
+                    $flat->sensors()->save($sensor);
+                });
+            });
+        });
+
+        return [
+            'redirect' => route('houses.show', $house),
+        ];
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -53,7 +90,7 @@ class HousesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -64,8 +101,8 @@ class HousesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -76,7 +113,7 @@ class HousesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

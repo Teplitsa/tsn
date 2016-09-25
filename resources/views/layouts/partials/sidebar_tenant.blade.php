@@ -1,7 +1,9 @@
 @foreach($flats as $flat)
-<li class="{!! $active_user or '' !!}">
-    <a href="{{route('employees.index')}}"><i class="fa fa-users"></i> <span class="nav-label">Сотрудники</span></a>
-</li>
+    <li class="{{ ((isset($currentFlat) && $currentFlat == $flat->id) ? 'active' : '')    }}">
+        <a href="{{route('flats.show', $flat)}}">
+            <i class="fa fa-home"></i> <span class="nav-label">{{ $flat->address }}</span>
+        </a>
+    </li>
 @endforeach
 <li class="{!! $active_dictionary or '' !!}">
     <a href="{{route('flats.attach')}}">

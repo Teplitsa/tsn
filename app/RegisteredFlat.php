@@ -11,7 +11,25 @@ class RegisteredFlat extends Model
         return $this->belongsTo(Flat::class);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(Models\User::class);
+    }
+
+    public function getAddressAttribute()
+    {
+        if ($this->active) {
+            return $this->flat->address_full;
+        }
+        return $this->flat->address;
+    }
+
+    public function isOwned($user)
+    {
+        if (is_null($user)) {
+            return false;
+        }
+
+        return (int)$this->user_id === (int)$user->id;
     }
 }

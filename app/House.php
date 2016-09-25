@@ -7,4 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class House extends Model
 {
     //
+    public function flats()
+    {
+        return $this->hasMany(Flat::class);
+    }
+
+    public function votings()
+    {
+        return $this->hasMany(Voting::class);
+    }
 }

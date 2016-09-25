@@ -17,7 +17,8 @@ class CreateFlatsTable extends Migration
             $table->increments('id');
             $table->integer('number');
             $table->integer('men_count');
-            $table->integer('account_number');
+            $table->string('account_number');
+
             $table->timestamps();
         });
     }
