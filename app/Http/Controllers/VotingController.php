@@ -72,8 +72,9 @@ class VotingController extends Controller
     {
         abort_if($house->company_id != auth()->user()->company_id, 403);
         abort_if($voting->house_id != $house->id, 403);
-        $pageTitle = 'Информация по голосованию:' . $voting->id;
-        return view('votings.show', compact('voting', 'pageTitle'));
+        $pageTitle = 'Информация по голосованию: ' . $voting->title;
+        $component = 'app-voting';
+        return view('votings.show', compact('voting', 'house', 'pageTitle', 'component'));
     }
 
     /**

@@ -25,27 +25,23 @@
                         <i class="fa fa-plus"></i> Добавить голосование
                     </a>
                     @forelse($house->votings as $voting)
+                        <div class="hr-line-dashed"></div>
                         <div class="row">
-                            <div class="col-md-6"></div>
+                            <div class="col-md-8">
+                                {!! $voting->name !!}
+                            </div>
                             <div class="col-md-2">
                                 @if($voting->closed_at > \Carbon\Carbon::now())
-                                    <span class="label label-warnign">Идет</span>
+                                    <span class="label label-warning">Идет</span>
                                 @else
                                     <span class="label label-success">Завершено</span>
                                 @endif
                             </div>
                             <div class="col-md-2"><a
-                                        href="{!! route('house.voting', [$house, $voting]) !!}"
+                                        href="{!! route('houses.votings.show', [$house, $voting]) !!}"
                                         class="btn btn-white btn-block"
                                 >
-                                    <i class="fa fa-eye"></i> Подробная инофрмация
-                                </a></div>
-                            <div class="col-md-2">
-                                <a
-                                        href="{!! route('house.voting.result', [$house, $voting]) !!}"
-                                        class="btn btn-primary btn-block"
-                                >
-                                    <i class="fa fa-check"></i> Результаты
+                                    <i class="fa fa-eye"></i>
                                 </a>
                             </div>
                         </div>
