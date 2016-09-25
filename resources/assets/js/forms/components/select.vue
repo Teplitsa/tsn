@@ -23,7 +23,15 @@
 
 <script>
     export default{
-        props: ['display', 'placeholder', 'form', 'name', 'help', 'items']
+        props: ['display', 'placeholder', 'form', 'name', 'help', 'items'],
+        ready(){
+            let val = this.form[this.name];
+            console.log(val);
+            console.log(this.items[val]);
+            if (this.items[val] == undefined) {
+                this.form[this.name] = _.first(this.items).value;
+            }
+        }
     }
 </script>
 
