@@ -5,7 +5,7 @@
 </li>
 @foreach($houses as $house)
     <li class="{{ ((isset($currentHouse) && $currentHouse == $house->id) ? 'active' : '')    }}">
-        <a href="{{route('houses.create')}}">
+        <a href="{{route('houses.show', $house)}}">
             <i class="fa fa-home"></i> <span class="nav-label">{!! $house->address !!}</span>
         </a>
     </li>

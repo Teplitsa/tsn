@@ -14,7 +14,7 @@ class Employees extends Controller
 {
     public function __construct()
     {
-        view()->share('active_user', 'active');
+        view()->share('active_users', 'active');
     }
 
     public function index()

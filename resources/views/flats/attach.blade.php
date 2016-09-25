@@ -19,7 +19,7 @@
                                 :form="form"
                                 name="company_id"
                                 help="Укажите ваше товарищество"
-                                list="{{ $companies }}"
+                                :items="{{ json_encode($companies) }}"
                         ></app-select>
 
                         <button class="col-sm-offset-2 btn btn-success"

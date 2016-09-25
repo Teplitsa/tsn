@@ -31,6 +31,8 @@ $router->group(['middleware'=>'auth'], function(Router $router){
 
     $router->get('flats/attach', ['as'=>'flats.attach', 'uses'=>'FlatController@attach']);
     $router->post('flats/attach', ['as'=>'flats.attach.post', 'uses'=>'FlatController@attachHandler']);
+    $router->get('flats/{flat}', ['as'=>'flats.show', 'uses'=>'FlatController@show']);
+    $router->post('flats/{flat}/activate', ['as'=>'flats.activate', 'uses'=>'FlatController@activate']);
 
     $router->resource('employees', 'Employees');
     $router->get('notification/{notification}', ['as'=>'notifications.read', 'uses'=>'Notifications@read']);
