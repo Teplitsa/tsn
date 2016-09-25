@@ -15,6 +15,7 @@ class HouseSeeder extends Seeder
             [
                 'address' => 'Мира 32',
                 'area' => 'Кировский',
+                'company_id' => '1',
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now(),
             ],
@@ -22,6 +23,7 @@ class HouseSeeder extends Seeder
             [
                 'address' => 'Ленина 40',
                 'area' => 'Ленинский',
+                'company_id' => '1',
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now(),
             ],

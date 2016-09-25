@@ -38,4 +38,6 @@ $router->group(['middleware'=>'auth'], function(Router $router){
 
     $router->get('dictionaries', ['as'=>'dictionary.index', 'uses'=>'Dictionaries@index']);
     $router->post('dictionaries', ['as'=>'dictionary.save', 'uses'=>'Dictionaries@save']);
+
+    $router->resource('/voting', 'VotingController');
 });
