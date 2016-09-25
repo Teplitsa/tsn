@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Company;
 use App\Notifications\Users\NewColleague;
 use App\Notifications\Users\Registered;
+use App\RegisteredFlat;
 use App\Role;
 use Illuminate\Database\Eloquent\Builder;
 use Hash;
@@ -27,6 +29,8 @@ class User extends Authenticatable
         'phone',
         'role_id',
         'api_token',
+        'role_id',
+        'password',
 
 
     ];
@@ -88,5 +92,19 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function registeredFlats()
+    {
+        return $this->hasMany(RegisteredFlat::class);
+    }
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function isUser()
+    {
+        return $this->company_id === null;
     }
 }

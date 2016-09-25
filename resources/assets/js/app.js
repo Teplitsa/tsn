@@ -35,9 +35,11 @@ App.Instance = new Vue({
             });
         }
 
-        this.getUser();
-        this.getNotifications();
-
+        if(App.userId)
+        {
+            this.getUser();
+            this.getNotifications();
+        }
 
 
         let vm = this;
