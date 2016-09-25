@@ -35,13 +35,6 @@
                                 name="email"
                         ></app-email>
 
-                        <app-text
-                                display="Город"
-                                placeholder="Введите город"
-                                :form="form"
-                                name="city"
-                        ></app-text>
-
                         <app-contact
                                 display="Контакты"
                                 :form="form"

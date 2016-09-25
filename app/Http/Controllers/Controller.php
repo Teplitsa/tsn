@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -39,6 +41,11 @@ class Controller extends BaseController
     public function callAction($method, $parameters)
     {
         $result = parent::callAction($method, $parameters);
+
+        if ($result instanceof \Symfony\Component\HttpFoundation\Response) {
+            return $result;
+        }
+
         if ($this->actionButtons !== null) {
             view()->share('actionButtons', $this->actionButtons);
         } else {
@@ -52,6 +59,8 @@ class Controller extends BaseController
         view()->share('toastrs', $toastrs);
 
         if (request()->wantsJson()) {
+
+
             if ($result instanceof View) {
                 $result = [
                     'data' => [

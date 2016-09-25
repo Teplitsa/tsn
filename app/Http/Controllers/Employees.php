@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Repositories\Contracts\UserRepository;
+use App\Role;
 use Hash;
 use App\Models\User;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -18,7 +19,10 @@ class Employees extends Controller
 
     public function index()
     {
-        $employees = User::paginate(20);
+        $currentUser = auth()->user();
+        abort_if($currentUser->isUser(), 403);
+
+        $employees = User::where('company_id', $currentUser->company_id)->paginate(20);
         $pageTitle = 'Сотрудники';
         $this->addActionButton('Создать сотрудника', '/employees/create', 'btn btn-info', 'fa-plus');
         return view('employees.index', compact('employees', 'pageTitle'));
@@ -26,6 +30,8 @@ class Employees extends Controller
 
     public function create()
     {
+        abort_if(auth()->user()->isUser(), 403);
+
         $handler = route('employees.store');
         $method = 'POST';
         $pageTitle = 'Добавление сотрудника';
@@ -39,6 +45,10 @@ class Employees extends Controller
 
     public function edit(User $employee)
     {
+        $currentUser = auth()->user();
+        abort_if($currentUser->isUser(), 403);
+        abort_if((int)$currentUser->company_id !== (int)$employee->company_id, 403);
+
         $pageTitle = 'Редактирование сотрудника';
         $handler = route('employees.update', $employee);
         $method = 'PATCH';
@@ -51,11 +61,19 @@ class Employees extends Controller
 
     public function store(Requests\UserManage $request)
     {
+        $currentUser = auth()->user();
+        abort_if($currentUser->isUser(), 403);
+
+
         return $this->manage(new User, $request);
     }
 
     public function update(User $employee, Requests\UserManage $request)
     {
+        $currentUser = auth()->user();
+        abort_if($currentUser->isUser(), 403);
+        abort_if((int)$currentUser->company_id !== (int)$employee->company_id, 403);
+
         return $this->manage($employee, $request);
     }
 
@@ -105,6 +123,7 @@ class Employees extends Controller
      */
     protected function manage(User $employee, Requests\UserManage $request)
     {
+        $currentUser = auth()->user();
         $data = $request->only([
             'first_name',
             'last_name',
@@ -118,8 +137,10 @@ class Employees extends Controller
         $created = $employee->exists;
 
         if (!$created) {
+            $employee->role_id = Role::where('keyword', 'manager')->first()->id;
+            $employee->company_id = $currentUser->company_id;
             $employee->save();
-            $employee->registered();
+//            $employee->registered();
         }
 
         $path = $this->saveImageReturnPath($employee, $request);

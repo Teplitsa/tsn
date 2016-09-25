@@ -2,9 +2,9 @@
 
 function issued_dates()
 {
-    $result = config('project.issued_year');
+    $result = config('project.issued_year', 2016);
 
-    if (date('Y') !== $result) {
+    if ((int)date('Y') !== $result) {
         $result .= ' &mdash; ' . date('Y');
     }
 

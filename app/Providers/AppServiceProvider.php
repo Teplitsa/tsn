@@ -15,7 +15,12 @@ class AppServiceProvider extends ServiceProvider
     {
         // Using Closure based composers...
         \View::composer('layouts.partials.sidebar_tenant', function ($view) {
+            $view->withFlats(auth()->user()->registeredFlats);
+        });
 
+        // Using Closure based composers...
+        \View::composer('layouts.partials.sidebar_manager', function ($view) {
+            $view->withHouses(auth()->user()->company->houses);
         });
     }
 

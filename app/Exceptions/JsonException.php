@@ -9,7 +9,7 @@ class JsonException
     private $exception;
     private $statusCode;
 
-    public function __construct(\Throwable $exception, $statusCode)
+    public function __construct(\Exception $exception, $statusCode)
     {
         $this->exception = $exception;
         $this->statusCode = $statusCode;
@@ -28,8 +28,10 @@ class JsonException
     public function getJson($data = null)
     {
         $data = [
-            'data'    => $data,
-            'toastrs' => [toastr('error', $this->exception->getMessage(), get_class($this->exception))],
+            'data' => $data,
+            'meta' => [
+                'toastrs' => [toastr('error', $this->exception->getMessage(), get_class($this->exception))],
+            ],
         ];
 
         if (app()->environment('local', 'testing')) {
