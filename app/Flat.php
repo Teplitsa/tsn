@@ -29,7 +29,7 @@ class Flat extends Model
 
     public function votings()
     {
-        return $this->hasManyThrough(Voting::class, House::class);
+        return $this->house->votings();
     }
 
     public function activeVotings()

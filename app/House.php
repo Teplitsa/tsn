@@ -11,4 +11,9 @@ class House extends Model
     {
         return $this->hasMany(Flat::class);
     }
+
+    public function votings()
+    {
+        return $this->hasMany(Voting::class);
+    }
 }
