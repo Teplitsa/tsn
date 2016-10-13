@@ -11,7 +11,7 @@
             </div>
             <div class="col-md-6">
                 <div class="ibox-content">
-                    <auth-form inline-template>
+                    <auth-form inline-template v-cloak>
                         <form class="m-t" role="form" action="/login">
                             <div class="form-group">
                                 <div :class="{'form-group': true, 'has-error': form.errors.has('email') }">
