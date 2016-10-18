@@ -18,7 +18,7 @@ class AddRelationsToUserWithCompanies extends Migration
             $table->integer('company_id')->unsigned()->nullable();
             $table->foreign('company_id')->references('id')->on('companies');
 
-            $table->integer('role_id')->unsigned();
+            $table->integer('role_id')->unsigned()->nullable();
             $table->foreign('role_id')->references('id')->on('roles');
         });
     }
@@ -34,6 +34,8 @@ class AddRelationsToUserWithCompanies extends Migration
             $table->dropForeign('users_company_id_foreign');
             $table->dropColumn('company_id');
 
+        });
+        Schema::table('users', function (Blueprint $table) {
             $table->dropForeign('users_role_id_foreign');
             $table->dropColumn('role_id');
         });
