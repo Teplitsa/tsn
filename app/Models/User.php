@@ -7,6 +7,7 @@ use App\Notifications\Users\NewColleague;
 use App\Notifications\Users\Registered;
 use App\RegisteredFlat;
 use App\Role;
+use App\Traits\Encryptable;
 use Illuminate\Database\Eloquent\Builder;
 use Hash;
 use Illuminate\Notifications\Notifiable;
@@ -15,6 +16,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use Encryptable;
+
+    protected $encryptable = [
+        'first_name',
+        'middle_name',
+        'last_name',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -26,12 +34,9 @@ class User extends Authenticatable
         'middle_name',
         'last_name',
         'email',
-        'phone',
         'role_id',
         'api_token',
         'password',
-        'role_id',
-
     ];
 
     /**

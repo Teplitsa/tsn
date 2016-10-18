@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <app-register-company inline-template>
+    <app-register-company inline-template v-cloak>
         <div class="text-center loginscreen animated fadeInDown loginColumns animated fadeInDown">
             <div>
 
@@ -104,14 +104,20 @@
                             class="btn btn-primary block full-width m-b"
                             v-on:click.prevent="submit()"
                     >
-                        Зарегистрироваться
+                        <span v-if="form.busy">
+                            Обработка
+                        </span>
+
+                        <span v-else>
+                            Зарегистрироваться
+                        </span>
                     </button>
 
                     <p class="text-muted text-center">
                         <small>Уже есть аккаунт?</small>
                     </p>
                     <a class="btn btn-sm btn-white btn-block" href="/login">
-                        Зарегистрироваться
+                        Авторизоваться
                     </a>
                 </form>
                 <p class="m-t">
