@@ -27,6 +27,10 @@ $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('/', ['as'=>'index', 'uses' => 'HomeController@index']);
     $router->get('/home', ['as'=>'home', 'uses' => 'HomeController@index']);
 
+    $router->get('houses/{house}/votings/create', ['as'=>'houses.votings.create', 'uses' => 'VotingController@create']);
+    $router->post('houses/{house}/votings', ['as'=>'houses.votings.store', 'uses' => 'VotingController@store']);
+    $router->get('houses/{house}/votings/{voting}', ['as'=>'houses.votings.show', 'uses' => 'VotingController@show']);
+
     $router->resource('houses', 'HousesController');
 
     $router->get('flats/attach', ['as'=>'flats.attach', 'uses'=>'FlatController@attach']);
@@ -40,6 +44,7 @@ $router->group(['middleware'=>'auth'], function(Router $router){
 
     $router->get('dictionaries', ['as'=>'dictionary.index', 'uses'=>'Dictionaries@index']);
     $router->post('dictionaries', ['as'=>'dictionary.save', 'uses'=>'Dictionaries@save']);
+
 
     $router->resource('/voting', 'VotingController');
 

@@ -50,7 +50,6 @@ Vue.component('app-create-house', {
             let $vm = this;
             let action = $(this.$el).find('form').attr('action');
             let method = $(this.$el).find('input[name="_method"]').val() || 'post';
-            alert(action);
             method = method.toLowerCase();
             App[method](action, this.form)
                 .then(function (response) {
@@ -62,7 +61,6 @@ Vue.component('app-create-house', {
                 });
         },
         generate(){
-            console.log('generating')
             for (let i in this.form.flats) {
                 if (this.form.flats[i].account_number == '') {
                     this.form.flats[i].account_number = Math.floor(Math.random() * (9999999999 - 1000000000)) + 1000000000;

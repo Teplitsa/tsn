@@ -32,12 +32,11 @@ class VotingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(House $house)
     {
-        $company_id = \Auth::user()->company_id;
-        $houses = House::where('company_id', $company_id)->get();
-        $voting = new Voting();
-        return view('votings.show', compact('voting', 'houses'));
+        $component = 'app-manage-voting';
+        $pageTitle = 'Создание голосования';
+        return view('votings.create', compact('house', 'component', 'pageTitle'));
     }
 
     /**
@@ -46,20 +45,21 @@ class VotingController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, House $house)
     {
         $voting = null;
-        \DB::transaction(function () use($request, &$voting) {
-            $voting = new Voting($request->only(['name', 'closed_at', 'house_id']));
+        \DB::transaction(function () use ($request, &$voting, &$house) {
+            $voting = new Voting($request->only(['name', 'closed_at']));
+            $voting->house_id = $house->id;
             $voting->save();
 
             collect($request->input('items', []))->each(function ($item) use ($voting) {
-                $voteItem = new VoteItem($item);
+                $voteItem = new VoteItem(collect($item)->only(['name', 'description', 'text'])->all()   );
                 $voting->vote_items()->save($voteItem);
             });
         });
 
-        return redirect()->route('votings.show', $voting);
+        return ['redirect' => route('houses.votings.show', [$house, $voting])];
     }
 
     /**
@@ -68,12 +68,13 @@ class VotingController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(House $house, Voting $voting)
     {
-        $voting = Voting::where('id', $id)->first();
-
-        $vote_items = VoteItem::orderBy('name')->pluck('name', 'id');
-        return view('votings.show', compact('voting', 'vote_items'));
+        abort_if($house->company_id != auth()->user()->company_id, 403);
+        abort_if($voting->house_id != $house->id, 403);
+        $pageTitle = 'Информация по голосованию: ' . $voting->title;
+        $component = 'app-voting';
+        return view('votings.show', compact('voting', 'house', 'pageTitle', 'component'));
     }
 
     /**
@@ -100,7 +101,7 @@ class VotingController extends Controller
      */
     public function update(Request $request, Voting $voting)
     {
-        \DB::transaction(function () use($request, &$voting){
+        \DB::transaction(function () use ($request, &$voting) {
             $voting->fill($request->only('name', 'closed_at', 'house_id'));
             $voting->save();
 
@@ -122,7 +123,7 @@ class VotingController extends Controller
     public function destroy(Voting $voting)
     {
         abort_if(!$this->check($voting), 403);
-        \DB::transaction(function () use($voting) {
+        \DB::transaction(function () use ($voting) {
 
             $voting->delete();
             return redirect()->route('votings.index');
@@ -132,7 +133,7 @@ class VotingController extends Controller
     protected function check(Voting $voting)
     {
         $check = true;
-        $voting->vote_items->each(function($vote_item) use(&$check) {
+        $voting->vote_items->each(function ($vote_item) use (&$check) {
             $check = $check && $vote_item->votes()->count == 0;
         });
 

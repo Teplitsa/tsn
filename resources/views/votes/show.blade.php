@@ -2,7 +2,7 @@
 
 @section ('content')
     <div>
-        <form class="form-horizontal" action="{!! route('houses.votings.store', $house) !!}">
+        <form class="form-horizontal" action="{!! route('flat.voting', [$flat, $voting]) !!}">
             <div class="row">
                 <div class="col-md-8 col-sm-6">
                     <div class="ibox float-e-margins">
@@ -28,21 +28,21 @@
                                 @{{ active.text }}
                             </p>
                             <div class="hr-line-dashed"></div>
-                            <div class="row" v-if="active.total > 0">
-                                <div class="col-md-4 text-center">
+                            <div class="row voting">
+                                <div :class="{'col-md-4 text-center':true, 'active': active.v == '1'}" v-on:click.prevent="vote(active, '1')">
                                     <i class="fa fa-thumbs-up" style="font-size: 30px"></i>
                                     <br/>
-                                    @{{ active.pro }}/@{{ active.total }} (@{{ Math.round(active.pro/active.total*100,2) }}%)
+                                    За
                                 </div>
-                                <div class="col-md-4 text-center">
+                                <div :class="{'col-md-4 text-center':true, 'active': active.v == '0'}"  v-on:click.prevent="vote(active, '0')">
                                     <i class="fa fa-minus" style="font-size: 30px"></i>
                                     <br/>
-                                    @{{ active.contra }}/@{{ active.total }} (@{{ Math.round(active.contra/active.total*100,2) }}%)
+                                    Воздержусь
                                 </div>
-                                <div class="col-md-4 text-center">
+                                <div :class="{'col-md-4 text-center':true, 'active': active.v == '-1'}"  v-on:click.prevent="vote(active, '-1')">
                                     <i class="fa fa-thumbs-down" style="font-size: 30px"></i>
                                     <br/>
-                                        @{{ active.refrained }}/@{{ active.total }} (@{{ Math.round(active.refrained/active.total*100,2) }}%)
+                                        Против
                                 </div>
                             </div>
                         </div>

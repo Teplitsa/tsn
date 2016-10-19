@@ -6,3 +6,5 @@ require('./attach-flat');
 require('./register-company');
 require('./create-house');
 require('./activate-flat');
+require('./manage-voting');
+require('./voting');
