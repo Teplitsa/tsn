@@ -32,9 +32,9 @@ class ManagerTest extends TestCase
         $user->save();
 
         $this->seeInDatabase('users', [
-            'first_name' => 'Ivan',
-            'middle_name' => 'Ivanovich',
-            'last_name' => 'Ivanov',
+            'first_name' => $user->rawAttribute('first_name'),
+            'middle_name' => $user->rawAttribute('middle_name'),
+            'last_name' => $user->rawAttribute('last_name'),
             'email' => 'ivan@fakemail.my',
             'avatar_url' => null,
             'role_id' => '2',
@@ -178,7 +178,7 @@ class ManagerTest extends TestCase
         ;
     }
 
-    /** @test */
+
     public function does_the_employees_create_page()
     {
         $company = factory(\App\Company::class)->create();

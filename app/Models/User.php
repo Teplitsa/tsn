@@ -37,6 +37,7 @@ class User extends Authenticatable
         'role_id',
         'api_token',
         'password',
+        'avatar_url',
     ];
 
     /**
