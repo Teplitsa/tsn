@@ -73,7 +73,7 @@
                             <div class="hr-line-dashed"></div>
 
 
-                            <h3>Поверстка дня</h3>
+                            <h3>Повестка дня</h3>
                             <ul class="list-group">
                                 <li class="list-group-item" v-for="(i, item) in form.items">
                                     @{{ i+1 }}. @{{ item.name }}

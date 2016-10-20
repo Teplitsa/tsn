@@ -58,7 +58,7 @@
                             <p>Крайний срок: <b>@{{ form.closed_at }}</b></p>
 
 
-                            <h3>Поверстка дня</h3>
+                            <h3>Повестка дня</h3>
                             <ul class="list-group">
                                 <li class="list-group-item" v-for="(i, item) in form.items"
                                     v-on:click.prevent="selectItem(item)">

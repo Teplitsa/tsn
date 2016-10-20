@@ -42,6 +42,43 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\House::class, function (Faker\Generator $faker) {
+
+    return [
+        'address' => 'fake address',
+        'area' => $faker->randomLetter,
+        'company_id' => '1',
+    ];
+});
+
+$factory->define(App\Flat::class, function (Faker\Generator $faker) {
+
+    return [
+        'number' => '1',
+        'men_count' => 'fake area',
+        'account_number' => $faker->randomLetter,
+        'house_id' => '1',
+    ];
+});
+
+$factory->define(App\Voting::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->randomLetter,
+        'house_id' => '1',
+        'closed_at' => $faker->dateTime,
+    ];
+});
+
+$factory->define(App\VoteItem::class, function (Faker\Generator $faker) {
+
+    return [
+        'name' =>$faker->randomLetter,
+        'description' => $faker->randomLetter,
+        'text' => $faker->randomLetter,
+        'voting_id' => '1',
+    ];
+});
+
 /*$factory->defineAs(App\Models\User::class, 'tenant', function ($faker) {
 
     $data = $this->raw(App\Models\User::class);

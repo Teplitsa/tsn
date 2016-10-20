@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ManagerTest extends TestCase
 {
     use DatabaseMigrations;
+
     /**
      * A basic test example.
      *
@@ -52,12 +53,11 @@ class ManagerTest extends TestCase
             ->assertResponseOk()
             ->see('Главная')
             ->see('Сотрудники')
-            ->see('Добавить дом')
-        ;
+            ->see('Добавить дом');
     }
 
     /** @test */
-    public function which_can_be_seen_on_the_house_page()
+    public function which_can_be_seen_on_the_house_create_page()
     {
         $company = factory(\App\Company::class)->create();
         $user = factory(\App\Models\User::class, 'manager')->create();
@@ -86,8 +86,7 @@ class ManagerTest extends TestCase
             ->assertResponseOk()
             ->see('Сотрудники')
             ->see('Добавить дом')
-            ->see($user -> name)
-        ;
+            ->see($user->name);
     }
 
     /** @test */
@@ -117,12 +116,13 @@ class ManagerTest extends TestCase
             ->assertResponseOk()
             ->see('Сотрудники')
             ->see('Добавить дом')
-            ->see($user -> name)
-            ->see($employee -> name)
+            ->see($user->name)
+            ->see($employee->name);
 
-            //->see($some_employees->name)
-
-        ;
+        foreach ($some_employees as $employee) {
+            $this->visit('/employees')
+                ->see($employee->name);
+        }
     }
 
     /** @test */
@@ -147,8 +147,7 @@ class ManagerTest extends TestCase
             ->see('Контакты')
             ->see('Добавить')
             ->see('Сохранить')
-            ->see('Отменить изменения')
-        ;
+            ->see('Отменить изменения');
     }
 
     /** @test */
@@ -164,18 +163,17 @@ class ManagerTest extends TestCase
             ->see('Сотрудники')
             ->see('Добавить дом')
             ->see('Имя')
-            ->see($user -> first_name)
+            ->see($user->first_name)
             ->see('Отчество')
-            ->see($user -> middle_name)
+            ->see($user->middle_name)
             ->see('Фамилия')
-            ->see($user -> last_name)
+            ->see($user->last_name)
             ->see('Email')
-            ->see($user -> email)
+            ->see($user->email)
             ->see('Контакты')
             ->see('Добавить')
             ->see('Сохранить')
-            ->see('Отменить изменения')
-        ;
+            ->see('Отменить изменения');
     }
 
 
@@ -192,5 +190,122 @@ class ManagerTest extends TestCase
             ->assertResponseOk()
             ->seeJson(['data' => ['redirect' => 'http://localhost/employees']])
             ->seeInDatabase('users', $baseAttributes);
+    }
+
+    /** @test */
+    public function which_can_be_seen_on_the_house_page()
+    {
+        $company = factory(\App\Company::class)->create();
+        $user = factory(\App\Models\User::class, 'manager')->create();
+        $house = factory(\App\House::class)->create();
+        $flat = factory(\App\Flat::class)->create();
+        $this->actingAs($user);
+
+        $this->visit('/houses/1')
+            ->assertResponseOk()
+            ->see('Сотрудники')
+            ->see('Добавить дом')
+            ->see($house->address)
+            ->see('Охват дома')
+            ->see($house->connectedFlats()->count())
+            ->see('/')
+            ->see($house->flats()->count())
+            ->see('квартир подключено к системе')
+            ->see('Голосования')
+            ->see('Добавить голосование')
+            ->see('Голосований не найдено');
+    }
+
+    /** @test */
+    public function which_can_be_seen_on_the_house_page_with_votings()
+    {
+        $company = factory(\App\Company::class)->create();
+        $user = factory(\App\Models\User::class, 'manager')->create();
+        $house = factory(\App\House::class)->create();
+        $flat = factory(\App\Flat::class)->create();
+        $voting = factory(\App\Voting::class)->create();
+        $vote_items = factory(\App\VoteItem::class)->create();
+        $this->actingAs($user);
+
+        $this->visit('/houses/1')
+            ->assertResponseOk()
+            ->see('Сотрудники')
+            ->see('Добавить дом')
+            ->see($house->address)
+            ->see('Охват дома')
+            ->see($house->connectedFlats()->count())
+            ->see('/')
+            ->see($house->flats()->count())
+            ->see('квартир подключено к системе')
+            ->see('Голосования')
+            ->see('Добавить голосование')
+            ->see($voting->name);
+
+        if ($voting->closed_at > \Carbon\Carbon::now())
+        {
+            $this->visit('//houses/1')
+                ->see('Идет');
+        }
+        else
+        {
+            $this->visit('//houses/1')
+                ->see('Завершено');
+        }
+    }
+
+    /** @test */
+    public function which_can_be_seen_on_the_votings_create_page()
+    {
+        $company = factory(\App\Company::class)->create();
+        $user = factory(\App\Models\User::class, 'manager')->create();
+        $house = factory(\App\House::class)->create();
+        $flat = factory(\App\Flat::class)->create();
+        $this->actingAs($user);
+
+        $this->visit('/houses/1/votings/create')
+            ->assertResponseOk()
+            ->see('Сотрудники')
+            ->see('Добавить дом')
+            ->see($house->address)
+            ->see('Создание голосования')
+            ->see('Вопрос №')
+            ->see('Добавить вопрос')
+            ->see('Предложение')
+            ->see('Вопрос')
+            ->see('Введите суть вопроса')
+            ->see('Введите понятное название')
+            ->see('Информация по голосованию')
+            ->see('Название')
+            ->see('Введите понятное название для собственников');
+    }
+
+    /** @test */
+    public function which_can_be_seen_on_the_votings_page()
+    {
+        $company = factory(\App\Company::class)->create();
+        $user = factory(\App\Models\User::class, 'manager')->create();
+        $house = factory(\App\House::class)->create();
+        $flat = factory(\App\Flat::class)->create();
+        $voting = factory(\App\Voting::class)->create();
+        $vote_items = factory(\App\VoteItem::class)->create();
+        $this->actingAs($user);
+
+        $this->visit('/houses/1/votings/1')
+            ->assertResponseOk()
+            ->see('Сотрудники')
+            ->see('Добавить дом')
+            ->see($house->address)
+            ->see('Информация по голосованию')
+            ->see('Информация по голосованию:')
+            ->see('Название')
+            ->see($voting->name)
+            ->see('Крайний срок')
+            ->see('Повестка дня')
+            ->see('Вопрос №')
+            ->see('Предложение')
+            ->see($vote_items->description)
+            ->see('Вопрос')
+            ->see($vote_items->name)
+            ->see($vote_items->text);
     }
 }

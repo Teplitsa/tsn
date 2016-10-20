@@ -129,7 +129,6 @@ class Employees extends Controller
             'last_name',
             'middle_name',
             'email',
-            'city',
         ]);
 
         $employee = $employee->fill($data);
