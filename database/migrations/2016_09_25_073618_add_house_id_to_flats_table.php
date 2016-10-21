@@ -14,7 +14,7 @@ class AddHouseIdToFlatsTable extends Migration
     public function up()
     {
         Schema::table('flats', function (Blueprint $table) {
-            $table->integer('house_id')->unsigned();
+            $table->integer('house_id')->unsigned()->nullable();
             $table->foreign('house_id')->references('id')->on('houses');
         });
     }

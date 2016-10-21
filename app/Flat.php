@@ -36,4 +36,9 @@ class Flat extends Model
     {
         return $this->votings()->where('closed_at', '>', Carbon::now());
     }
+
+    public function registered_flats()
+    {
+        return $this->hasMany(RegisteredFlat::class);
+    }
 }

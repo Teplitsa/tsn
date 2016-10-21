@@ -14,7 +14,7 @@ class AddCompaniesToAnnotationsTable extends Migration
     public function up()
     {
         Schema::table('annotations', function (Blueprint $table) {
-            $table->integer('company_id')->unsigned();
+            $table->integer('company_id')->unsigned()->nullable();
             $table->foreign('company_id')->references('id')->on('companies');
         });
     }

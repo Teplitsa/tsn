@@ -2,7 +2,15 @@
 <html>
 
 <head>
+<style>
+    .voting div {
+        cursor: pointer;
+    }
 
+    .voting div.active {
+        color: #0f8f31;
+    }
+</style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 

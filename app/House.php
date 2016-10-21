@@ -12,6 +12,11 @@ class House extends Model
         return $this->hasMany(Flat::class);
     }
 
+    public function connectedFlats()
+    {
+        return $this->flats()->whereHas('registered_flats');
+    }
+
     public function votings()
     {
         return $this->hasMany(Voting::class);

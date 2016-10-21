@@ -14,7 +14,7 @@ class AddHousesToAnnotationsTable extends Migration
     public function up()
     {
         Schema::table('annotations', function (Blueprint $table) {
-            $table->integer('house_id')->unsigned();
+            $table->integer('house_id')->unsigned()->nullable();
             $table->foreign('house_id')->references('id')->on('houses');
         });
     }

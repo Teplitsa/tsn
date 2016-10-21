@@ -27,4 +27,9 @@ trait Encryptable
 
         return parent::setAttribute($key, $value);
     }
+
+    public function rawAttribute($key, $default = null)
+    {
+        return array_get($this->attributes, $key, $default);
+    }
 }

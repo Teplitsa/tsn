@@ -32,4 +32,11 @@ class RegisteredFlat extends Model
 
         return (int)$this->user_id === (int)$user->id;
     }
+
+    protected $fillable = [
+        'user_id',
+        'flat_id',
+        'active',
+        'activate_code',
+    ];
 }
