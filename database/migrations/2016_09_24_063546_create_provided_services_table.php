@@ -26,6 +26,7 @@ class CreateProvidedServicesTable extends Migration
             $table->decimal('normal_value', 10, 2);
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
