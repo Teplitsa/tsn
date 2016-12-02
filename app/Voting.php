@@ -9,13 +9,26 @@ class Voting extends Model
     protected $fillable = [
         'name',
         'house_id',
+        'public_house_id',
+        'voting_type_id',
+        'kind',
+        'election_at',
+        'opened_at',
         'closed_at',
+        'public_at',
+        'public_length',
+        'protocol_at',
     ];
 
 
     public function vote_items()
     {
         return $this->hasMany(VoteItem::class);
+    }
+
+    public function voting_type()
+    {
+        return $this->belongsTo(Voting_type::class);
     }
 
     public function getInfo()

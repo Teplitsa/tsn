@@ -19,12 +19,12 @@ class Flat extends Model
 
     public function getAddressAttribute()
     {
-        return $this->house->address;
+        return $this->house->street->name . ', ' . $this->house->number;
     }
 
     public function getAddressFullAttribute()
     {
-        return $this->house->address . ' кв. ' . $this->number;
+        return $this->address . ', кв. ' . $this->number;
     }
 
     public function votings()

@@ -67,7 +67,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                {{--<div class="col-lg-5">
                     <div class="ibox float-e-margins">
                         <div class="ibox-content">
                             <h3>Информация об общедомовых приборах учета</h3>
@@ -97,7 +97,7 @@
                             ></app-text>
                         </div>
                     </div>
-                </div>
+                </div>--}}
             </div>
 
             <div class="row">

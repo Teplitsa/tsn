@@ -29,7 +29,7 @@ class CreateVotingsTable extends Migration
             $table->integer('public_length');
             $table->dateTime('opened_at');
             $table->dateTime('closed_at');
-            $table->dateTime('protocol_at q');
+            $table->dateTime('protocol_at');
 
 
             $table->integer('public_house_id')->unsigned();

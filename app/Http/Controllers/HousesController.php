@@ -46,20 +46,22 @@ class HousesController extends Controller
         $house = null;
         \DB::transaction(function () use (&$house, &$request) {
             $house = new House();
-            $house->address = $request->input('address');
+            $house->number = $request->input('number');
+            $house->street_id = $request->input('street_id');
+            $house->square = $request->input('square');
             $house->company_id = auth()->user()->company_id;
-            $house->area = '';
             $house->save();
 
             collect($request->input('flats', []))->each(function ($item, $i) use (&$house) {
                 $flat = new Flat();
                 $flat->number = $i + 1;
                 $flat->account_number = $item['account_number'];
-                $flat->men_count = 1;
+                $flat->men_count = 1;//?
+                $flat->square = '';
 
                 $house->flats()->save($flat);
 
-                collect(['cold_water', 'warm_water', 'gas'])->filter(function ($type) use ($item) {
+                /*collect(['cold_water', 'warm_water', 'gas'])->filter(function ($type) use ($item) {
                     return trim(array_get($item, $type, '')) !== '';
                 })->each(function ($item) use (&$flat) {
                     $sensor = new Sensor([
@@ -67,7 +69,7 @@ class HousesController extends Controller
                         'number' => array_get($item, 'cold_water', ''),
                     ]);
                     $flat->sensors()->save($sensor);
-                });
+                });*/
             });
         });
 

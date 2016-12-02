@@ -7,6 +7,7 @@ use App\House;
 use App\Vote;
 use App\VoteItem;
 use App\Voting;
+use App\Voting_type;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -36,7 +37,8 @@ class VotingController extends Controller
     {
         $component = 'app-manage-voting';
         $pageTitle = 'Создание голосования';
-        return view('votings.create', compact('house', 'component', 'pageTitle'));
+        $voting_type = Voting_type::orderBy('name')->pluck('name', 'id');
+        return view('votings.create', compact('house', 'voting_type', 'component', 'pageTitle'));
     }
 
     /**
@@ -49,7 +51,8 @@ class VotingController extends Controller
     {
         $voting = null;
         \DB::transaction(function () use ($request, &$voting, &$house) {
-            $voting = new Voting($request->only(['name', 'closed_at']));
+            $voting = new Voting($request->only(['name', 'kind', 'closed_at', 'opened_at', 'public_at',
+            'public_length', 'protocol_at', 'election_place', 'voting_type_id', 'public_house_id']));
             $voting->house_id = $house->id;
             $voting->save();
 
@@ -89,7 +92,8 @@ class VotingController extends Controller
         $company_id = \Auth::user()->company_id;
         $houses = House::where('company_id', $company_id)->get();
         $vote_items = VoteItem::orderBy('name')->pluck('name', 'id');
-        return view('votings.show', compact('voting', 'vote_items', 'houses'));
+        $voting_type = Voting_type::orderBy('name')->pluck('name', 'id');
+        return view('votings.show', compact('voting', 'vote_items', 'voting_type', 'houses'));
     }
 
     /**
@@ -102,7 +106,8 @@ class VotingController extends Controller
     public function update(Request $request, Voting $voting)
     {
         \DB::transaction(function () use ($request, &$voting) {
-            $voting->fill($request->only('name', 'closed_at', 'house_id'));
+            $voting->fill($request->only('name', 'kind', 'closed_at', 'opened_at', 'public_at', 'public_length',
+                'protocol_at', 'election_place', 'voting_type_id', 'public_house_id', 'house_id'));
             $voting->save();
 
             collect($request->input('items', []))->each(function ($item) use ($voting) {
