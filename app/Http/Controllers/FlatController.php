@@ -59,10 +59,10 @@ class FlatController extends Controller
 
     public function active(RegisteredFlat $flat)
     {
-        $pageTitle = $flat->address;//////////////////////////?
+        $pageTitle = $flat->address;
         $template = 'active';
 
-        $votings = $flat->flat->activeVotings;///////////////////////?
+        $votings = $flat->flat->activeVotings;
 
         return view('flats.' . $template, compact('flat', 'pageTitle', 'votings'));
 

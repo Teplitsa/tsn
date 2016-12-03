@@ -8,6 +8,7 @@ use App\Vote;
 use App\VoteItem;
 use App\Voting;
 use App\Voting_type;
+use App\VotingType;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -37,7 +38,7 @@ class VotingController extends Controller
     {
         $component = 'app-manage-voting';
         $pageTitle = 'Создание голосования';
-        $voting_type = Voting_type::orderBy('name')->pluck('name', 'id');
+        $voting_type = VotingType::orderBy('name')->pluck('name', 'id');
         return view('votings.create', compact('house', 'voting_type', 'component', 'pageTitle'));
     }
 
@@ -92,7 +93,7 @@ class VotingController extends Controller
         $company_id = \Auth::user()->company_id;
         $houses = House::where('company_id', $company_id)->get();
         $vote_items = VoteItem::orderBy('name')->pluck('name', 'id');
-        $voting_type = Voting_type::orderBy('name')->pluck('name', 'id');
+        $voting_type = VotingType::orderBy('name')->pluck('name', 'id');
         return view('votings.show', compact('voting', 'vote_items', 'voting_type', 'houses'));
     }
 

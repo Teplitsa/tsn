@@ -56,20 +56,10 @@ class HousesController extends Controller
                 $flat = new Flat();
                 $flat->number = $i + 1;
                 $flat->account_number = $item['account_number'];
-                $flat->men_count = 1;//?
                 $flat->square = '';
 
                 $house->flats()->save($flat);
 
-                /*collect(['cold_water', 'warm_water', 'gas'])->filter(function ($type) use ($item) {
-                    return trim(array_get($item, $type, '')) !== '';
-                })->each(function ($item) use (&$flat) {
-                    $sensor = new Sensor([
-                        'type'   => 'cold_water',
-                        'number' => array_get($item, 'cold_water', ''),
-                    ]);
-                    $flat->sensors()->save($sensor);
-                });*/
             });
         });
 

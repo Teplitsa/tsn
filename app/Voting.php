@@ -28,7 +28,7 @@ class Voting extends Model
 
     public function voting_type()
     {
-        return $this->belongsTo(Voting_type::class);
+        return $this->belongsTo(VotingType::class);
     }
 
     public function getInfo()

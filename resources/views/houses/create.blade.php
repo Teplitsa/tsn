@@ -67,37 +67,6 @@
                         </div>
                     </div>
                 </div>
-                {{--<div class="col-lg-5">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-content">
-                            <h3>Информация об общедомовых приборах учета</h3>
-                            <app-text
-                                    display="ХВС"
-                                    placeholder="Введени номер счетчика ХВС"
-                                    :form="form"
-                                    name="cold_watter"
-                            ></app-text>
-                            <app-text
-                                    display="ГВС"
-                                    placeholder="Введени номер счетчика ГВС"
-                                    :form="form"
-                                    name="warm_watter"
-                            ></app-text>
-                            <app-text
-                                    display="Эл."
-                                    placeholder="Введени номер счетчика Электроэнергии"
-                                    :form="form"
-                                    name="electric"
-                            ></app-text>
-                            <app-text
-                                    display="Газ"
-                                    placeholder="Введени номер газового счетчика"
-                                    :form="form"
-                                    name="gas"
-                            ></app-text>
-                        </div>
-                    </div>
-                </div>--}}
             </div>
 
             <div class="row">
