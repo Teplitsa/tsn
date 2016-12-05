@@ -56,7 +56,7 @@ class HousesController extends Controller
                 $flat = new Flat();
                 $flat->number = $i + 1;
                 $flat->account_number = $item['account_number'];
-                $flat->square = '';
+                $flat->square = $item['square'];
 
                 $house->flats()->save($flat);
 

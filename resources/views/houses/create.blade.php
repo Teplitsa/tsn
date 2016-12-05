@@ -27,37 +27,23 @@
                             <h3>Информация о квартире</h3>
                             <table class="table table-bordered" v-if="form.flats.length > 0">
                                 <tr>
-                                    <td rowspan="2">№</td>
-                                    <td rowspan="2">
+                                    <td>№</td>
+                                    <td>
                                         Счет <br/>
                                         <a href="#" class="btn btn-xs btn-primary" v-on:click="generate()">
                                             Сгенерировать
                                         </a>
                                     </td>
-                                    <td colspan="5">Приборы учета</td>
+                                    <td>Площадь</td>
                                 </tr>
-                                <tr>
-                                    <td>ХВС</td>
-                                    <td>ГВС</td>
-                                    <td>Электричество</td>
-                                    <td>Газ</td>
-                                </tr>
+
                                 <tr v-for="(i, item) in form.flats">
                                     <td>@{{ i+1 }}</td>
                                     <td>
                                         <input type="text" class="form-control" v-model="item.account_number"/>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" v-model="item.cold_watter"/>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" v-model="item.warm_watter"/>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" v-model="item.electric"/>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" v-model="item.gas"/>
+                                        <input type="text" class="form-control" v-model="item.square"/>
                                     </td>
                                 </tr>
                             </table>

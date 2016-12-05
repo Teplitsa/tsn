@@ -7,7 +7,6 @@ use App\House;
 use App\Vote;
 use App\VoteItem;
 use App\Voting;
-use App\Voting_type;
 use App\VotingType;
 use Illuminate\Http\Request;
 
