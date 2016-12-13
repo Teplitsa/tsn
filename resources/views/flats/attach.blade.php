@@ -11,8 +11,16 @@
                                 placeholder="Номер счета"
                                 :form="form"
                                 name="account"
-                                help="Его вам должен сообщить председеталь ТСЖ"
+                                help="Его вам должен сообщить председеталь ТСН"
                         ></app-text>
+
+                        <app-select
+                                display="Укажите ваш город"
+                                :form="form"
+                                name="city_id"
+                                help="Укажите город, в котором находится ваша квартира"
+                                :items="{{ json_encode($cities) }}"
+                        ></app-select>
 
                         <app-select
                                 display="Выберите ТСЖ"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
 use App\Company;
 use App\Flat;
 use App\RegisteredFlat;
@@ -21,8 +22,17 @@ class FlatController extends Controller
                 'text'  => $company->name,
             ];
         });
+
+        $cities = City::orderBy('name')->get()->map(function ($city) {
+            return [
+                'value' => $city->id,
+                'text'  => $city->name,
+            ];
+        });
+
+
         $component = 'attach-flat';
-        return view('flats.attach', compact('pageTitle', 'companies', 'component'));
+        return view('flats.attach', compact('pageTitle', 'companies', 'component', 'cities', 'addresses'));
     }
 
     public function attachHandler(Requests\AttachFlat $request)

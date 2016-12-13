@@ -25,6 +25,8 @@ class CreateRegisteredFlatsTable extends Migration
             $table->boolean('active');
             $table->string('activate_code');
 
+            $table->double('user_share');
+
             $table->timestamps();
             $table->softDeletes();
         });

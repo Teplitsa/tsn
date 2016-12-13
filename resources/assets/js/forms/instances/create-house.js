@@ -32,10 +32,7 @@ Vue.component('app-create-house', {
                 while (this.form.flats.length < val) {
                     this.form.flats.push({
                         'account_number': '',
-                        'cold_watter': '',
-                        'warm_watter': '',
-                        'electric': '',
-                        'gas': ''
+                        'square': ''
                     })
                 }
 

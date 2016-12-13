@@ -7,10 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flat extends Model
 {
-    public function sensors()
-    {
-        return $this->morphMany(Sensor::class, 'sensorable');
-    }
 
     public function house()
     {
