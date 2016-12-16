@@ -26,6 +26,13 @@ Vue.component('app-manage-voting', {
         return {
             form: new AppForm({
                 code: '',
+                name:'',
+                voting_type:'',
+                kind:'',
+                public_at:'',
+                opened_at:'',
+                closed_at:'',
+                end_at:'',
                 items: []
             }),
             active: {}

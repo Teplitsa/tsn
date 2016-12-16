@@ -26,4 +26,7 @@ class House extends Model
     {
         return $this->hasMany(Voting::class);
     }
+    public function getAddressAttribute(){
+        return 'г. '.$this->street->city->name.', '.$this->street->name.' '.$this->number;
+    }
 }

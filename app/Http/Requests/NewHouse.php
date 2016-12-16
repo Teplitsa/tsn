@@ -25,7 +25,6 @@ class NewHouse extends FormRequest
     {
         return [
             'number_of_flats' => 'required',
-            'address' => 'required',
             'flats' => 'required',
         ];
     }

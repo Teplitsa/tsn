@@ -32,6 +32,6 @@
                 this.form[this.name] = _.first(this.items).value;
             }
         }
-    }
+        }
 </script>
 

@@ -4,7 +4,7 @@
     <div>
         <form class="form-horizontal" action="{!! route('houses.votings.store', $house) !!}">
             <div class="row">
-                <div class="col-md-8 col-sm-6">
+                <div class="col-md-6 col-sm-6">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
                             <h5>Вопрос № @{{ active.i }}</h5>
@@ -23,7 +23,7 @@
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">
-                                    Предложение
+                                    Решение
                                 </label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" v-model="active.description"
@@ -46,31 +46,93 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-6 col-sm-6">
                     <div class="ibox float-e-margins">
                         <div class="ibox-content">
                             <h3>Информация по голосованию</h3>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">
+                                <label class="col-sm-2 control-label">
                                     Название
                                 </label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-10">
                                     <input type="text" class="form-control" v-model="form.name"
                                            placeholder="Введите понятное название для собственников">
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
-
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">
-                                    Крайний срок
+                                <app-enum-select
+                                display="Вид общего собрания"
+                                :form="form"
+                                name="voting_type"
+                                placeholder="Выберете из списка"
+                                :items="{{ json_encode(\App\Enums\VotingTypes::humanValues()) }}">
+                                </app-enum-select>
+                            </div>
+                            <div class="form-group">
+                                <app-enum-select
+                                        display="Форма проведения собрания"
+                                        :form="form"
+                                        name="kind"
+                                        placeholder="Выберете из списка"
+                                        :items="{{ json_encode(\App\Enums\VotingForms::humanValues()) }}">
+                                </app-enum-select>
+                            </div>
+                            <div class="form-group">
+                            <label class="col-sm-2 control-label">
+                                Дата и время проведения очного обсуждения
+                            </label>
+
+                                <label class="col-sm-2 control-label">
+                                    C
                                 </label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" v-model="form.closed_at"
-                                           placeholder="Введите дату"/>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right datepicker" v-model="form.public_at"
+                                           name="deadline" placeholder="Введите дату">
+                                </div>
+                                <label class="col-sm-2 control-label">
+                                    До
+                                </label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right datepicker" v-model="form.end_at"
+                                           name="deadline" placeholder="Введите дату">
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    Дата и время проведения заочного голосования
+                                </label>
+
+                                <label class="col-sm-2 control-label">
+                                    C
+                                </label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right datepicker" v-model="form.opened_at"
+                                           name="deadline" placeholder="Введите дату">
+                                </div>
+                                <label class="col-sm-2 control-label">
+                                    До
+                                </label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right datepicker" v-model="form.closed_at"
+                                           name="deadline" placeholder="Введите дату">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+
 
 
                             <h3>Повестка дня</h3>
@@ -110,4 +172,13 @@
             <div class="row">&nbsp;</div>
         </form>
     </div>
+@stop
+
+@section('after_js')
+    <script>
+    $('.datepicker').datetimepicker({
+        format: 'DD.MM.YYYY HH:mm'
+    });
+
+    </script>
 @stop

@@ -5,7 +5,7 @@
         <div class="middle-box text-center loginscreen   animated fadeInDown">
             <div>
 
-                <h3>Зарегистрироваться в Ананас.ТСЖ</h3>
+                <h3>Зарегистрироваться в Ананас.ТСН</h3>
                 <form class="m-t" role="form" action="/register">
                     <div :class="{'form-group': true, 'has-error': form.errors.has('first_name') }">
                         <input type="text" class="form-control" v-model="form['first_name']"
@@ -38,8 +38,7 @@
                     <div class="form-group">
                         <div class="checkbox i-checks">
                             <label>
-                                <input type="checkbox" v-model="form['agreed']"><i></i>Agree the terms and
-                                policy
+                                <input type="checkbox" v-model="form['agreed']"><i></i>Нажимая "Зарегистрироваться", Вы соглашаетесь с условиями пользовательского соглашения
                             </label>
                         </div>
                     </div>

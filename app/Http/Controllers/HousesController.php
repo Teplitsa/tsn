@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
 use App\Flat;
 use App\House;
 use App\Sensor;
+use App\Street;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -31,7 +33,13 @@ class HousesController extends Controller
         $active_new_house = 'active';
         $pageTitle = 'Добавление дома';
         $component = 'app-create-house';
-        return view('houses.create', compact('pageTitle', 'component', 'active_new_house'));
+        $cities = City::orderBy('name')->get()->map(function ($city) {
+            return [
+                'value' => $city->id,
+                'text'  => $city->name,
+            ];
+        });
+        return view('houses.create', compact('cities','pageTitle', 'component', 'active_new_house'));
     }
 
     /**
@@ -48,7 +56,7 @@ class HousesController extends Controller
             $house = new House();
             $house->number = $request->input('number');
             $house->street_id = $request->input('street_id');
-            $house->square = $request->input('square');
+            $house->square = collect($request->input('flats', []))->sum('square');
             $house->company_id = auth()->user()->company_id;
             $house->save();
 
@@ -111,5 +119,16 @@ class HousesController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function load_streets(Request $request){
+
+        $streets=Street::where('city_id',$request->get('city_id'))->orderBy('name')->get()->map(function ($street) {
+            return [
+                'value' => $street->id,
+                'text'  => $street->name,
+            ];
+        });
+        return response()->json(['streets'=>$streets]);
+
     }
 }

@@ -10,7 +10,7 @@ class Voting extends Model
         'name',
         'house_id',
         'public_house_id',
-        'voting_type_id',
+        'voting_type',
         'kind',
         'election_at',
         'opened_at',
@@ -71,4 +71,31 @@ class Voting extends Model
 
         return $data;
     }
+    protected $dates = ['public_at', 'closed_at', 'end_at','opened_at'];
+
+    public function setClosedAtAttribute($value = null)
+    {
+        $this->attributes['closed_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y h:m',
+            $value);
+    }
+
+    public function setPublicAtAttribute($value = null)
+    {
+        $this->attributes['public_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y h:m',
+            $value);
+    }
+
+    public function setOpenedAtAttribute($value = null)
+    {
+        $this->attributes['end_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y h:m',
+            $value);
+    }
+
+    public function setEndAtAttribute($value = null)
+    {
+        $this->attributes['opened_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y h:m',
+            $value);
+    }
+
+
 }

@@ -29,6 +29,7 @@ $router->group(['middleware'=>'auth'], function(Router $router){
 
     $router->get('houses/{house}/votings/create', ['as'=>'houses.votings.create', 'uses' => 'VotingController@create']);
     $router->post('houses/{house}/votings', ['as'=>'houses.votings.store', 'uses' => 'VotingController@store']);
+    $router->post('houses/load_streets', ['as'=>'houses.load_streets', 'uses' => 'HousesController@load_streets']);
     $router->get('houses/{house}/votings/{voting}', ['as'=>'houses.votings.show', 'uses' => 'VotingController@show']);
 
     $router->resource('houses', 'HousesController');

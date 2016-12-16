@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Enums\VotingTypes;
 use App\House;
+use App\Street;
 use App\Vote;
 use App\VoteItem;
 use App\Voting;
@@ -37,7 +39,6 @@ class VotingController extends Controller
     {
         $component = 'app-manage-voting';
         $pageTitle = 'Создание голосования';
-        $voting_type = VotingType::orderBy('name')->pluck('name', 'id');
         return view('votings.create', compact('house', 'voting_type', 'component', 'pageTitle'));
     }
 
@@ -52,8 +53,10 @@ class VotingController extends Controller
         $voting = null;
         \DB::transaction(function () use ($request, &$voting, &$house) {
             $voting = new Voting($request->only(['name', 'kind', 'closed_at', 'opened_at', 'public_at',
-            'public_length', 'protocol_at', 'election_place', 'voting_type_id', 'public_house_id']));
+            'end_at', 'protocol_at', 'election_place', 'voting_type', 'public_house_id']));
             $voting->house_id = $house->id;
+            $voting->public_house_id = $house->id;
+            $voting->number=str_random(5);
             $voting->save();
 
             collect($request->input('items', []))->each(function ($item) use ($voting) {

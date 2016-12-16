@@ -5,7 +5,7 @@
         <div class="text-center loginscreen animated fadeInDown loginColumns animated fadeInDown">
             <div>
 
-                <h3>Зарегистрироваться в Ананас.ТСЖ</h3>
+                <h3>Зарегистрироваться в Ананас.ТСН</h3>
                 <form class="form-horizontal" role="form" action="/new-company">
                     <app-email
                             display="Email"
@@ -29,8 +29,8 @@
                     ></app-password>
 
                     <app-text
-                            display="ИНН ТСЖ"
-                            placeholder="Введите ИНН вашего ТСЖ"
+                            display="ИНН ТСН"
+                            placeholder="Введите ИНН вашего ТСН"
                             :form="form"
                             name="inn"
                     ></app-text>
@@ -41,7 +41,7 @@
                                 v-on:click.prevent="loadInfo()"
                         >
                             <span v-if="loading">
-                                <i class="fa fa-btn fa-spinner fa-spin"></i> Поиск информации о ТСЖ
+                                <i class="fa fa-btn fa-spinner fa-spin"></i> Поиск информации о ТСН
                             </span>
                             <span v-else>
                                 <i class="fa fa-search"></i> Заполнить по ИНН
@@ -51,22 +51,22 @@
                     <div class="hr-line-dashed"></div>
 
                     <app-text
-                            display="Название ТСЖ"
-                            placeholder="Введите название ТСЖ"
+                            display="Название ТСН"
+                            placeholder="Введите название ТСН"
                             :form="form"
                             name="title"
                     ></app-text>
 
                     <app-text
-                            display="КПП ТСЖ"
-                            placeholder="Введите КПП ТСЖ"
+                            display="КПП ТСН"
+                            placeholder="Введите КПП ТСН"
                             :form="form"
                             name="kpp"
                     ></app-text>
 
                     <app-text
-                            display="ОГРН ТСЖ"
-                            placeholder="Введите ОГРН ТСЖ"
+                            display="ОГРН ТСН"
+                            placeholder="Введите ОГРН ТСН"
                             :form="form"
                             name="ogrn"
                     ></app-text>
@@ -95,8 +95,8 @@
                     <div class="form-group">
                         <div class="checkbox i-checks">
                             <label>
-                                <input type="checkbox" v-model="form['agreed']"><i></i> Agree the terms and
-                                policy
+                                <input type="checkbox" v-model="form['agreed']"><i></i> Нажимая "Зарегистрироваться", Вы соглашаетесь с условиями пользовательского соглашения
+
                             </label>
                         </div>
                     </div>

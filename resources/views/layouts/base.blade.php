@@ -11,10 +11,13 @@
         color: #0f8f31;
     }
 </style>
+    <link rel="stylesheet" href="/plugins/datepicker/datepicker3.css">
+    <link rel="stylesheet" href="/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Erp</title>
+    <title>Ананас.ТСН</title>
 
     <link href="{!! elixir('css/style.css') !!}" rel="stylesheet">
 
@@ -80,7 +83,9 @@
 <!-- Custom and plugin javascript -->
 <script src="/js/inspinia.js"></script>
 <script src="/js/pace.min.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
 
+@yield('after_js')
 
 </body>
 
