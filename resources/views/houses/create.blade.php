@@ -18,7 +18,7 @@
 
                                     <div>
                                         <app-select
-                                        @change="loadStreets"
+
                                         display="Город"
                                         :form="form"
                                         name="city"

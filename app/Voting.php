@@ -12,6 +12,7 @@ class Voting extends Model
         'public_house_id',
         'voting_type',
         'kind',
+        'end_at',
         'election_at',
         'opened_at',
         'closed_at',
@@ -71,29 +72,33 @@ class Voting extends Model
 
         return $data;
     }
-    protected $dates = ['public_at', 'closed_at', 'end_at','opened_at'];
+    protected $dates = ['public_at', 'closed_at', 'end_at','opened_at','protocol_at'];
 
     public function setClosedAtAttribute($value = null)
     {
-        $this->attributes['closed_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y h:m',
+        $this->attributes['closed_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
             $value);
     }
-
+    public function setProtocolAtAttribute($value = null)
+    {
+        $this->attributes['protocol_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
+            $value);
+    }
     public function setPublicAtAttribute($value = null)
     {
-        $this->attributes['public_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y h:m',
+        $this->attributes['public_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
             $value);
     }
 
     public function setOpenedAtAttribute($value = null)
     {
-        $this->attributes['end_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y h:m',
+        $this->attributes['opened_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
             $value);
     }
 
     public function setEndAtAttribute($value = null)
     {
-        $this->attributes['opened_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y h:m',
+        $this->attributes['end_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
             $value);
     }
 

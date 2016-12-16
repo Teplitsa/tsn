@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
 use App\Company;
 use App\Enums\VotingTypes;
 use App\House;
@@ -39,7 +40,13 @@ class VotingController extends Controller
     {
         $component = 'app-manage-voting';
         $pageTitle = 'Создание голосования';
-        return view('votings.create', compact('house', 'voting_type', 'component', 'pageTitle'));
+        $cities = City::orderBy('name')->get()->map(function ($city) {
+            return [
+                'value' => $city->id,
+                'text'  => $city->name,
+            ];
+        });
+        return view('votings.create', compact('cities','house', 'voting_type', 'component', 'pageTitle'));
     }
 
     /**
@@ -56,11 +63,13 @@ class VotingController extends Controller
             'end_at', 'protocol_at', 'election_place', 'voting_type', 'public_house_id']));
             $voting->house_id = $house->id;
             $voting->public_house_id = $house->id;
-            $voting->number=str_random(5);
+            $voting->protocol_number=str_random(5);
+            $voting->election_place=str_random(5);
             $voting->save();
 
             collect($request->input('items', []))->each(function ($item) use ($voting) {
                 $voteItem = new VoteItem(collect($item)->only(['name', 'description', 'text'])->all()   );
+                $voteItem->user_id = auth()->id();
                 $voting->vote_items()->save($voteItem);
             });
         });
@@ -108,16 +117,20 @@ class VotingController extends Controller
      */
     public function update(Request $request, Voting $voting)
     {
-        \DB::transaction(function () use ($request, &$voting) {
-            $voting->fill($request->only('name', 'kind', 'closed_at', 'opened_at', 'public_at', 'public_length',
-                'protocol_at', 'election_place', 'voting_type_id', 'public_house_id', 'house_id'));
+        \DB::transaction(function () use ($request, &$voting, &$house) {
+            $voting = new Voting($request->only(['name', 'kind', 'closed_at', 'opened_at', 'public_at',
+                'end_at', 'protocol_at', 'election_place', 'voting_type', 'public_house_id']));
+            $voting->house_id = $house->id;
+            $voting->public_house_id = $house->id;
+            $voting->protocol_number=str_random(5);
+            $voting->election_place=str_random(5);
             $voting->save();
 
             collect($request->input('items', []))->each(function ($item) use ($voting) {
-                $voteItem = VoteItem::find($item['id']);
+                $voteItem = new VoteItem(collect($item)->only(['name', 'description', 'text'])->all()   );
+                $voteItem->user_id = auth()->id();
                 $voting->vote_items()->save($voteItem);
             });
-
         });
         return redirect()->route('votings.show', $voting);
     }

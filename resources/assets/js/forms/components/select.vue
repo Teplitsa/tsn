@@ -23,7 +23,7 @@
 
 <script>
     export default{
-        props: ['display', 'placeholder', 'form', 'name', 'help', 'items'],
+        props: ['display', 'placeholder', 'form', 'name', 'help', 'items','value'],
         ready(){
             let val = this.form[this.name];
             console.log(val);

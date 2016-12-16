@@ -24,6 +24,10 @@ class AddTypeAndFormToVoitingTable extends Migration
             $table->string('voting_type')->nullable();
 
         });
+        Schema::table('vote_items', function (Blueprint $table) {
+            $table->string('solution')->nullable()->change();
+
+        });
         Schema::dropIfExists('voting_types');
     }
 
@@ -48,6 +52,10 @@ class AddTypeAndFormToVoitingTable extends Migration
             $table->dateTime('protocol_at')->change();
             $table->integer('voting_type_id')->unsigned()->nullable();
             $table->foreign('voting_type_id')->references('id')->on('voting_types');
+        });
+        Schema::table('vote_items', function (Blueprint $table) {
+            $table->string('solution')->change();
+
         });
     }
 }

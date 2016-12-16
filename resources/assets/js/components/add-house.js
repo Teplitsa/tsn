@@ -1,4 +1,8 @@
+var base = require('./can-load-streets');
+
 Vue.component('add-house', {
+    mixins: [base],
+
     data(){
         return {
             form:new AppForm({
@@ -8,18 +12,11 @@ Vue.component('add-house', {
                 house_number:'',
                 number_of_flats: 0
             }),
-            streets: [],
-            cities: [],
         }
     },
 
     methods:{
-        loadStreets(){
-            this.$http.post('/houses/load_streets',{city_id: this.form.city}).then(
-                function(response){
-                    this.streets = response.data.streets;
-                });
-        },
+
 
         submit(){
             let $vm = this;

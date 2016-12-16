@@ -1,4 +1,8 @@
+var base = require('../../components/can-load-streets');
+
 Vue.component('app-manage-voting', {
+    mixins: [base],
+
     props: ['init'],
 
     /*
@@ -24,17 +28,7 @@ Vue.component('app-manage-voting', {
      */
     data: function () {
         return {
-            form: new AppForm({
-                code: '',
-                name:'',
-                voting_type:'',
-                kind:'',
-                public_at:'',
-                opened_at:'',
-                closed_at:'',
-                end_at:'',
-                items: []
-            }),
+            form: new AppForm(App.forms.ManageVoting),
             active: {}
         }
     },

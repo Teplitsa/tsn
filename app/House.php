@@ -29,4 +29,9 @@ class House extends Model
     public function getAddressAttribute(){
         return 'г. '.$this->street->city->name.', '.$this->street->name.' '.$this->number;
     }
+
+    public function getCityIdAttribute()
+    {
+        return $this->street->city_id;
+    }
 }

@@ -50,6 +50,26 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-content">
                             <h3>Информация по голосованию</h3>
+                                <app-select
+                                display="Город"
+                                :form="form"
+                                name="city"
+                                :items="{{ json_encode($cities) }}"></app-select>
+
+                                <app-select
+                                            display="Улица"
+                                            :form="form"
+                                            name="street_id"
+                                            value="{{($house->street->name)}}"
+                                            :items="streets"
+                                ></app-select>
+
+                                <app-text
+                                        display="Номер дома"
+                                        :form="form"
+                                        name="number"
+                                        value="{{$house->number}}"
+                                ></app-text>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">
                                     Название
@@ -176,9 +196,30 @@
 
 @section('after_js')
     <script>
+
     $('.datepicker').datetimepicker({
-        format: 'DD.MM.YYYY HH:mm'
+        format: 'DD.MM.YYYY HH:mm',
+        locale: 'ru'
     });
 
     </script>
 @stop
+
+@section('after_body')
+    <script>
+        App.forms.ManageVoting = {
+            code: '',
+            city: {{ $house->city_id }},
+            street_id: '{{ $house->street_id }}',
+            number: {{ $house->number }},
+            name:'',
+            voting_type:'',
+            kind:'',
+            public_at:'',
+            opened_at:'',
+            closed_at:'',
+            end_at:'',
+            items: []
+        };
+    </script>
+    @stop
