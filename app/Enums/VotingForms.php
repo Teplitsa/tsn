@@ -9,14 +9,13 @@ class VotingForms
 
     use TEnum;
 
-    const FULL_TIME = 'очное',
-        PART_TIME = 'очно-заочное',
-        IN_ABSENTIA = 'заочное';
+    const FULL_TIME = 'fulltime',
+        PART_TIME = 'parttime',
+        IN_ABSENTIA = 'absent';
 
     public static $values = [
-        self::FULL_TIME => 'очное',
-        self::PART_TIME => 'очно-заочное',
+        self::FULL_TIME   => 'очное',
+        self::PART_TIME   => 'очно-заочное',
         self::IN_ABSENTIA => 'заочное',
     ];
-
 }

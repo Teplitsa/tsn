@@ -5,4 +5,3 @@ Vue.component('layout-headerline', require('./layout/HeaderLine.vue'));
 
 Vue.component('timeago', require('./timeago.vue'));
 require('./add-house');
-require('./add-voting');

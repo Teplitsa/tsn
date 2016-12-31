@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Flat extends Model
@@ -15,12 +16,12 @@ class Flat extends Model
 
     public function getAddressAttribute()
     {
-        return $this->house->street->name . ', ' . $this->house->number;
+        return $this->house->street->name.', '.$this->house->number;
     }
 
     public function getAddressFullAttribute()
     {
-        return $this->address . ', кв. ' . $this->number;
+        return $this->address.', кв. '.$this->number;
     }
 
     public function votings()
@@ -36,5 +37,16 @@ class Flat extends Model
     public function registered_flats()
     {
         return $this->hasMany(RegisteredFlat::class);
+    }
+
+    public function scopeInTheHouse(Builder $builder, $city, $street, $number)
+    {
+        return $builder->whereHas(
+            'house',
+            function (Builder $houseQuery) use ($number, $street, $city) {
+                $houseQuery->where('number', $number)
+                    ->where('street_id', $street);
+            }
+        );
     }
 }

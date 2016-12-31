@@ -6,6 +6,7 @@ use App\City;
 use App\Company;
 use App\Flat;
 use App\RegisteredFlat;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -16,40 +17,41 @@ class FlatController extends Controller
     public function attach()
     {
         $pageTitle = 'Подключение квартиры';
-        $companies = Company::orderBy('name')->get()->map(function ($company) {
-            return [
-                'value' => $company->id,
-                'text'  => $company->name,
-            ];
-        });
 
-        $cities = City::orderBy('name')->get()->map(function ($city) {
-            return [
-                'value' => $city->id,
-                'text'  => $city->name,
-            ];
-        });
+        $cities = City::orderBy('name')->get()->map(
+            function ($city) {
+                return [
+                    'value' => $city->id,
+                    'text'  => $city->name,
+                ];
+            }
+        );
 
 
         $component = 'attach-flat';
-        return view('flats.attach', compact('pageTitle', 'companies', 'component', 'cities', 'addresses'));
+
+        return view('flats.attach', compact('pageTitle', 'component', 'cities'));
     }
 
     public function attachHandler(Requests\AttachFlat $request)
     {
-        $flat = Flat::where('account_number', $request->input('account'))
-            ->whereHas('house', function (Builder $subQuery) use ($request) {
-                $subQuery->where('company_id', $request->input('company_id'));
-            })->first();
+        $flat = Flat::inTheHouse($request->input('city'), $request->input('street_id'), $request->input('number'))
+            ->where('number', $request->input('flat'))
+            ->first();
 
         if ($flat === null) {
-            return response()->json(['account' => ['Такой лицевой счет в указанном ТСЖ не найден']], 422);
+            return response()->json(['flat' => ['Такой квартиры не существует']], 422);
         }
 
         $registeredFlat = new RegisteredFlat();
         $registeredFlat->user()->associate(auth()->user());
         $registeredFlat->flat()->associate($flat);
-        $registeredFlat->activate_code = str_random(15);
+        $registeredFlat->fill(
+            $request->only(['square', 'up_part', 'down_part', 'number_doc', 'issuer_doc'])
+        );
+        $registeredFlat->user_share = $registeredFlat->square / $registeredFlat->down_part * $registeredFlat->up_part;
+        $registeredFlat->date_doc = Carbon::createFromFormat('d.m.Y', $request->date_doc);
+        $registeredFlat->scan = $request->scan->store('scans_of_documents');
         $registeredFlat->active = 0;
         $registeredFlat->save();
 
@@ -64,6 +66,7 @@ class FlatController extends Controller
         if (!$flat->active) {
             return $this->not_active($flat);
         }
+
         return $this->active($flat);
     }
 
@@ -74,7 +77,7 @@ class FlatController extends Controller
 
         $votings = $flat->flat->activeVotings;
 
-        return view('flats.' . $template, compact('flat', 'pageTitle', 'votings'));
+        return view('flats.'.$template, compact('flat', 'pageTitle', 'votings'));
 
     }
 
@@ -83,7 +86,8 @@ class FlatController extends Controller
         $pageTitle = $flat->address;
         $template = 'not_active';
         $component = 'app-activate-flat';
-        return view('flats.' . $template, compact('flat', 'component', 'pageTitle'));
+
+        return view('flats.'.$template, compact('flat', 'component', 'pageTitle'));
 
     }
 
@@ -97,8 +101,12 @@ class FlatController extends Controller
 
         $flat->active = true;
         $flat->save();
-        $this->addToastr('success', 'Квартира успешно активирована. Теперь вам доступны все возможности системы',
-            'Квартира активирована');
+        $this->addToastr(
+            'success',
+            'Квартира успешно активирована. Теперь вам доступны все возможности системы',
+            'Квартира активирована'
+        );
+
         return ['redirect' => route('flats.show', $flat)];
     }
 

@@ -34,4 +34,9 @@ class House extends Model
     {
         return $this->street->city_id;
     }
+
+    public function getCityAttribute()
+    {
+        return $this->street->city;
+    }
 }

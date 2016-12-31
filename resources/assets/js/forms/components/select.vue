@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div :class="{'form-group': true, 'has-error': form.errors.has(name) }">
+        <div :class="{'row form-group': true, 'has-error': form.errors.has(name) }">
             <label class="col-sm-2 control-label">
-                {{ display }}
+                {{{ display }}}
                 <br v-if="help != ''"/>
                 <small v-if="help != ''" class="text-navy">{{ help }}</small>
             </label>
@@ -23,15 +23,13 @@
 
 <script>
     export default{
-        props: ['display', 'placeholder', 'form', 'name', 'help', 'items','value'],
+        props: ['display', 'placeholder', 'form', 'name', 'help', 'items', 'value'],
         ready(){
             let val = this.form[this.name];
-            console.log(val);
-            console.log(this.items[val]);
-            if (this.items[val] == undefined) {
+            if (this.items[val] == undefined && this.items.length > 0) {
                 this.form[this.name] = _.first(this.items).value;
             }
         }
-        }
+    }
 </script>
 

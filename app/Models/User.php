@@ -112,4 +112,11 @@ class User extends Authenticatable
     {
         return $this->company_id === null;
     }
+
+    public function getFlatIn($house)
+    {
+        return RegisteredFlat::whereHas('flat', function(Builder $builder) use ($house){
+            $builder->where('house_id', $house->id);
+        })->first();
+    }
 }

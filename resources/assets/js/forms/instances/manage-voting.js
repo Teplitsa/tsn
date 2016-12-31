@@ -29,6 +29,7 @@ Vue.component('app-manage-voting', {
     data: function () {
         return {
             form: new AppForm(App.forms.ManageVoting),
+            streets: App.streets,
             active: {}
         }
     },
@@ -95,6 +96,10 @@ Vue.component('app-manage-voting', {
                 }, function (response) {
                     // error
                 });
+        },
+
+        selectItem(item){
+            this.active = item;
         },
 
         addItem(){

@@ -8,6 +8,9 @@
                     <h5>Голосование</h5>
                 </div>
                 <div class="ibox-content">
+                    <a href="{!! route('houses.votings.create', [$flat->house]) !!}" class="btn btn-success btn-block">
+                        <i class="fa fa-plus"></i> Новое голосование
+                    </a>
                     @forelse($votings as $voting)
                         <div class="row">
                             <div class="col-sm-8">

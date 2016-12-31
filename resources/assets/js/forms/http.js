@@ -36,9 +36,7 @@ module.exports = {
 
                     resolve(JSON.parse(response.body));
                 }, function (errors) {
-                    console.log(errors);
                     let error = JSON.parse(errors.body);
-                    console.log(error);
 
                     form.errors.set(error);
                     form.busy = false;

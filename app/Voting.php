@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Voting extends Model
@@ -36,7 +37,7 @@ class Voting extends Model
     {
         $data = [
             'name'      => $this->name,
-            'closed_at' => $this->closed_at,
+            'closed_at' => $this->closed_at->format('d.m.Y H:m'),
             'items'     => [],
         ];
 
@@ -72,6 +73,7 @@ class Voting extends Model
 
         return $data;
     }
+
     protected $dates = ['public_at', 'closed_at', 'end_at','opened_at','protocol_at'];
 
     public function setClosedAtAttribute($value = null)
@@ -81,6 +83,8 @@ class Voting extends Model
     }
     public function setProtocolAtAttribute($value = null)
     {
+        if($value == null)
+            $value = new Carbon();
         $this->attributes['protocol_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
             $value);
     }

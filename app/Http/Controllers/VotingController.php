@@ -46,7 +46,7 @@ class VotingController extends Controller
                 'text'  => $city->name,
             ];
         });
-        return view('votings.create', compact('cities','house', 'voting_type', 'component', 'pageTitle'));
+        return view('votings.create', compact('cities', 'house', 'component', 'pageTitle'));
     }
 
     /**
@@ -74,7 +74,11 @@ class VotingController extends Controller
             });
         });
 
-        return ['redirect' => route('houses.votings.show', [$house, $voting])];
+        if($request->user()->company_id == null)
+            return ['redirect' => route('flat.voting', [$request->user()->getFlatIn($house), $voting])];
+        else
+            return ['redirect' => route('houses.votings.show', [$house, $voting])];
+
     }
 
     /**
