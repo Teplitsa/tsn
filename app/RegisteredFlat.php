@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class RegisteredFlat extends Model
 {
-    protected $fillable = ['square', 'up_part', 'down_part', 'number_doc', 'date_doc', 'issuer_doc'];
+    protected $fillable = [
+        'square', 'up_part', 'down_part', 'number_doc', 'issuer_doc'
+    ];
     protected $casts = ['date_doc' => 'date'];
 
     public function flat()

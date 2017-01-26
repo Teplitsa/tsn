@@ -9,6 +9,7 @@ Vue.component('app-manage-voting', {
      * Bootstrap the component. Load the initial data.
      */
     ready: function () {
+
         if (this.init) {
             this.form.closed_at = this.init.closed_at;
             this.form.name = this.init.name;

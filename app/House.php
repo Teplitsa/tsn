@@ -22,11 +22,23 @@ class House extends Model
         return $this->flats()->whereHas('registered_flats');
     }
 
+    public function getSquareAttribute()
+    {
+        $total_square = 0;
+        foreach ($this->flats as $flat) {
+            $total_square += $flat->square;
+        }
+
+        return $total_square;
+    }
+
     public function votings()
     {
         return $this->hasMany(Voting::class);
     }
-    public function getAddressAttribute(){
+
+    public function getAddressAttribute()
+    {
         return 'г. '.$this->street->city->name.', '.$this->street->name.' '.$this->number;
     }
 
@@ -38,5 +50,16 @@ class House extends Model
     public function getCityAttribute()
     {
         return $this->street->city;
+    }
+
+    public function getUsersAttribute()
+    {
+        $users=[];
+        foreach ($this->flats as $flat){
+            foreach ($flat->registered_flats as $registeredFlat){
+                $users[$registeredFlat->user->id]=$registeredFlat->user->full_name;
+            }
+        }
+        return $users;
     }
 }

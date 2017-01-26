@@ -27,6 +27,14 @@ class Voting extends Model
     {
         return $this->hasMany(VoteItem::class);
     }
+    public function public_house()
+    {
+        return $this->belongsTo(House::class,'public_house_id');
+    }
+    public function house()
+    {
+        return $this->belongsTo(House::class,'house_id');
+    }
 
     public function voting_type()
     {
@@ -105,6 +113,4 @@ class Voting extends Model
         $this->attributes['end_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
             $value);
     }
-
-
 }

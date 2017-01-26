@@ -16,5 +16,9 @@ class VotingTypes
         self::REGULAR => 'очередное',
         self::IRREGULAR => 'внеочередное',
     ];
+    public static $faker = [
+        self::REGULAR => 'очередное',
+        self::IRREGULAR => 'внеочередное',
+    ] ;
 
 }

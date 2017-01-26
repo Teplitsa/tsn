@@ -14,6 +14,7 @@ require('./bootstrap');
  */
 
 require('./components/bootstrap');
+require('./directives/bootstrap');
 require('./plugins');
 require('./helpers/bootstrap');
 

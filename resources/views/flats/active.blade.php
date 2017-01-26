@@ -13,10 +13,10 @@
                     </a>
                     @forelse($votings as $voting)
                         <div class="row">
-                            <div class="col-sm-8">
+                            <div class="col-sm-6">
                                 {!! $voting->name !!}
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <a href="{!! route('flat.voting', [$flat, $voting]) !!}" class="btn btn-block btn-primary">Проголосовать</a>
                             </div>
 

@@ -9,13 +9,20 @@ class VotingForms
 
     use TEnum;
 
-    const FULL_TIME = 'fulltime',
-        PART_TIME = 'parttime',
-        IN_ABSENTIA = 'absent';
+
+    const FULLTIME = 'очное',
+        PARTTIME = 'очно-заочное',
+        INABSENTIA = 'заочное';
 
     public static $values = [
-        self::FULL_TIME   => 'очное',
-        self::PART_TIME   => 'очно-заочное',
-        self::IN_ABSENTIA => 'заочное',
+        self::FULLTIME   => 'очное',
+        self::PARTTIME   => 'очно-заочное',
+        self::INABSENTIA => 'заочное',
     ];
+    public static $faker = [
+        self::FULLTIME   => 'очное',
+        self::PARTTIME   => 'очно-заочное',
+        self::INABSENTIA => 'заочное',
+    ] ;
+
 }

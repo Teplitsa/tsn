@@ -3,6 +3,7 @@ import Email from './components/email.vue';
 import Password from './components/password.vue';
 import Select from './components/select.vue';
 import EnumSelect from './components/enum-select.vue';
+import SelectMultiple from './components/select-multiple.vue';
 import Image from './components/image.vue';
 import Contact from './components/contact.vue';
 //import Marked from './components/marked.vue';
@@ -42,6 +43,7 @@ Vue.component('app-image', Image);
  */
 Vue.component('app-contact', Contact);
 Vue.component('app-enum-select', EnumSelect);
+Vue.component('app-select-multiple', SelectMultiple);
 
 
 //Vue.component('app-markdown-editor', Marked);

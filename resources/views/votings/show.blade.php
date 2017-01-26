@@ -53,6 +53,8 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-content">
                             <h3>Информация по голосованию</h3>
+                            <a data-target="#myModal">11</a>
+                            <a href="{{route('houses.votings.download',[$voting->house,$voting])}}">Скачать протокол</a>
 
                             <p>Название: <b>@{{ form.name }}</b></p>
                             <p>Крайний срок: <b>@{{ form.closed_at }}</b></p>
@@ -71,6 +73,17 @@
             </div>
 
         </form>
+    </div>
+    <div id="myModal5" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><button class="close" type="button" data-dismiss="modal">&times;</button>
+                    <h4 id="myModalLabel" class="modal-title">Event Example</h4>
+                </div>
+                <div class="modal-body">&nbsp;jnhh</div>
+                <div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">Close</button></div>
+            </div>
+        </div>
     </div>
 @stop
 

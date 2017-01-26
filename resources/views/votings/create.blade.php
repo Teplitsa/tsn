@@ -8,6 +8,14 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-content">
                             <h3>Информация по голосованию</h3>
+                            <app-select-multiple
+                                    display="Инициаторы голосования"
+                                    :form="form"
+                                    name="initiators"
+                                    placeholder="Выберете инициаторов голосования"
+                                    :items="{{ json_encode($house->users)}}"
+                            >
+                            </app-select-multiple>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">
                                     Название
@@ -18,22 +26,18 @@
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
-                            <div class="form-group">
-                                <app-select
-                                        display="Вид общего собрания"
-                                        :form="form"
-                                        name="voting_type"
-                                        :items="{{ json_encode(\App\Enums\VotingTypes::humanValuesForVue()) }}">
-                                </app-select>
-                            </div>
-                            <div class="form-group">
-                                <app-select
-                                        display="Форма проведения собрания"
-                                        :form="form"
-                                        name="kind"
-                                        :items="{{ json_encode(\App\Enums\VotingForms::humanValuesForVue()) }}">
-                                </app-select>
-                            </div>
+                            <app-select
+                                    display="Вид общего собрания"
+                                    :form="form"
+                                    name="voting_type"
+                                    :items="{{ json_encode(\App\Enums\VotingTypes::humanValuesForVue()) }}">
+                            </app-select>
+                            <app-select
+                                    display="Форма проведения собрания"
+                                    :form="form"
+                                    name="kind"
+                                    :items="{{ json_encode(\App\Enums\VotingForms::humanValuesForVue()) }}">
+                            </app-select>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">
                                     Дата и время проведения очного обсуждения
@@ -218,9 +222,10 @@
             street_id: '{{ $house->street_id }}',
             number: {{ $house->number }},
             name: '',
-            voting_type: '',
+            initiators: [],
             kind: '',
             public_at: '',
+            voting_type: '',
             opened_at: '',
             closed_at: '',
             end_at: '',

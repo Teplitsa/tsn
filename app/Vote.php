@@ -16,5 +16,9 @@ class Vote extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function registered_flat()
+    {
+        return $this->belongsTo(RegisteredFlat::class);
+    }
 
 }

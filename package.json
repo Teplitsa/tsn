@@ -28,6 +28,7 @@
     "pace": "0.0.4",
     "pace-progress": "^1.0.2",
     "pusher-js": "^3.2.1",
+    "select2": "^4.0.3",
     "toastr": "^2.1.2"
   }
 }
