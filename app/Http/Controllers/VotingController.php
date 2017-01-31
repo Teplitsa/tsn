@@ -331,6 +331,13 @@ class VotingController extends Controller
             $document->setValue('closed_at_year', $voting->closed_at->year);
             $document->setValue('closed_at_hours_and_minutes', $voting->closed_at->format('H.m'));
             $document->setValue('total_square', $house->flats->sum('square'));
+            $predsed=UserVoting::where('voting_id',$voting->id)->where('role',RoleTypesInVoting::CHAIRMAN)->first();
+            $flat=$house->connectedFlats->where('user_id',$predsed->user_id)->first();
+            $document->setValue('predsed', $predsed->user->full_name.',собственник кв.'.$flat->number);
+            $secret=UserVoting::where('voting_id',$voting->id)->where('role',RoleTypesInVoting::SECRETARY)->first();
+            $flat=$house->connectedFlats->where('user_id',$secret->user_id)->first();
+            $document->setValue('secret', $secret->user->full_name.',собственник кв.'.$flat->number);
+
             $square = 0;
             $idS = [];
             foreach ($voting->vote_items as $key => $voteItem) {
@@ -360,7 +367,8 @@ class VotingController extends Controller
                     ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
                     '- ВОЗДЕРЖАЛСЯ '.$item->votes->where('refrained', 1)->count().' голосов, что составляет '.
                     $item->votes->where('refrained', 1)->count(
-                    ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />';;
+                    ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                'РЕШИЛИ: <w:br />'.$item->solution;
                 $vote_items = $vote_items.'5.'.$k.' '.$item->name.'<w:br />';
                 $vote_items_new = $vote_items_new.$k.'. '.$item->name.'<w:br />';
             }
@@ -431,6 +439,17 @@ class VotingController extends Controller
             $counter->save();
         }
 
+        return redirect()->back();
+    }
+    public function solution(House $house,Voting $voting,Request $request){
+        foreach ($request->get('solution') as $key=>$item){
+               foreach ($voting->vote_items as $voteKey=>$voteItem){
+                  if($key==$voteKey){
+                      $voteItem->solution=$item;
+                      $voteItem->save();
+                  }
+               }
+        }
         return redirect()->back();
     }
 }

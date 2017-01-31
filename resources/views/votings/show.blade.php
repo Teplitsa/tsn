@@ -6,45 +6,45 @@
         @if($voting->closed_at < \Carbon\Carbon::now())
 
             <form class="form-horizontal" action="{!! route('houses.votings.peoples',[$house, $voting]) !!}">
-            <div class="row">
-                <div class="col-md-12 col-sm-12">
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>Информация по голосованию</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <app-select
-                                    display="Председатель"
-                                    :form="form"
-                                    name="predsed"
-                                    placeholder="Выберете председателя голосования"
-                                    :items="{{ json_encode($users)}}"
-                            ></app-select>
-                            <app-select
-                                    display="Секретарь"
-                                    :form="form"
-                                    name="secretar"
-                                    placeholder="Выберете секретаря голосования"
-                                    :items="{{ json_encode($users)}}"
-                            ></app-select>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Информация по голосованию</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <app-select
+                                        display="Председатель"
+                                        :form="form"
+                                        name="predsed"
+                                        placeholder="Выберете председателя голосования"
+                                        :items="{{ json_encode($users)}}"
+                                ></app-select>
+                                <app-select
+                                        display="Секретарь"
+                                        :form="form"
+                                        name="secretar"
+                                        placeholder="Выберете секретаря голосования"
+                                        :items="{{ json_encode($users)}}"
+                                ></app-select>
 
-                            <app-select-multiple
-                                    display="Счетная коммисия"
-                                    :form="form"
-                                    name="count"
-                                    placeholder="Выберете счетную коммисию"
-                                    :items="{{ json_encode($house->users)}}"
-                            ></app-select-multiple>
-                            <button class="btn-block btn btn-success">
-                                <i class="fa fa-check"></i> Сохранить
-                            </button>
+                                <app-select-multiple
+                                        display="Счетная коммисия"
+                                        :form="form"
+                                        name="count"
+                                        placeholder="Выберете счетную коммисию"
+                                        :items="{{ json_encode($house->users)}}"
+                                ></app-select-multiple>
+                                <button class="btn-block btn btn-success">
+                                    <i class="fa fa-check"></i> Сохранить
+                                </button>
+                            </div>
+
                         </div>
 
                     </div>
-
                 </div>
-            </div>
-        </form>
+            </form>
 
         @endif
         <form class="form-horizontal" action="{!! route('houses.votings.store', $house) !!}">
@@ -92,6 +92,7 @@
                                     @{{ active.refrained }}/@{{ active.total }}
                                     (@{{ Math.round(active.refrained/active.total*100,2) }}%)
                                 </div>
+
                             </div>
                         </div>
 
@@ -101,8 +102,10 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-content">
                             <h3>Информация по голосованию</h3>
-                            <a href="{{route('houses.votings.download',[$voting->house,$voting])}}">Скачать протокол</a>
-
+                            @if($voting->closed_at < \Carbon\Carbon::now())
+                                <a href="{{route('houses.votings.download',[$voting->house,$voting])}}">Скачать
+                                    протокол</a>
+                            @endif
                             <p>Название: <b>@{{ form.name }}</b></p>
                             <p>Крайний срок: <b>@{{ form.closed_at }}</b></p>
 
@@ -114,12 +117,38 @@
                                     @{{ i+1 }}. @{{ item.name }}
                                 </li>
                             </ul>
+
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
+
+            <form class="form-horizontal" action="{!! route('houses.votings.solution',[$house, $voting]) !!}">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        @foreach($voting->vote_items as $key=>$item)
+                            @if($voting->closed_at < \Carbon\Carbon::now())
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">
+                                        Решение по вопросу {{$key+1}}
+                                    </label>
+                                    <div class="col-sm-8">
+                                    <textarea class="form-control" name="solution[]" data-voting="{{$item->id}}"
+                                              placeholder="Введите решение"></textarea>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                            <button class="btn-block btn btn-success">
+                                <i class="fa fa-check"></i> Сохранить
+                            </button>
+                    </div>
+                </div>
+            </form>
+
 @stop
 
 
