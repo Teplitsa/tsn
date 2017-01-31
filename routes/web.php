@@ -26,7 +26,7 @@ $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('logout', 'Auth\LoginController@logout');
     $router->get('/', ['as'=>'index', 'uses' => 'HomeController@index']);
     $router->get('/home', ['as'=>'home', 'uses' => 'HomeController@index']);
-
+    $router->get('houses/{house}/votings/{voting}/people', ['as'=>'houses.votings.peoples', 'uses' => 'VotingController@people']);
     $router->get('houses/{house}/votings/create', ['as'=>'houses.votings.create', 'uses' => 'VotingController@create']);
     $router->post('houses/{house}/votings', ['as'=>'houses.votings.store', 'uses' => 'VotingController@store']);
     $router->post('houses/load_streets', ['as'=>'houses.load_streets', 'uses' => 'HousesController@load_streets']);

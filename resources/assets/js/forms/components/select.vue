@@ -7,7 +7,7 @@
                 <small v-if="help != ''" class="text-navy">{{ help }}</small>
             </label>
             <div class="col-sm-10">
-                <select class="form-control" v-model="form[name]">
+                <select class="form-control" :name="name" v-model="form[name]">
                     <option v-for="item in items" :value="item.value">
                         {{ item.text }}
                     </option>

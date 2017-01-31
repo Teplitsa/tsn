@@ -7,6 +7,7 @@ use App\Company;
 use App\Enums\RoleTypesInVoting;
 use App\Enums\VotingTypes;
 use App\House;
+use App\Http\Controllers\InternalApi\User;
 use App\RegisteredFlat;
 use App\Street;
 use App\UserVoting;
@@ -134,8 +135,17 @@ class VotingController extends Controller
         abort_if($voting->house_id != $house->id, 403);
         $pageTitle = 'Информация по голосованию: '.$voting->title;
         $component = 'app-voting';
+        $users = collect($house->users)->map(
+            function ($val, $key) {
+                return [
+                    'value' => $key,
+                    'text' => $val,
+                ];
 
-        return view('votings.show', compact('voting', 'house', 'pageTitle', 'component'));
+            }
+        )->values();
+
+        return view('votings.show', compact('voting', 'house', 'pageTitle', 'component', 'users'));
     }
 
     /**
@@ -144,8 +154,10 @@ class VotingController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Voting $voting)
-    {
+    public
+    function edit(
+        Voting $voting
+    ) {
         abort_if(!$this->check($voting), 403);
         $company_id = \Auth::user()->company_id;
         $houses = House::where('company_id', $company_id)->get();
@@ -162,8 +174,11 @@ class VotingController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Voting $voting)
-    {
+    public
+    function update(
+        Request $request,
+        Voting $voting
+    ) {
         \DB::transaction(
             function () use ($request, &$voting, &$house) {
                 $voting = new Voting(
@@ -207,8 +222,10 @@ class VotingController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Voting $voting)
-    {
+    public
+    function destroy(
+        Voting $voting
+    ) {
         abort_if(!$this->check($voting), 403);
         \DB::transaction(
             function () use ($voting) {
@@ -220,8 +237,10 @@ class VotingController extends Controller
         );
     }
 
-    protected function check(Voting $voting)
-    {
+    protected
+    function check(
+        Voting $voting
+    ) {
         $check = true;
         $voting->vote_items->each(
             function ($vote_item) use (&$check) {
@@ -232,13 +251,21 @@ class VotingController extends Controller
         return $check;
     }
 
-    public function add_iniciators()
+    public
+    function add_iniciators()
     {
 
     }
 
-    public function download(House $house, Voting $voting)
-    {
+    public
+    function download(
+        House $house,
+        Voting $voting
+    ) {
+
+        if (!file_exists('documents/results/'.$house->city->id.'/'.$house->street->id.'/'.$house->number)) {
+            mkdir('documents/results/'.$house->city->id.'/'.$house->street->id.'/'.$house->number, 0777, true);
+        }
         $month = Carbon::today()->month;
         $dictionary = [
             '/10/' => 'октября',
@@ -255,122 +282,155 @@ class VotingController extends Controller
             '/9/' => 'сентября',
         ];
         $month = preg_replace(array_keys($dictionary), array_values($dictionary), $month);
-        $public_at_month = preg_replace(array_keys($dictionary), array_values($dictionary), $voting->public_at->month);
-        $open_at_month = preg_replace(array_keys($dictionary), array_values($dictionary), $voting->opened_at->month);
-        $closed_at_month = preg_replace(array_keys($dictionary), array_values($dictionary), $voting->closed_at->month);
+        $public_at_month = preg_replace(
+            array_keys($dictionary),
+            array_values($dictionary),
+            $voting->public_at->month
+        );
+        $open_at_month = preg_replace(
+            array_keys($dictionary),
+            array_values($dictionary),
+            $voting->opened_at->month
+        );
+        $closed_at_month = preg_replace(
+            array_keys($dictionary),
+            array_values($dictionary),
+            $voting->closed_at->month
+        );
         $name = 'documents/results/'.$house->city->id.'/'.$house->street->id.'/'.$house->number.'/'.$voting->id.'.docx';
-        /*if(file_exists($name)){
+        if (file_exists($name)) {
+            return response()->download($name);
+        } else {
+            $phpWord = new PhpWord();
+            $document = $phpWord->loadTemplate('documents/templates/protocol_template.docx');
+            $document->setValue('NAME', $voting->protocol_number);
+            $document->setValue('day', Carbon::today()->day);
+            $document->setValue('month', $month);
+            $document->setValue('year', Carbon::today()->year);
+            $document->setValue('city', $house->city->name);
+            $document->setValue('street', $house->street->name);
+            $document->setValue('house', $house->number);
+            $document->setValue('voting_type', $voting->voting_type);
+            $document->setValue('kind', $voting->kind);
+            $document->setValue('public_at_day', $voting->public_at->day);
+            $document->setValue('public_at_month', $public_at_month);
+            $document->setValue('public_at_year', $voting->public_at->year);
+            $document->setValue('public_at_hours', $voting->public_at->hour);
+            $document->setValue('public_at_minutes', $voting->public_at->format('m'));
+            $document->setValue('end_at_hours', $voting->end_at->hour);
+            $document->setValue('end_at_minutes', $voting->end_at->format('m'));
+            $document->setValue('public_city', $voting->public_house->city->name);
+            $document->setValue('public_street', $voting->public_house->street->name);
+            $document->setValue('public_house', $voting->public_house->number);
+            $document->setValue('opened_at_day', $voting->opened_at->day);
+            $document->setValue('opened_at_month', $open_at_month);
+            $document->setValue('opened_at_year', $voting->opened_at->year);
+            $document->setValue('opened_at_hours_and_minutes', $voting->opened_at->format('H.m'));
+            $document->setValue('closed_at_day', $voting->closed_at->day);
+            $document->setValue('closed_at_month', $closed_at_month);
+            $document->setValue('closed_at_year', $voting->closed_at->year);
+            $document->setValue('closed_at_hours_and_minutes', $voting->closed_at->format('H.m'));
+            $document->setValue('total_square', $house->flats->sum('square'));
+            $square = 0;
+            $idS = [];
+            foreach ($voting->vote_items as $key => $voteItem) {
+                array_push($idS, $voteItem->id);
+            }
+
+            $uniq = Vote::whereIn('vote_item_id', $idS)->get()->groupBy('registered_flat_id')->count();
+
+            foreach (Vote::whereIn('vote_item_id', $idS)->get()->groupBy('registered_flat_id') as $item) {
+                $square += $item->first()->registered_flat->square;
+            }
+            $document->setValue('votes_total_square', $square);
+            $document->setValue('total_votes', $uniq);
+            $vote_items = '';
+            $vote_items_new = '';
+            $full_text = '';
+            foreach ($voting->vote_items as $key => $item) {
+                $k = $key + 1;
+                $full_text = $full_text.'По вопросу № '.$k.' повестки дня "'.$item->name.'".<w:br /> ВЫСТУПАЛ '
+                    .$item->user->full_name.'<w:br />'.'ПРЕДЛОЖЕНО по пункту №'.$k.' повестки дня: <w:br />'.$item->description.
+                    '<w:br />. Результаты голосования по пункту №'.$k.' повестки дня: <w:br />'.
+                    '- ЗА '.$item->votes->where('pro', 1)->count().' голосов, что составляет '.
+                    $item->votes->where('pro', 1)->count(
+                    ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    '- ПРОТИВ '.$item->votes->where('contra', 1)->count().' голосов, что составляет '.
+                    $item->votes->where('contra', 1)->count(
+                    ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    '- ВОЗДЕРЖАЛСЯ '.$item->votes->where('refrained', 1)->count().' голосов, что составляет '.
+                    $item->votes->where('refrained', 1)->count(
+                    ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />';;
+                $vote_items = $vote_items.'5.'.$k.' '.$item->name.'<w:br />';
+                $vote_items_new = $vote_items_new.$k.'. '.$item->name.'<w:br />';
+            }
+
+            $initiators = '';
+            foreach (UserVoting::where('voting_id', $voting->id)->get() as $key => $initiator) {
+                $k = $key + 1;
+                $initiators = $initiators.'1.'.$k.' Собственник кв. №'.$initiator->user->registeredFlats->first(
+                    )->flat->number.' - '.$initiator->user->full_name.
+                    '(свидетельство о государственной регистрации права '.$initiator->user->registeredFlats->first(
+                    )->number_doc.' от '.$initiator->user->registeredFlats->first()->date_doc->format(
+                        'd.m.Y'
+                    ).'г.)'.'<w:br />';
+            }
+            $document->setValue('vote_items', $vote_items);
+            $document->setValue('full_text', $full_text);
+            $document->setValue('vote_items_new', $vote_items_new);
+            $document->setValue('initiators', $initiators);
+            $document->setValue('votes_percent', $uniq / count($house->flats) * 100);
+            if ($uniq / count($house->flats) * 100 > 50) {
+                $result = 'правомочно';
+            } else {
+                $result = 'не правомочно';
+            }
+            $document->setValue('is_success', $result);
+            $document->saveAs($name);
+
+
             return response()->download($name);
         }
-        else{*/
-        $phpWord = new PhpWord();
-        $document = $phpWord->loadTemplate('documents/templates/protocol_template.docx');
-        $document->setValue('NAME', $voting->protocol_number);
-        $document->setValue('day', Carbon::today()->day);
-        $document->setValue('month', $month);
-        $document->setValue('year', Carbon::today()->year);
-        $document->setValue('city', $house->city->name);
-        $document->setValue('street', $house->street->name);
-        $document->setValue('house', $house->number);
-        $document->setValue('voting_type', $voting->voting_type);
-        $document->setValue('kind', $voting->kind);
-        $document->setValue('public_at_day', $voting->public_at->day);
-        $document->setValue('public_at_month', $public_at_month);
-        $document->setValue('public_at_year', $voting->public_at->year);
-        $document->setValue('public_at_hours', $voting->public_at->hour);
-        $document->setValue('public_at_minutes', $voting->public_at->format('m'));
-        $document->setValue('end_at_hours', $voting->end_at->hour);
-        $document->setValue('end_at_minutes', $voting->end_at->format('m'));
-        $document->setValue('public_city', $voting->public_house->city->name);
-        $document->setValue('public_street', $voting->public_house->street->name);
-        $document->setValue('public_house', $voting->public_house->number);
-        $document->setValue('opened_at_day', $voting->opened_at->day);
-        $document->setValue('opened_at_month', $open_at_month);
-        $document->setValue('opened_at_year', $voting->opened_at->year);
-        $document->setValue('opened_at_hours_and_minutes', $voting->opened_at->format('H.m'));
-        $document->setValue('closed_at_day', $voting->closed_at->day);
-        $document->setValue('closed_at_month', $closed_at_month);
-        $document->setValue('closed_at_year', $voting->closed_at->year);
-        $document->setValue('closed_at_hours_and_minutes', $voting->closed_at->format('H.m'));
-        $document->setValue('total_square', $house->flats->sum('square'));
-        $square = 0;
-        $idS = [];
-        foreach ($voting->vote_items as $key => $voteItem) {
-            array_push($idS, $voteItem->id);
-        }
-
-        $uniq = Vote::whereIn('vote_item_id', $idS)->get()->groupBy('registered_flat_id')->count();
-
-        foreach (Vote::whereIn('vote_item_id', $idS)->get()->groupBy('registered_flat_id') as $item) {
-            $square += $item->first()->registered_flat->square;
-        }
-        $document->setValue('votes_total_square', $square);
-        $document->setValue('total_votes', $uniq);
-        $vote_items = '';
-        $vote_items_new = '';
-        $full_text = '';
-        foreach ($voting->vote_items as $key => $item) {
-            $k = $key + 1;
-            $full_text = $full_text.'По вопросу № '.$k.' повестки дня "'.$item->name.'".<w:br /> ВЫСТУПАЛ '
-                .$item->user->full_name.'<w:br />'.'ПРЕДЛОЖЕНО по пункту №'.$k.' повестки дня: <w:br />'.$item->description.
-            '<w:br />. Результаты голосования по пункту №'.$k.' повестки дня: <w:br />'.
-                '- ЗА '.$item->votes->where('pro',1)->count().' голосов, что составляет '.
-                $item->votes->where('pro',1)->count()*100/$uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
-                '- ПРОТИВ '.$item->votes->where('contra',1)->count().' голосов, что составляет '.
-                $item->votes->where('contra',1)->count()*100/$uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
-                '- ВОЗДЕРЖАЛСЯ '.$item->votes->where('refrained',1)->count().' голосов, что составляет '.
-                $item->votes->where('refrained',1)->count()*100/$uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />';
-
-            ;
-            $vote_items = $vote_items.'5.'.$k.' '.$item->name.'<w:br />';
-            $vote_items_new = $vote_items_new.$k.'. '.$item->name.'<w:br />';}
-
-        $initiators = '';
-        foreach (UserVoting::where('voting_id', $voting->id)->get() as $key => $initiator) {
-            $k = $key + 1;
-            $initiators = $initiators.'1.'.$k.' Собственник кв. №'.$initiator->user->registeredFlats->first(
-                )->flat->number.' - '.$initiator->user->full_name.
-                '(свидетельство о государственной регистрации права '.$initiator->user->registeredFlats->first(
-                )->number_doc.' от '.$initiator->user->registeredFlats->first()->date_doc->format(
-                    'd.m.Y'
-                ).'г.)'.'<w:br />';
-        }
-        $document->setValue('vote_items', $vote_items);
-        $document->setValue('full_text', $full_text);
-        $document->setValue('vote_items_new', $vote_items_new);
-        $document->setValue('initiators', $initiators);
-        $document->setValue('votes_percent', $uniq / count($house->flats) * 100);
-        if ($uniq / count($house->flats) * 100 > 50) {
-            $result = 'правомочно';
-        } else {
-            $result = 'не правомочно';
-        }
-        $document->setValue('is_success', $result);
-
-
-        //$document->cloneBlock('vote_items');
-
-        //$section = $phpWord->addSection();
-        // $listItem = new ListItem("Test");
-
-        /*$xml = new XMLWriter();
-        $listItemWriter = new \PhpOffice\PhpWord\Writer\Word2007\Element\ListItem($xml, $listItem);
-        $listItemWriter->write();*/
-
-
-        //$document->setValue('vote_items', $xml->getData());
-
-//        $section ="";
-//        foreach ($voting->vote_items as $key=>$item){
-//            $section=$section."5.".$key.$item->name."\n";
-//        }
-//        $phpWord->setValue('vote_items',$section);
-        if (!file_exists('documents/results/'.$house->city->id.'/'.$house->street->id.'/'.$house->number)) {
-            mkdir('documents/results/'.$house->city->id.'/'.$house->street->id.'/'.$house->number, 0777, true);
-        }
-        $document->saveAs($name);
-
-        return response()->download($name);
     }
+
     // }
+
+    public function people(House $house, Voting $voting, Request $request)
+    {
+        $predsed = UserVoting::where('voting_id', $voting->id)
+            ->where('user_id', $request->get('predsed'))->first();
+        if ($predsed == null) {
+            $predsed = new UserVoting();
+        }
+
+        $predsed->voting_id = $voting->id;
+        $predsed->role = RoleTypesInVoting::CHAIRMAN;
+        $predsed->user_id = $request->get('predsed');
+        $predsed->save();
+
+        $secretar = UserVoting::where('voting_id', $voting->id)
+            ->where('user_id', $request->get('secretar'))->first();
+        if ($secretar == null) {
+            $secretar = new UserVoting();
+        }
+
+        $secretar->voting_id = $voting->id;
+        $secretar->role = RoleTypesInVoting::SECRETARY;
+        $secretar->user_id = $request->get('secretar');
+        $secretar->save();
+
+        foreach ($request->get('count') as $count) {
+            $counter = UserVoting::where('voting_id', $voting->id)
+                ->where('user_id', $count)->first();
+            if ($counter == null) {
+                $counter = new UserVoting();
+            }
+            $counter->voting_id = $voting->id;
+            $counter->role = RoleTypesInVoting::COUNTER;
+            $counter->user_id = $count;
+            $counter->save();
+        }
+
+        return redirect()->back();
+    }
 }

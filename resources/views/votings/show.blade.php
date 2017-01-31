@@ -2,6 +2,51 @@
 
 @section ('content')
     <div>
+
+        @if($voting->closed_at < \Carbon\Carbon::now())
+
+            <form class="form-horizontal" action="{!! route('houses.votings.peoples',[$house, $voting]) !!}">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Информация по голосованию</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <app-select
+                                    display="Председатель"
+                                    :form="form"
+                                    name="predsed"
+                                    placeholder="Выберете председателя голосования"
+                                    :items="{{ json_encode($users)}}"
+                            ></app-select>
+                            <app-select
+                                    display="Секретарь"
+                                    :form="form"
+                                    name="secretar"
+                                    placeholder="Выберете секретаря голосования"
+                                    :items="{{ json_encode($users)}}"
+                            ></app-select>
+
+                            <app-select-multiple
+                                    display="Счетная коммисия"
+                                    :form="form"
+                                    name="count"
+                                    placeholder="Выберете счетную коммисию"
+                                    :items="{{ json_encode($house->users)}}"
+                            ></app-select-multiple>
+                            <button class="btn-block btn btn-success">
+                                <i class="fa fa-check"></i> Сохранить
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+
+        @endif
         <form class="form-horizontal" action="{!! route('houses.votings.store', $house) !!}">
             <div class="row">
                 <div class="col-md-8 col-sm-6">
@@ -32,17 +77,20 @@
                                 <div class="col-md-4 text-center">
                                     <i class="fa fa-thumbs-up" style="font-size: 30px"></i>
                                     <br/>
-                                    @{{ active.pro }}/@{{ active.total }} (@{{ Math.round(active.pro/active.total*100,2) }}%)
+                                    @{{ active.pro }}/@{{ active.total }}
+                                    (@{{ Math.round(active.pro/active.total*100,2) }}%)
                                 </div>
                                 <div class="col-md-4 text-center">
                                     <i class="fa fa-minus" style="font-size: 30px"></i>
                                     <br/>
-                                    @{{ active.contra }}/@{{ active.total }} (@{{ Math.round(active.contra/active.total*100,2) }}%)
+                                    @{{ active.contra }}/@{{ active.total }}
+                                    (@{{ Math.round(active.contra/active.total*100,2) }}%)
                                 </div>
                                 <div class="col-md-4 text-center">
                                     <i class="fa fa-thumbs-down" style="font-size: 30px"></i>
                                     <br/>
-                                        @{{ active.refrained }}/@{{ active.total }} (@{{ Math.round(active.refrained/active.total*100,2) }}%)
+                                    @{{ active.refrained }}/@{{ active.total }}
+                                    (@{{ Math.round(active.refrained/active.total*100,2) }}%)
                                 </div>
                             </div>
                         </div>
@@ -53,7 +101,6 @@
                     <div class="ibox float-e-margins">
                         <div class="ibox-content">
                             <h3>Информация по голосованию</h3>
-                            <a data-target="#myModal">11</a>
                             <a href="{{route('houses.votings.download',[$voting->house,$voting])}}">Скачать протокол</a>
 
                             <p>Название: <b>@{{ form.name }}</b></p>
@@ -71,19 +118,7 @@
                     </div>
                 </div>
             </div>
-
         </form>
-    </div>
-    <div id="myModal5" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header"><button class="close" type="button" data-dismiss="modal">&times;</button>
-                    <h4 id="myModalLabel" class="modal-title">Event Example</h4>
-                </div>
-                <div class="modal-body">&nbsp;jnhh</div>
-                <div class="modal-footer"><button class="btn btn-default" type="button" data-dismiss="modal">Close</button></div>
-            </div>
-        </div>
     </div>
 @stop
 
@@ -91,5 +126,14 @@
 @section('after_body')
     <script>
         App.forms.voting = {!! json_encode($voting->getInfo()) !!}
+    </script>
+
+    <script>
+        App.forms.ManagePeople = {
+            predsed: '',
+            secretar: '',
+            count: '',
+        };
+
     </script>
 @stop

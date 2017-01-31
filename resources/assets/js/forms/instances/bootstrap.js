@@ -8,3 +8,4 @@ require('./create-house');
 require('./activate-flat');
 require('./manage-voting');
 require('./voting');
+require('./manage-people');
