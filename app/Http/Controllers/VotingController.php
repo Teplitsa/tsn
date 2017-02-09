@@ -28,7 +28,6 @@ class VotingController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -43,7 +42,6 @@ class VotingController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
      * @return \Illuminate\Http\Response
      */
     public function create(House $house)
@@ -66,6 +64,7 @@ class VotingController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, House $house)
@@ -127,6 +126,7 @@ class VotingController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(House $house, Voting $voting)
@@ -152,6 +152,7 @@ class VotingController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public
@@ -172,6 +173,7 @@ class VotingController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public
@@ -220,6 +222,7 @@ class VotingController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public
@@ -298,7 +301,7 @@ class VotingController extends Controller
             $voting->closed_at->month
         );
         $name = 'documents/results/'.$house->city->id.'/'.$house->street->id.'/'.$house->number.'/'.$voting->id.'.docx';
-        if (file_exists($name)) {
+        if (false && file_exists($name)) {
             return response()->download($name);
         } else {
             $phpWord = new PhpWord();
@@ -331,12 +334,19 @@ class VotingController extends Controller
             $document->setValue('closed_at_year', $voting->closed_at->year);
             $document->setValue('closed_at_hours_and_minutes', $voting->closed_at->format('H.m'));
             $document->setValue('total_square', $house->flats->sum('square'));
-            $predsed=UserVoting::where('voting_id',$voting->id)->where('role',RoleTypesInVoting::CHAIRMAN)->first();
-            $flat=$house->connectedFlats->where('user_id',$predsed->user_id)->first();
-            $document->setValue('predsed', $predsed->user->full_name.',собственник кв.'.$flat->number);
-            $secret=UserVoting::where('voting_id',$voting->id)->where('role',RoleTypesInVoting::SECRETARY)->first();
-            $flat=$house->connectedFlats->where('user_id',$secret->user_id)->first();
-            $document->setValue('secret', $secret->user->full_name.',собственник кв.'.$flat->number);
+            $predsed = UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::CHAIRMAN)->first();
+            $flat = $house->connectedFlats->where('user_id', $predsed->user_id)->first();
+            $suffix = '';
+            if (!is_null($flat))
+                $suffix = ',собственник кв.'.$flat->number;
+
+            $document->setValue('predsed', $predsed->user->full_name.$suffix);
+            $secret = UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::SECRETARY)->first();
+            $flat = $house->connectedFlats->where('user_id', $secret->user_id)->first();
+            $suffix = '';
+            if (!is_null($flat))
+                $suffix = ',собственник кв.'.$flat->number;
+            $document->setValue('secret', $secret->user->full_name.$suffix);
 
             $square = 0;
             $idS = [];
@@ -344,7 +354,8 @@ class VotingController extends Controller
                 array_push($idS, $voteItem->id);
             }
 
-            $uniq = Vote::whereIn('vote_item_id', $idS)->get()->groupBy('registered_flat_id')->count();
+            $uniq = $voting->getTotalVotes();
+            //$uniq = Vote::whereIn('vote_item_id', $idS)->get()->groupBy('registered_flat_id')->count();
 
             foreach (Vote::whereIn('vote_item_id', $idS)->get()->groupBy('registered_flat_id') as $item) {
                 $square += $item->first()->registered_flat->square;
@@ -356,44 +367,63 @@ class VotingController extends Controller
             $full_text = '';
             foreach ($voting->vote_items as $key => $item) {
                 $k = $key + 1;
-                $full_text = $full_text.'По вопросу № '.$k.' повестки дня "'.$item->name.'".<w:br /> ВЫСТУПАЛ '
+                $full_text = $full_text.'По вопросу № '.$k.' повестки дня "'.$item->name.'".<w:br />ВЫСТУПАЛ '
                     .$item->user->full_name.'<w:br />'.'ПРЕДЛОЖЕНО по пункту №'.$k.' повестки дня: <w:br />'.$item->description.
-                    '<w:br />. Результаты голосования по пункту №'.$k.' повестки дня: <w:br />'.
-                    '- ЗА '.$item->votes->where('pro', 1)->count().' голосов, что составляет '.
-                    $item->votes->where('pro', 1)->count(
-                    ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
-                    '- ПРОТИВ '.$item->votes->where('contra', 1)->count().' голосов, что составляет '.
-                    $item->votes->where('contra', 1)->count(
-                    ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
-                    '- ВОЗДЕРЖАЛСЯ '.$item->votes->where('refrained', 1)->count().' голосов, что составляет '.
-                    $item->votes->where('refrained', 1)->count(
-                    ) * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
-                'РЕШИЛИ: <w:br />'.$item->solution;
+                    '<w:br />Результаты голосования по пункту №'.$k.' повестки дня: <w:br />'.
+                    '     - ЗА '.$item->votes->where('pro', 1)->count().' голосов, что составляет '.
+                    $item->votes->where('pro',
+                        1)->count() * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    '     - ПРОТИВ '.$item->votes->where('contra', 1)->count().' голосов, что составляет '.
+                    $item->votes->where('contra',
+                        1)->count() * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    '     - ВОЗДЕРЖАЛСЯ '.$item->votes->where('refrained', 1)->count().' голосов, что составляет '.
+                    $item->votes->where('refrained',
+                        1)->count() * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    //'РЕШИЛИ: <w:br />'.$item->solution;
+                '<w:br />';
                 $vote_items = $vote_items.'5.'.$k.' '.$item->name.'<w:br />';
                 $vote_items_new = $vote_items_new.$k.'. '.$item->name.'<w:br />';
             }
 
             $initiators = '';
-            foreach (UserVoting::where('voting_id', $voting->id)->get() as $key => $initiator) {
+            foreach (UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::TENANT)->get() as $key => $initiator) {
                 $k = $key + 1;
-                $initiators = $initiators.'1.'.$k.' Собственник кв. №'.$initiator->user->registeredFlats->first(
-                    )->flat->number.' - '.$initiator->user->full_name.
-                    '(свидетельство о государственной регистрации права '.$initiator->user->registeredFlats->first(
-                    )->number_doc.' от '.$initiator->user->registeredFlats->first()->date_doc->format(
-                        'd.m.Y'
-                    ).'г.)'.'<w:br />';
+                $flat = $initiator->user->registeredFlats->first();
+                $prefix = 'Сотрудник ТСН: ';
+                $suffix = '';
+                if(!is_null($flat)){
+                    $prefix = ' Собственник кв. №'.$flat->flat->number.' - ';
+                    $suffix = '(свидетельство о государственной регистрации права '.$flat->number_doc.' от '.$flat->date_doc->format('d.m.Y').'г.)';
+                }
+
+                $initiators = $initiators.'1.'.$k.$prefix.$initiator->user->full_name.$suffix
+                    .'<w:br />';
             }
             $document->setValue('vote_items', $vote_items);
             $document->setValue('full_text', $full_text);
             $document->setValue('vote_items_new', $vote_items_new);
             $document->setValue('initiators', $initiators);
-            $document->setValue('votes_percent', $uniq / count($house->flats) * 100);
-            if ($uniq / count($house->flats) * 100 > 50) {
+            $document->setValue('votes_percent', $uniq);
+            if ($uniq > 50) {
                 $result = 'правомочно';
             } else {
                 $result = 'не правомочно';
             }
             $document->setValue('is_success', $result);
+
+            $countPeople = UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::COUNTER)->limit(3)->get();
+            foreach ($countPeople as $key=>$person)
+            {
+                $num = $key + 1;
+                $document->setValue('schet'.$num.'line','___ _______________ 201__ г.	_____________/ ____________');
+                $document->setValue('schet'.$num,$person->user->full_name);
+            }
+            for($i=count($countPeople)+1; $i <= 3; $i++)
+            {
+                $document->setValue('schet'.$i.'line','');
+                $document->setValue('schet'.$i,'');
+            }
+
             $document->saveAs($name);
 
 
@@ -405,34 +435,22 @@ class VotingController extends Controller
 
     public function people(House $house, Voting $voting, Request $request)
     {
-        $predsed = UserVoting::where('voting_id', $voting->id)
-            ->where('user_id', $request->get('predsed'))->first();
-        if ($predsed == null) {
-            $predsed = new UserVoting();
-        }
-
+        UserVoting::where('voting_id', $voting->id)->where('role', '!=', RoleTypesInVoting::TENANT)->delete();
+        $predsed = new UserVoting();
         $predsed->voting_id = $voting->id;
         $predsed->role = RoleTypesInVoting::CHAIRMAN;
         $predsed->user_id = $request->get('predsed');
         $predsed->save();
 
-        $secretar = UserVoting::where('voting_id', $voting->id)
-            ->where('user_id', $request->get('secretar'))->first();
-        if ($secretar == null) {
-            $secretar = new UserVoting();
-        }
 
+        $secretar = new UserVoting();
         $secretar->voting_id = $voting->id;
         $secretar->role = RoleTypesInVoting::SECRETARY;
         $secretar->user_id = $request->get('secretar');
         $secretar->save();
 
-        foreach ($request->get('count') as $count) {
-            $counter = UserVoting::where('voting_id', $voting->id)
-                ->where('user_id', $count)->first();
-            if ($counter == null) {
-                $counter = new UserVoting();
-            }
+        foreach ($request->get('count', []) as $count) {
+            $counter = new UserVoting();
             $counter->voting_id = $voting->id;
             $counter->role = RoleTypesInVoting::COUNTER;
             $counter->user_id = $count;
@@ -441,15 +459,18 @@ class VotingController extends Controller
 
         return redirect()->back();
     }
-    public function solution(House $house,Voting $voting,Request $request){
-        foreach ($request->get('solution') as $key=>$item){
-               foreach ($voting->vote_items as $voteKey=>$voteItem){
-                  if($key==$voteKey){
-                      $voteItem->solution=$item;
-                      $voteItem->save();
-                  }
-               }
+
+    public function solution(House $house, Voting $voting, Request $request)
+    {
+        foreach ($request->get('solution') as $key => $item) {
+            foreach ($voting->vote_items as $voteKey => $voteItem) {
+                if ($key == $voteKey) {
+                    $voteItem->solution = $item;
+                    $voteItem->save();
+                }
+            }
         }
+
         return redirect()->back();
     }
 }

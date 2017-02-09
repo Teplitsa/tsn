@@ -12,6 +12,11 @@ class House extends Model
         return $this->hasMany(Flat::class);
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
     public function street()
     {
         return $this->belongsTo(Street::class);
@@ -54,12 +59,17 @@ class House extends Model
 
     public function getUsersAttribute()
     {
-        $users=[];
-        foreach ($this->flats as $flat){
-            foreach ($flat->registered_flats as $registeredFlat){
-                $users[$registeredFlat->user->id]=$registeredFlat->user->full_name;
+        $users = [];
+        foreach ($this->flats as $flat) {
+            foreach ($flat->registered_flats as $registeredFlat) {
+                $users[$registeredFlat->user->id] = $registeredFlat->user->full_name;
             }
         }
+
+        foreach ($this->company->employees as $employee) {
+            $users[$employee->id] = $employee->full_name;
+        }
+
         return $users;
     }
 }

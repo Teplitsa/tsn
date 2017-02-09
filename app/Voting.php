@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\RoleTypesInVoting;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -79,7 +80,15 @@ class Voting extends Model
             ];
         }
 
+//        $data['predsed'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::CHAIRMAN)->first()->user_id;
+//        $data['secretar'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::SECRETARY)->first()->user_id;
+        //$data['count[]'] = ;
+
         return $data;
+    }
+
+    public function isCounter($id){
+        return in_array($id, UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::COUNTER)->pluck('user_id')->all());
     }
 
     protected $dates = ['public_at', 'closed_at', 'end_at','opened_at','protocol_at'];
@@ -112,5 +121,15 @@ class Voting extends Model
     {
         $this->attributes['end_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
             $value);
+    }
+
+    public function getTotalVotes()
+    {
+        $ids = $this->vote_items->flatMap(function($item) {
+            return $item->votes->groupBy('registered_flat_id')->keys();
+        })->unique()->all();
+
+        $square = RegisteredFlat::whereIn('id', $ids)->sum('square');
+        return number_format($square / $this->house->square * 100, 2);
     }
 }

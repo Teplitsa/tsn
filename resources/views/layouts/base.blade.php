@@ -91,6 +91,11 @@
 
 @yield('after_js')
 
+<script>
+    $(function(){
+        $('.select2-my').select2();
+    })
+</script>
 </body>
 
 </html>
