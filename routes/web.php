@@ -10,7 +10,7 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-Route::get('/landing_page', function () {
+Route::get('/about', function () {
     return view('index');
 
 
