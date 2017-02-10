@@ -248,11 +248,6 @@
                 <div class="bubble">
                     Сейчас мы набираем ТСН и ТСЖ для тестирования, запишитесь и ваш отзыв появится здесь.
                 </div>
-                <div class="comments-avatar">
-                    <a href="" class="pull-left">
-                        <i class="fa fa-bolt big-icon pull-right"></i>
-                    </a>
-                </div>
             </div>
 
             <div class="col-lg-4">
