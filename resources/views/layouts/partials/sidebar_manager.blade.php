@@ -7,6 +7,9 @@
     <li class="{{ ((isset($currentHouse) && $currentHouse == $house->id) ? 'active' : '')    }}">
         <a href="{{route('houses.show', $house)}}">
             <i class="fa fa-home"></i> <span class="nav-label">{!! $house->address !!}</span>
+            @if($house->not_active>0)
+                <span class="label label-primary">{{$house->not_active}}</span>
+            @endif
         </a>
     </li>
 @endforeach

@@ -10,10 +10,15 @@
 | to using a Closure or controller method. Build something great!
 |
 */
+Route::get('/landing_page', function () {
+    return view('index');
 
+
+});
 use Illuminate\Routing\Router;
 
 Auth::routes();
+
 $router->get('/forgot-password', ['as'=>'auth.forgot', 'uses' => 'Auth@forget']);
 $router->post('/forgot-password', ['as'=>'auth.forgot.post', 'uses' => 'Auth@forgetHandler']);
 $router->get('/new-company', ['as'=>'new-company', 'uses' => 'Auth\RegisterController@newCompany']);
@@ -35,6 +40,8 @@ $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('houses/{house}/votings/{voting}/download', ['as'=>'houses.votings.download', 'uses' => 'VotingController@download']);
 
     $router->resource('houses', 'HousesController');
+    $router->get('houses/{house}/{flat}/download', ['as'=>'houses.flat.download', 'uses' => 'HousesController@download']);
+    $router->get('houses/{house}/{flat}/active', ['as'=>'houses.flat.active', 'uses' => 'HousesController@active']);
 
     $router->get('flats/attach', ['as'=>'flats.attach', 'uses'=>'FlatController@attach']);
     $router->post('flats/attach', ['as'=>'flats.attach.post', 'uses'=>'FlatController@attachHandler']);
@@ -54,3 +61,4 @@ $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('/flat/{flat}/voting/{voting}', ['as'=>'flat.voting', 'uses'=>'VoteController@voting']);
     $router->post('/flat/{flat}/voting/{voting}/{votingItem}/{vote}', ['as'=>'flat.voting.vote', 'uses'=>'VoteController@vote']);
 });
+
