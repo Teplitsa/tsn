@@ -13,7 +13,6 @@ class HouseSeeder extends Seeder
     {
         \App\House::insert([
             [
-                'address' => 'Мира 32',
                 'area' => 'Кировский',
                 'company_id' => '1',
                 'created_at' => Carbon\Carbon::now(),

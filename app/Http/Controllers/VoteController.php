@@ -30,14 +30,14 @@ class VoteController extends Controller
         abort_if($flat->flat->house_id != $voting->house_id, 403);
         abort_if($votingItem->voting_id != $voting->id, 403);
 
-        $vote = $votingItem->votes->first(function ($vote) {
-            return $vote->user_id == auth()->user()->id;
+        $vote = $votingItem->votes->first(function ($vote) use ($flat){
+            return $vote->registered_flat_id == $flat->id;
         });
 
         if($vote == null)
         {
             $vote = new Vote();
-            $vote->user()->associate(auth()->user());
+            $vote->registered_flat()->associate($flat);
             $vote->vote_item()->associate($votingItem);
         }
 

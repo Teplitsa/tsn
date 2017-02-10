@@ -33,4 +33,14 @@ trait TEnum
     {
         return isset(self::$faker[$key]) ? self::$faker[$key] : 'word';
     }
+    public static function humanValuesForVue()
+    {
+        return collect(self::humanValues())->map(
+            function ($val, $key) {
+                return ['value' => $key, 'text' => $val];
+            }
+        )->values()->all();
+    }
+
+
 }

@@ -14,6 +14,7 @@ require('./bootstrap');
  */
 
 require('./components/bootstrap');
+require('./directives/bootstrap');
 require('./plugins');
 require('./helpers/bootstrap');
 
@@ -56,7 +57,7 @@ App.Instance = new Vue({
                 vm.$broadcast('newNotification', notificationItem);
             });
 
-        // Enable pusher logging - don't include this in production
+
 
 
     },

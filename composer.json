@@ -17,8 +17,10 @@
         "laracasts/flash": "^2.0",
         "intervention/image": "^2.3",
         "guzzlehttp/guzzle": "^6.2",
+        "phpoffice/phpword": "v0.13.*",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
         "deployer/deployer": "~3.0"
+
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

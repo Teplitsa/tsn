@@ -26,6 +26,7 @@ class CreateCompaniesTable extends Migration
             $table->string('bank_account')->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

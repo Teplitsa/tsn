@@ -1,5 +1,7 @@
+let streets = require('../../components/can-load-streets');
+
 Vue.component('attach-flat', {
-    props: [],
+    mixins: [streets],
 
     /*
      * Bootstrap the component. Load the initial data.
@@ -15,10 +17,29 @@ Vue.component('attach-flat', {
      */
     data: function () {
         return {
-            form:  new AppForm({
+            form: new AppForm({
                 account: '',
-                company_id: ''
-            })
+                city: '',
+                street_id: '',
+                number: '',
+                flat: '',
+                square: '',
+                up_part: 1,
+                down_part: 1,
+                number_doc: '',
+                date_doc: '',
+                issuer_doc: '',
+                scan: ''
+            }),
+            streets: []
+        }
+    },
+
+    computed: {
+        mySquare()
+        {
+            let square = this.form.square / this.form.down_part * this.form.up_part;
+            return Math.round((isNaN(square) ? 0 : square) * 100) / 100;
         }
     },
 
@@ -29,14 +50,50 @@ Vue.component('attach-flat', {
             let action = $(this.$el).find('form').attr('action');
             let method = $(this.$el).find('input[name="_method"]').val() || 'post';
             method = method.toLowerCase();
-            App[method](action, this.form)
+
+
+            let data = new FormData();
+
+            $.each(JSON.parse(JSON.stringify(this.form)), function(key, value) {
+                if(['scan', 'successful', 'busy', 'errors'].indexOf(key) == -1)
+                    data.append(key, value);
+            });
+            data.append('scan', $(this.$el).find("[name='scan']")[0].files[0]);
+
+            this.form.startProcessing();
+            this.$http[method](action, data)
                 .then(function (response) {
-                    setTimeout(function(){
-                        location.href = response.data.redirect;
+                    $vm.form.finishProcessing();
+
+                    setTimeout(function () {
+                        location.href = response.data.data.redirect;
                     }, 3000);
-                }, function (response) {
-                    // error
+                }).catch(function (response) {
+                    let error = response.data;
+
+                    $vm.form.errors.set(error);
+                    $vm.form.busy = false;
                 });
+        },
+
+        previewImage(){
+            var input = event.target;
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                var vm = this;
+
+                reader.onload = function (e) {
+                    vm.form.scan = e.target.result;
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        },
+
+
+        openScan(){
+            $(this.$el).find('[name="scan"]').click();
         }
     },
 });

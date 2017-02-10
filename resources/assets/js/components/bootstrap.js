@@ -4,3 +4,4 @@ Vue.component('layout-breadcrumbs', require('./layout/Breadcrumbs.vue'));
 Vue.component('layout-headerline', require('./layout/HeaderLine.vue'));
 
 Vue.component('timeago', require('./timeago.vue'));
+require('./add-house');

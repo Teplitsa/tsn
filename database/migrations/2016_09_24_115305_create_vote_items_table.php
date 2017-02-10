@@ -16,10 +16,16 @@ class CreateVoteItemsTable extends Migration
         Schema::create('vote_items', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('description');
+            $table->text('description');
             $table->text('text');
             $table->integer('voting_id')->unsigned();
             $table->foreign('voting_id')->references('id')->on('votings');
+
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+
+            $table->text('solution');
+
             $table->timestamps();
             $table->softDeletes();
         });

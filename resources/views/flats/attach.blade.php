@@ -6,21 +6,89 @@
             <div class="row">
                 <div class="col-md-7">
                     <form action="{!! route('flats.attach.post') !!}" class="form-horizontal">
-                        <app-text
-                                display="Введите ваш номер счета"
-                                placeholder="Номер счета"
+                        <app-select
+                                display="Укажите ваш город"
                                 :form="form"
-                                name="account"
-                                help="Его вам должен сообщить председеталь ТСЖ"
-                        ></app-text>
+                                name="city"
+                                :items="{{ json_encode($cities) }}"
+                        ></app-select>
 
                         <app-select
-                                display="Выберите ТСЖ"
+                                display="Улица"
                                 :form="form"
-                                name="company_id"
-                                help="Укажите ваше товарищество"
-                                :items="{{ json_encode($companies) }}"
+                                name="street_id"
+                                :items="streets"
                         ></app-select>
+
+                        <app-text
+                                display="Номер дома"
+                                :form="form"
+                                name="number"
+                        ></app-text>
+
+                        <app-text
+                                display="Номер квартиры"
+                                :form="form"
+                                name="flat"
+                        ></app-text>
+
+                        <app-text
+                                display="Площадь квартиры м<sup>2</sup>"
+                                :form="form"
+                                name="square"
+                        ></app-text>
+
+                        <div class="row">
+                            <div class="col-sm-2"><label class="text-right">Доля в собственности</label></div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control pull-right"
+                                           v-model="form.up_part"
+                                           placeholder="Числитель">
+                                    <div class="input-group-addon">/</div>
+                                    <input type="text" class="form-control pull-right"
+                                           v-model="form.down_part"
+                                           placeholder="Знаменатель">
+                                </div>
+                            </div>
+                            <div class="col-sm-6" v-if="mySquare > 0">
+                                Площадь в собственности: @{{ mySquare }} м<sup>2</sup>
+                            </div>
+                        </div>
+
+                        <hr class="hr-line-dashed"/>
+
+                        <app-text
+                                display="Номер документа о праве собственности"
+                                :form="form"
+                                name="number_doc"
+                        ></app-text>
+
+                        <app-text
+                                display="Дата выдачи документа"
+                                :form="form"
+                                name="date_doc"
+                        ></app-text>
+
+                        <app-text
+                                display="Кем выдан документ"
+                                :form="form"
+                                name="issuer_doc"
+                        ></app-text>
+
+
+                        <div class="row">
+                            <div class="col-sm-2"><label class="text-right">Скан документа</label></div>
+                            <div class="col-sm-10">
+                                <img :src="form.scan" v-if="form.scan" style="height: 200px;" />
+                                <button class="btn btn-success" @click.prevent="openScan">
+                                    Выбрать изображение
+                                </button>
+                                <input type="file" @change="previewImage" name="scan" style="display: none" />
+                            </div>
+                        </div>
+
+                        <hr class="hr-line-dashed"/>
 
                         <button class="col-sm-offset-2 btn btn-success"
                                 :disabled="form.busy"
@@ -38,21 +106,18 @@
                 <div class="col-md-5">
                     <h3>Для чего нужно привязывать квартиру?</h3>
                     <p>
-                        Потому что это удобно! Вам не нужно больше думать стоять в томных очередях, заходить в интернет
-                        банк. Все - что вам надо - это просто пройти регистрацию.
-                        Процедура проста:
+                        Зарегистрировав личный кабинет, вы получили возможность управлять судьбой всех квартир в одном
+                        месте. Для того чтобы принять участие в голосовании, вам надо быть собственником помещения.
+                        Вам потребуется подтвердить право собственоности на квартиру (долю в квартире), для этого
+                        загрузить скан вашего свидетельства о праве собственности, и после ручной проверки Вашим
+                        председателем ТСЖ, вы получите доступ к голосованиям.
                     </p>
-                    <ol>
-                        <li>Укажите номер лицевого счета и УК</li>
-                        <li>Дождитесь кода в следующей квитанции или получите его лично в Вашей УК</li>
-                        <li>Введите код</li>
-                        <li>Начинайте работать</li>
-                    </ol>
 
-                    <h3>Я не могу найти свое ТСЖ</h3>
+                    <h3>Я не могу добавить квартиру. Дом не зарегистрирован в системе.</h3>
                     <p>
-                        Это означает, что Ваше ТСЖ не заключило договор с Ананас.ЖКХ. Расскажите о нас Вашему ТСЖ и
-                        может уже в ближайшее время оно появится тут
+                        Ваш дом не добавлен в систему. Обратитесь к Вашему председателю ТСН с просьбой
+                        зарегистрироваться, проведите очное собрание, для придания юридической силы результатам
+                        голосования и начинайте вершить демократию не вставая с дивана!
                     </p>
                 </div>
             </div>

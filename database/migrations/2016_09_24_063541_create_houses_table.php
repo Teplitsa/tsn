@@ -15,9 +15,10 @@ class CreateHousesTable extends Migration
     {
         Schema::create('houses', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('address');
-            $table->text('area');
-            
+            $table->integer('street_id')->unsigned();
+            $table->foreign('street_id')->references('id')->on('streets');
+            $table->string('number');
+            $table->integer('square');
             $table->timestamps();
         });
     }

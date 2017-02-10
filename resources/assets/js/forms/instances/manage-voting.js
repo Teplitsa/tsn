@@ -1,10 +1,15 @@
+var base = require('../../components/can-load-streets');
+
 Vue.component('app-manage-voting', {
+    mixins: [base],
+
     props: ['init'],
 
     /*
      * Bootstrap the component. Load the initial data.
      */
     ready: function () {
+
         if (this.init) {
             this.form.closed_at = this.init.closed_at;
             this.form.name = this.init.name;
@@ -24,10 +29,8 @@ Vue.component('app-manage-voting', {
      */
     data: function () {
         return {
-            form: new AppForm({
-                code: '',
-                items: []
-            }),
+            form: new AppForm(App.forms.ManageVoting),
+            streets: App.streets,
             active: {}
         }
     },
@@ -94,6 +97,10 @@ Vue.component('app-manage-voting', {
                 }, function (response) {
                     // error
                 });
+        },
+
+        selectItem(item){
+            this.active = item;
         },
 
         addItem(){

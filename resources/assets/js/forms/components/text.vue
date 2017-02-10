@@ -2,7 +2,7 @@
     <div>
         <div :class="{'form-group': true, 'has-error': form.errors.has(name) }">
             <label class="col-sm-2 control-label">
-                {{ display }}
+                {{{ display }}}
                 <br v-if="help != ''"/>
                 <small v-if="help != ''" class="text-navy">{{ help }}</small>
             </label>

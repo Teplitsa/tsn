@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
 use App\Flat;
 use App\House;
 use App\Sensor;
+use App\Street;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -31,7 +33,13 @@ class HousesController extends Controller
         $active_new_house = 'active';
         $pageTitle = 'Добавление дома';
         $component = 'app-create-house';
-        return view('houses.create', compact('pageTitle', 'component', 'active_new_house'));
+        $cities = City::orderBy('name')->get()->map(function ($city) {
+            return [
+                'value' => $city->id,
+                'text'  => $city->name,
+            ];
+        });
+        return view('houses.create', compact('cities','pageTitle', 'component', 'active_new_house'));
     }
 
     /**
@@ -46,28 +54,20 @@ class HousesController extends Controller
         $house = null;
         \DB::transaction(function () use (&$house, &$request) {
             $house = new House();
-            $house->address = $request->input('address');
+            $house->number = $request->input('number');
+            $house->street_id = $request->input('street_id');
+            $house->square = collect($request->input('flats', []))->sum('square');
             $house->company_id = auth()->user()->company_id;
-            $house->area = '';
             $house->save();
 
             collect($request->input('flats', []))->each(function ($item, $i) use (&$house) {
                 $flat = new Flat();
                 $flat->number = $i + 1;
                 $flat->account_number = $item['account_number'];
-                $flat->men_count = 1;
+                $flat->square = $item['square'];
 
                 $house->flats()->save($flat);
 
-                collect(['cold_water', 'warm_water', 'gas'])->filter(function ($type) use ($item) {
-                    return trim(array_get($item, $type, '')) !== '';
-                })->each(function ($item) use (&$flat) {
-                    $sensor = new Sensor([
-                        'type'   => 'cold_water',
-                        'number' => array_get($item, 'cold_water', ''),
-                    ]);
-                    $flat->sensors()->save($sensor);
-                });
             });
         });
 
@@ -119,5 +119,16 @@ class HousesController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function load_streets(Request $request){
+
+        $streets=Street::where('city_id',$request->get('city_id'))->orderBy('name')->get()->map(function ($street) {
+            return [
+                'value' => $street->id,
+                'text'  => $street->name,
+            ];
+        });
+        return response()->json(['streets'=>$streets]);
+
     }
 }

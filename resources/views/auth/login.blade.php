@@ -5,7 +5,7 @@
         <div class="row">
 
             <div class="col-md-6">
-                <h2 class="font-bold">Добро пожаловать в Ананас.ТСЖ</h2>
+                <h2 class="font-bold">Добро пожаловать в Ананас.ТСН</h2>
 
 
             </div>
@@ -45,7 +45,7 @@
                             <hr>
 
                             <a class="btn btn-sm btn-success btn-block" href="{!! route('new-company') !!}">
-                                Зарегистрировать ТСЖ
+                                Зарегистрировать ТСН
                             </a>
                         </form>
                     </auth-form>

@@ -19,5 +19,7 @@ elixir(mix => {
         .version([
             'public/css/style.css',
             'public/js/app.js',
-        ]);
-});
+        ])
+        .copy('node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css', 'public/css/bootstrap-datepicker.min.css')
+        .copy('node_modules/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js', 'public/js/bootstrap-datepicker.js');
+})

@@ -11,12 +11,16 @@
         color: #0f8f31;
     }
 </style>
+    <link rel="stylesheet" href="/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/plugins/select2/select2.min.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Erp</title>
+    <title>Ананас.ТСН</title>
 
     <link href="{!! elixir('css/style.css') !!}" rel="stylesheet">
+
 
     <script>
         window.App = {
@@ -30,6 +34,7 @@
                 'csrfToken' => csrf_token(),
         ]) !!};
     </script>
+
 </head>
 
 <body class="">
@@ -80,8 +85,17 @@
 <!-- Custom and plugin javascript -->
 <script src="/js/inspinia.js"></script>
 <script src="/js/pace.min.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/jquery.maskedinput.min.js"></script>
+<script src="/plugins/select2/select2.min.js" type="text/javascript"></script>
 
+@yield('after_js')
 
+<script>
+    $(function(){
+        $('.select2-my').select2();
+    })
+</script>
 </body>
 
 </html>

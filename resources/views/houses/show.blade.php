@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-sm-6">
+        <div class="col-md-6 col-sm-8">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Голосования</h5>
@@ -27,17 +27,17 @@
                     @forelse($house->votings as $voting)
                         <div class="hr-line-dashed"></div>
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 {!! $voting->name !!}
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 @if($voting->closed_at > \Carbon\Carbon::now())
                                     <span class="label label-warning">Идет</span>
                                 @else
                                     <span class="label label-success">Завершено</span>
                                 @endif
                             </div>
-                            <div class="col-md-2"><a
+                            <div class="col-md-3"><a
                                         href="{!! route('houses.votings.show', [$house, $voting]) !!}"
                                         class="btn btn-white btn-block"
                                 >
