@@ -22,11 +22,26 @@ class House extends Model
         return $this->belongsTo(Street::class);
     }
 
+
     public function connectedFlats()
     {
-        return $this->flats()->whereHas('registered_flats');
-    }
 
+        return $this->flats()->whereHas('registered_flats', function($query)
+        {
+            $query->where('active', 1);
+
+        });
+    }
+    public function connectedFlatsSquare()
+    {
+       $square=0;
+       foreach ($this->flats as $flat){
+           foreach ($flat->registered_flats->where('active',1) as $registeredFlat){
+               $square+=$registeredFlat->user_share;
+           }
+       }
+       return $square;
+    }
     public function getSquareAttribute()
     {
         $total_square = 0;
@@ -35,6 +50,18 @@ class House extends Model
         }
 
         return $total_square;
+    }
+    public function getNotActiveAttribute()
+    {
+        $count = 0;
+        foreach ($this->flats as $flat) {
+            foreach ($flat->registered_flats->where('active',0) as $registeredFlat){
+                if(!$registeredFlat->active)
+                    $count+=1;
+            }
+        }
+
+        return $count;
     }
 
     public function votings()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\City;
 use App\Flat;
 use App\House;
+use App\RegisteredFlat;
 use App\Sensor;
 use App\Street;
 use Illuminate\Http\Request;
@@ -130,5 +131,16 @@ class HousesController extends Controller
         });
         return response()->json(['streets'=>$streets]);
 
+    }
+    public function download(House $house,RegisteredFlat $flat)
+    {
+        $server = config('filesystems.default');
+        return response()->flydownload(\Storage::disk($server)->get($flat->scan), basename($flat->scan));
+    }
+    public function active(House $house,RegisteredFlat $flat)
+    {
+        $flat->active=true;
+        $flat->save();
+        return redirect()->back();
     }
 }

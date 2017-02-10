@@ -371,14 +371,14 @@ class VotingController extends Controller
                     .$item->user->full_name.'<w:br />'.'ПРЕДЛОЖЕНО по пункту №'.$k.' повестки дня: <w:br />'.$item->description.
                     '<w:br />Результаты голосования по пункту №'.$k.' повестки дня: <w:br />'.
                     '     - ЗА '.$item->votes->where('pro', 1)->count().' голосов, что составляет '.
-                    $item->votes->where('pro',
-                        1)->count() * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    number_format($item->votes->where('pro',
+                        1)->count() * 100 / $uniq,2).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
                     '     - ПРОТИВ '.$item->votes->where('contra', 1)->count().' голосов, что составляет '.
-                    $item->votes->where('contra',
-                        1)->count() * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    number_format($item->votes->where('contra',
+                        1)->count() * 100 / $uniq,2).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
                     '     - ВОЗДЕРЖАЛСЯ '.$item->votes->where('refrained', 1)->count().' голосов, что составляет '.
-                    $item->votes->where('refrained',
-                        1)->count() * 100 / $uniq.'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                        number_format($item->votes->where('refrained',
+                        1)->count() * 100 / $uniq,2).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
                     //'РЕШИЛИ: <w:br />'.$item->solution;
                 '<w:br />';
                 $vote_items = $vote_items.'5.'.$k.' '.$item->name.'<w:br />';

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Response;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,6 +14,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        \Response::macro('flydownload', function ($file, $name = "attachment", $mime = 'application/octet-stream') {
+            $mode = 'attachment';
+
+            $response =  (new Response($file, 200))
+                ->header('Content-Type', $mime);
+
+            $disposition = $response->headers->makeDisposition($mode, $name, 'attachment');
+            return ( $response
+                ->header('Content-Disposition', $disposition )
+                ->header('Content-Transfer-Encoding', 'binary'))
+                ;
+        });
+
         // Using Closure based composers...
         \View::composer('layouts.partials.sidebar_tenant', function ($view) {
             $view->withFlats(auth()->user()->registeredFlats);
