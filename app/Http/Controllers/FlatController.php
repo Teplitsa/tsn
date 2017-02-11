@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class FlatController extends Controller
 {
@@ -22,7 +23,7 @@ class FlatController extends Controller
             function ($city) {
                 return [
                     'value' => $city->id,
-                    'text'  => $city->name,
+                    'text' => $city->name,
                 ];
             }
         );
@@ -31,6 +32,60 @@ class FlatController extends Controller
         $component = 'attach-flat';
 
         return view('flats.attach', compact('pageTitle', 'component', 'cities'));
+    }
+
+    public function edit(RegisteredFlat $flat)
+    {
+        $pageTitle = 'Редактирование квартиры';
+        $cities = City::orderBy('name')->get()->map(
+            function ($city) {
+                return [
+                    'value' => $city->id,
+                    'text' => $city->name,
+                ];
+            }
+        );
+        $component = 'update-flat';
+
+        return view('flats.edit', compact('pageTitle', 'component', 'cities', 'flat'));
+    }
+
+    public function update(RegisteredFlat $flat, Requests\UpdateFlatRequest $request)
+    {
+        $registeredFlat = $flat;
+        $flat = Flat::inTheHouse($request->input('city'), $request->input('street_id'), $request->input('number'))
+            ->where('number', $request->input('flat'))
+            ->first();
+
+        if ($flat === null) {
+            return response()->json(['flat' => ['Такой квартиры не существует']], 422);
+        }
+        $registeredFlat->flat()->associate($flat);
+        $registeredFlat->fill(
+            $request->only(['square', 'up_part', 'down_part', 'number_doc', 'issuer_doc'])
+        );
+        $registeredFlat->user_share = $registeredFlat->square / $registeredFlat->down_part * $registeredFlat->up_part;
+        $registeredFlat->date_doc = Carbon::createFromFormat('d.m.Y', $request->date_doc);
+        if ($request->file('scan')) {
+            $this->validate(
+                $request,
+                [
+                    'scan' => 'image',
+                ],
+                [],
+                [
+                    'old_password' => 'Скан документа о праве собственнсоти',
+                ]
+            );
+            $registeredFlat->scan = $request->scan->store('scans_of_documents');
+        }
+        if ($registeredFlat->wasImportantChanged()) {
+            $registeredFlat->active = 0;
+            $registeredFlat->save();
+            
+        }
+
+        return ['redirect' => route('flats.show', $registeredFlat)];
     }
 
     public function attachHandler(Requests\AttachFlat $request)
