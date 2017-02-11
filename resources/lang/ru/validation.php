@@ -18,7 +18,7 @@ return [
     'boolean' => 'Поле :attribute должно иметь значение логического типа.',
     'confirmed' => 'Поле :attribute не совпадает с подтверждением.',
     'date' => 'Поле :attribute не является датой.',
-    'date_format' => 'Поле :attribute не соответствует формату :format.',
+    'date_format' => 'Поле :attribute не соответствует формату дд.мм.гггг.',
     'different' => 'Поля :attribute и :other должны различаться.',
     'digits' => 'Длина цифрового поля :attribute должна быть :digits.',
     'digits_between' => 'Длина цифрового поля :attribute должна быть между :min и :max.',
