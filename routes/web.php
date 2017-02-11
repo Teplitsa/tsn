@@ -10,7 +10,7 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-Route::get('/landing_page', function () {
+Route::get('/', function () {
     return view('index');
 
 
@@ -29,8 +29,8 @@ $router->get('/new-company/{inn}', ['as'=>'new-company.search', 'uses' => 'Auth\
 
 $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('logout', 'Auth\LoginController@logout');
-    $router->get('/', ['as'=>'index', 'uses' => 'HomeController@index']);
-    $router->get('/home', ['as'=>'home', 'uses' => 'HomeController@index']);
+   // $router->get('/', ['as'=>'index', 'uses' => 'HomeController@index']);
+    $router->get('/home', ['as'=>'index', 'uses' => 'HomeController@index']);
     $router->get('houses/{house}/votings/{voting}/people', ['as'=>'houses.votings.peoples', 'uses' => 'VotingController@people']);
     $router->get('houses/{house}/votings/{voting}/solution', ['as'=>'houses.votings.solution', 'uses' => 'VotingController@solution']);
     $router->get('houses/{house}/votings/create', ['as'=>'houses.votings.create', 'uses' => 'VotingController@create']);
