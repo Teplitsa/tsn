@@ -10,7 +10,7 @@
 | to using a Closure or controller method. Build something great!
 |
 */
-Route::get('/about', function () {
+Route::get('/', function () {
     return view('index');
 
 
@@ -29,8 +29,10 @@ $router->get('/new-company/{inn}', ['as'=>'new-company.search', 'uses' => 'Auth\
 
 $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('logout', 'Auth\LoginController@logout');
-    $router->get('/', ['as'=>'index', 'uses' => 'HomeController@index']);
-    $router->get('/home', ['as'=>'home', 'uses' => 'HomeController@index']);
+   // $router->get('/', ['as'=>'index', 'uses' => 'HomeController@index']);
+    $router->get('/home', ['as'=>'index', 'uses' => 'HomeController@index']);
+    $router->get('/profile', ['as'=>'profile', 'uses' => 'UserController@profile']);
+    $router->patch('/profile', ['as'=>'profile.post', 'uses' => 'UserController@profile_post']);
     $router->get('houses/{house}/votings/{voting}/people', ['as'=>'houses.votings.peoples', 'uses' => 'VotingController@people']);
     $router->get('houses/{house}/votings/{voting}/solution', ['as'=>'houses.votings.solution', 'uses' => 'VotingController@solution']);
     $router->get('houses/{house}/votings/create', ['as'=>'houses.votings.create', 'uses' => 'VotingController@create']);
@@ -46,6 +48,8 @@ $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('flats/attach', ['as'=>'flats.attach', 'uses'=>'FlatController@attach']);
     $router->post('flats/attach', ['as'=>'flats.attach.post', 'uses'=>'FlatController@attachHandler']);
     $router->get('flats/{flat}', ['as'=>'flats.show', 'uses'=>'FlatController@show']);
+    $router->get('flats/{flat}/edit', ['as'=>'flats.edit', 'uses'=>'FlatController@edit']);
+    $router->post('flats/{flat}/update', ['as'=>'flats.update', 'uses'=>'FlatController@update']);
     $router->post('flats/{flat}/activate', ['as'=>'flats.activate', 'uses'=>'FlatController@activate']);
 
     $router->resource('employees', 'Employees');
@@ -61,4 +65,3 @@ $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('/flat/{flat}/voting/{voting}', ['as'=>'flat.voting', 'uses'=>'VoteController@voting']);
     $router->post('/flat/{flat}/voting/{voting}/{votingItem}/{vote}', ['as'=>'flat.voting.vote', 'uses'=>'VoteController@vote']);
 });
-

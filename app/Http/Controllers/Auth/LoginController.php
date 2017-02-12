@@ -63,7 +63,7 @@ class LoginController extends Controller
 
         if ($this->guard()->attempt($credentials, $request->has('remember'))) {
             return [
-                'redirect' => route('home')
+                'redirect' => route('index')
             ];
         }
 

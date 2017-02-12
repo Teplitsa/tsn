@@ -119,4 +119,17 @@ class User extends Authenticatable
             $builder->where('house_id', $house->id);
         })->first();
     }
+
+    public function wasImportantChanged() {
+        $fields = ['first_name', 'last_name', 'middle_name'];
+        foreach ($fields as $field)
+        {
+            if($this->original[$field] != $this->attributes[$field])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

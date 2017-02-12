@@ -9,3 +9,5 @@ require('./activate-flat');
 require('./manage-voting');
 require('./voting');
 require('./manage-people');
+require('./update-profile');
+require('./update-flat');

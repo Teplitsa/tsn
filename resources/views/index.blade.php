@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Ананас.ТСН</a>
+                    <a class="navbar-brand" href="{{route('login')}}">Ананас.ТСН</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -155,7 +155,7 @@
                 <div class="team-member">
                     <img src="/img/our_team/xenia.jpg" class="img-responsive img-circle img-small" alt="">
                     <h4><span class="navy">Ксения</span> Ниссхен</h4>
-                    <p>Младший программист.<br> Разбирается в коде решает все горячие ошибки. </p>
+                    <p>Младший программист.<br> Разбирается в коде, решает все горячие ошибки. </p>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -308,6 +308,9 @@
                     </li>
                     <li>
                         Отсутствие затрат на поддержку инфраструктуры.
+                    </li>
+                    <li>
+                            <a class="btn btn-primary btn-xs" href="{{route('login')}}">Протестировать</a>
                     </li>
                 </ul>
             </div>

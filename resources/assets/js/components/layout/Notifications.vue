@@ -23,7 +23,7 @@
             <li v-if="notifications.length == 0">
                 <div class="text-center">
                     <div class="alert alert-info">
-                        There are no new notifications
+                        Новых оповещений нет
                     </div>
 
             </div>
@@ -32,7 +32,7 @@
             <li>
                 <div class="text-center link-block">
                     <a href="/notifications">
-                        <strong>See All Notifications</strong>
+                        <strong>Посмотреть все оповещения</strong>
                         <i class="fa fa-angle-right"></i>
                     </a>
                 </div>

@@ -7,9 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class RegisteredFlat extends Model
 {
     protected $fillable = [
-        'square', 'up_part', 'down_part', 'number_doc', 'issuer_doc'
+        'square',
+        'up_part',
+        'down_part',
+        'number_doc',
+        'issuer_doc',
     ];
     protected $casts = ['date_doc' => 'date'];
+    protected $dates = ['date_doc'];
+    public function setDateDocAttribute($value = null)
+    {
+        $this->attributes['date_doc'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('m.d.Y',
+            $value);
+    }
+    public function formDateDocAttribute($value)
+    {
+        return $value->format('m.d.Y');
+    }
 
     public function flat()
     {
@@ -42,5 +56,34 @@ class RegisteredFlat extends Model
     public function getHouseAttribute()
     {
         return $this->flat->house;
+    }
+
+    public function wasImportantChanged()
+    {
+        $fields = [
+            'flat_id',
+            'number_doc',
+            'issuer_doc',
+            'up_part',
+            'down_part',
+            'square',
+            'scan',
+            'date_doc',
+        ];
+        foreach ($fields as $field) {
+            if ($this->original[$field] != $this->attributes[$field]) {
+                if($field=='date_doc'){
+                    if($this->original[$field]!=$this->attributes[$field]->format('Y-m-d')){
+                        return true;
+                    }
+                }
+                else{
+                    return true;
+                }
+
+            }
+        }
+
+        return false;
     }
 }

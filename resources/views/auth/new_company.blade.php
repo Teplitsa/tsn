@@ -121,7 +121,14 @@
                     </a>
                 </form>
                 <p class="m-t">
-                    <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small>
+                <div class="row">
+                    <div class="col-md-6">
+                        Компания Ананас.
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <small>© {!! issued_dates() !!}</small>
+                    </div>
+                </div>
                 </p>
             </div>
         </div>

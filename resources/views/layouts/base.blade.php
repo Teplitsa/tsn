@@ -70,7 +70,14 @@
 
             </div>
             <div>
-                <strong>Copyright</strong> Ananas Company &copy; {!! issued_dates() !!}
+                <div class="row">
+                    <div class="col-md-6">
+                        Разработка: Компания Ананас.
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <small>© {!! issued_dates() !!}</small>
+                    </div>
+                </div>
             </div>
         </div>
 
