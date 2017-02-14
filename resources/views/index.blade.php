@@ -117,7 +117,7 @@
         </div>
     </div>
 </section>
-<section class=" gray-section">
+<section class="features gray-section">
     <div class="container">
         <div class="row m-b-lg">
             <div class="col-lg-12 text-center">
@@ -126,6 +126,7 @@
                 <p>Ананас.ТСН поможет Вашему дому сделать голосование проще и удобнее для жильцов </p>
             </div>
         </div>
+
         <div class="row">
             <div class="row features-block">
                 <div class="col-lg-6 features-text wow fadeInLeft">
