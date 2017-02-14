@@ -47,7 +47,7 @@
                         <li><a class="page-scroll" href="#features">Возможности</a></li>
                         <li><a class="page-scroll" href="#team">Команда</a></li>
                         <li><a class="page-scroll" href="#testimonials">Отзывы</a></li>
-                        <li><a class="page-scroll" href="#pricing">Цены</a></li>
+                        <li><a class="page-scroll" href="#pricing">Тарифы</a></li>
                         <li><a class="page-scroll" href="#contact">Контакты</a></li>
                     </ul>
                 </div>
@@ -117,22 +117,24 @@
         </div>
     </div>
 </section>
-<section class=" gray-section">
+<section class="features gray-section">
     <div class="container">
-        <div class="row m-b-lg">
+        <div class="row m-b-lg container">
             <div class="col-lg-12 text-center">
                 <div class="navy-line"></div>
                 <h1>Создай будущие с нами</h1>
                 <p>Ананас.ТСН поможет Вашему дому сделать голосование проще и удобнее для жильцов </p>
             </div>
         </div>
-        <div class="row">
+
+        <div class="row container">
             <div class="row features-block">
                 <div class="col-lg-6 features-text wow fadeInLeft">
                     <small>Ананас.ТСН</small>
                     <h2>Решение будущего </h2>
                     <p>Мы разрабатываем систему с использованием современных технологий Bootstrap 3+ Framework, HTML5 and CSS3, Laravel. Интерфейс старается быть максимально дружелюбным к пользователю. С Вашей помощью мы создадим идеальный продукт.</p>
-                    <a href="#pricing" class="btn btn-primary">Цены</a>
+                    <a href="#pricing" class="btn btn-primary">Тарифы</a>
+                    <br>&nbsp;
                 </div>
                 <div class="col-lg-6 text-right wow fadeInRight">
                     <img src="/landing/img/dashboard.png" alt="dashboard" class="img-responsive pull-right">
