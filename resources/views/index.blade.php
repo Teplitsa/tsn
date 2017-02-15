@@ -59,7 +59,12 @@
         <div class="item active">
             <div class="container">
                 <div class="carousel-caption">
-                    <h1>Удобное проведение <br> голосований для ТСН.</h1>
+                    <h3>
+                        60% результатов голосований<br>
+                        жильцов домов,недействительны<br> из-за формальных <br>ошибок.</h3>
+                    <p>Наша система позволит каждому объединению жильцов <br>
+                        принимать решения удобно и <br>
+                        согласно всем юридическим тонкостям</p>
                 </div>
                 <div class="carousel-image wow zoomIn">
                     <img src="/landing/img/laptop.png" alt="laptop"/>
@@ -122,8 +127,8 @@
         <div class="row m-b-lg container">
             <div class="col-lg-12 text-center">
                 <div class="navy-line"></div>
-                <h1>Создай будущие с нами</h1>
-                <p>Ананас.ТСН поможет Вашему дому сделать голосование проще и удобнее для жильцов </p>
+                <h1>Построй будущее своего дома с нами!</h1>
+                <p>Мы даем возможность миллионам собственников квартир лучше и честнее заботиться о своих домах </p>
             </div>
         </div>
 
@@ -132,7 +137,7 @@
                 <div class="col-lg-6 features-text wow fadeInLeft">
                     <small>Ананас.ТСН</small>
                     <h2>Решение будущего </h2>
-                    <p>Мы разрабатываем систему с использованием современных технологий Bootstrap 3+ Framework, HTML5 and CSS3, Laravel. Интерфейс старается быть максимально дружелюбным к пользователю. С Вашей помощью мы создадим идеальный продукт.</p>
+                    <p>Мы разрабатываем систему с открытым исходным кодом. Используя современные технологии Bootstrap 3+ Framework, HTML5 and CSS3, Laravel. Интерфейс старается быть максимально дружелюбным к пользователю. С Вашей помощью мы создадим идеальный продукт. </p>
                     <a href="#pricing" class="btn btn-primary">Тарифы</a>
                     <br>&nbsp;
                 </div>
@@ -194,7 +199,7 @@
                             <i class="fa fa-briefcase"></i>
                         </div>
                         <div class="vertical-timeline-content">
-                            <p> Участие и победа на Хакатоне по улучшению улиц, дворов и домов «ЖКХак».
+                            <p> Участие и победа на Хакатоне по улучшению улиц, дворов и домов «ЖКХак» <a target="_blank" href="https://ekb.te-st.ru/">Теплицы социальных технологий</a>
                             </p>
                             <span class="vertical-date"> <small>24-25.09.2016</small> </span>
                         </div>
@@ -283,13 +288,16 @@
                         <span>Бесплатно</span>
                     </li>
                     <li>
+                        Открытый исходный код.
+                    </li>
+                    <li>
                         Модуль голосования.
                     </li>
                     <li>
                         Разворачивание на Вашем сервере.
                     </li>
                     <li>
-                        <a class="btn btn-primary btn-xs" href="#">Скачать</a>
+                        <a class="btn btn-primary btn-xs" href="https://github.com/ananas-web/tsn">Скачать</a>
                     </li>
                 </ul>
             </div>
@@ -304,6 +312,9 @@
                     </li>
                     <li class="pricing-price">
                         <span>Бесплатно</span>
+                    </li>
+                    <li>
+                        Открытый исходный.
                     </li>
                     <li>
                         Модуль голосования.
@@ -351,6 +362,7 @@
             <div class="col-lg-3 col-lg-offset-3">
                 <address>
                     <strong><span class="navy">Ананас</span></strong><br/>
+                    г.Екатеринбург <br/>
                     Щорса 7а<br/>
                     офис 410<br/>
                 </address>
@@ -370,7 +382,9 @@
         </div>
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
-                <p><strong>&copy; <?php echo(date('Y')) ?> <a href="http://ananas-web.ru/" target="_blank" >Ананас</a></strong><br/></p>
+                <p><strong>&copy; <?php echo(date('Y')) ?> </strong><br/></p>
+                <p>Проект реализован компанией <a href="http://ananas-web.ru/" target="_blank" > Ананас</a> при поддержке <a href="https://te-st.ru/" target="_blank" >Теплицы социальных технологий</a></p>
+                <img width="40px" src="/img/logo.png"/>
             </div>
         </div>
     </div>
