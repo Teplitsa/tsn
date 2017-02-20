@@ -48,6 +48,18 @@ Vue.component('app-create-house', {
             let action = $(this.$el).find('form').attr('action');
             let method = $(this.$el).find('input[name="_method"]').val() || 'post';
             method = method.toLowerCase();
+
+
+            let data = new FormData();
+
+            $.each(JSON.parse(JSON.stringify(this.form)), function(key, value) {
+                if(['successful', 'busy', 'errors'].indexOf(key) == -1)
+                    data.append(key, value);
+               console.log(value);
+            });
+
+            this.form.startProcessing();
+
             App[method](action, this.form)
                 .then(function (response) {
                     setTimeout(function () {

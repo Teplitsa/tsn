@@ -18,10 +18,10 @@
 
                                     <div>
                                         <app-select
-
                                         display="Город"
                                         :form="form"
                                         name="city"
+                                        class="select2"
                                         :items="{{ json_encode($cities) }}"></app-select>
 
                                         <app-select v-if="streets.length>0"
@@ -53,9 +53,10 @@
 
                                             <tr v-for="(i, item) in form.flats">
                                                 <td>@{{ i+1 }}</td>
-                                                <td>
-                                                    <input type="text" class="form-control" v-model="item.square"/>
-                                                </td>
+                                                <app-input
+                                                        v-model="item.square" >
+
+                                                </app-input>
                                             </tr>
                                         </table>
                                         <div v-else class="alert alert-info">

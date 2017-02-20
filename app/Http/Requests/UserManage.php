@@ -31,4 +31,14 @@ class UserManage extends FormRequest
             'city' => 'alpha-dash',
         ];
     }
+    public function attributes()
+    {
+        return [
+            'first_name' => 'Имя',
+            'last_name' => 'Отчество',
+            'password' => 'Пароль',
+            'email' => 'Электронная почта',
+            'city' => 'город',
+        ];
+    }
 }

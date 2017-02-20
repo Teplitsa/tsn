@@ -19,8 +19,8 @@ use Illuminate\Routing\Router;
 
 Auth::routes();
 
-$router->get('/forgot-password', ['as'=>'auth.forgot', 'uses' => 'Auth@forget']);
-$router->post('/forgot-password', ['as'=>'auth.forgot.post', 'uses' => 'Auth@forgetHandler']);
+$router->get('/forgot-password', ['as'=>'auth.forgot', 'uses' => 'Auth\ForgotPasswordController@showLinkRequestForm']);
+//$router->post('/forgot-password', ['as'=>'auth.forgot.post', 'uses' => 'Auth\ForgotPasswordController@forgetHandler']);
 $router->get('/new-company', ['as'=>'new-company', 'uses' => 'Auth\RegisterController@newCompany']);
 $router->post('/new-company', ['as'=>'new-company', 'uses' => 'Auth\RegisterController@newCompanyHandle']);
 $router->get('/new-company/{inn}', ['as'=>'new-company.search', 'uses' => 'Auth\RegisterController@inn']);

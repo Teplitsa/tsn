@@ -23,7 +23,7 @@
 
 <script>
     export default{
-        props: ['display', 'placeholder', 'form', 'name', 'help', 'items', 'value'],
+        props: ['display', 'placeholder', 'form', 'name', 'help', 'items', 'value','class'],
         ready(){
             let val = this.form[this.name];
             if (this.items[val] == undefined && this.items.length > 0) {
