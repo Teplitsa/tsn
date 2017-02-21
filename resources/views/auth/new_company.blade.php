@@ -34,7 +34,7 @@
                             :form="form"
                             name="inn"
                     ></app-text>
-                    <div class="form-group">
+                  <!--  <div class="form-group">
                         <button type="button"
                                 class="btn btn-info block full-width m-b"
                                 :disabled="loadingInfo"
@@ -47,7 +47,7 @@
                                 <i class="fa fa-search"></i> Заполнить по ИНН
                             </span>
                         </button>
-                    </div>
+                    </div> -->
                     <div class="hr-line-dashed"></div>
 
                     <app-text

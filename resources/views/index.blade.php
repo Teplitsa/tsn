@@ -47,7 +47,7 @@
                         <li><a class="page-scroll" href="#features">Возможности</a></li>
                         <li><a class="page-scroll" href="#team">Команда</a></li>
                         <li><a class="page-scroll" href="#testimonials">Отзывы</a></li>
-                        <li><a class="page-scroll" href="#pricing">Тарифы</a></li>
+                        <li><a class="page-scroll" href="#pricing">Варианты использования</a></li>
                         <li><a class="page-scroll" href="#contact">Контакты</a></li>
                     </ul>
                 </div>
@@ -138,11 +138,11 @@
                     <small>Ананас.ТСН</small>
                     <h2>Решение будущего </h2>
                     <p>Мы разрабатываем систему с открытым исходным кодом. Используя современные технологии Bootstrap 3+ Framework, HTML5 and CSS3, Laravel. Интерфейс старается быть максимально дружелюбным к пользователю. С Вашей помощью мы создадим идеальный продукт. </p>
-                    <a href="#pricing" class="btn btn-primary">Тарифы</a>
+                    <a href="#pricing" class="btn btn-primary">Варианты использования</a>
                     <br>&nbsp;
                 </div>
                 <div class="col-lg-6 text-right wow fadeInRight">
-                    <img src="/landing/img/dashboard.png" alt="dashboard" class="img-responsive pull-right">
+                    <img src="/landing/img/image3.png" alt="dashboard" class="img-responsive pull-right">
                 </div>
             </div>
         </div>

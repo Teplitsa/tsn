@@ -9,7 +9,7 @@
             </form>
         </div>
         <ul class="nav navbar-top-links navbar-right">
-            <layout-notifications></layout-notifications>
+            <!-- <layout-notifications></layout-notifications> -->
 
             <li>
                 <a href="/logout">

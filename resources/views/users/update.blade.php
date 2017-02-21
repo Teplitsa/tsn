@@ -89,7 +89,6 @@
             middle_name: '{{ $user->middle_name }}',
             email: '{{ $user->email }}',
             avatar: '{!!  $user->avatar_url  !!}',
-
         }
     </script>
 @endsection
