@@ -33,7 +33,14 @@
 <!-- Custom and plugin javascript -->
 <script src="/js/inspinia.js"></script>
 <script src="/js/pace.min.js"></script>
-
+<script>
+    $(function(){
+        $('.select2-my').select2();
+    })
+    $("form:not(.dont-disable)").submit(function(){
+        $(this).find('[type="submit"]').prop('disabled', true);
+    });
+</script>
 
 </body>
 

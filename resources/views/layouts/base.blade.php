@@ -35,6 +35,7 @@
         ]) !!};
     </script>
 
+
 </head>
 
 <body class="">
@@ -96,13 +97,18 @@
 <script src="/js/jquery.maskedinput.min.js"></script>
 <script src="/plugins/select2/select2.min.js" type="text/javascript"></script>
 
+
 @yield('after_js')
 
 <script>
     $(function(){
         $('.select2-my').select2();
     })
+    $("form:not(.dont-disable)").submit(function(){
+        $(this).find('[type="submit"]').prop('disabled', true);
+    });
 </script>
+
 </body>
 
 </html>

@@ -7,7 +7,7 @@
                 <small v-if="help != ''" class="text-navy">{{ help }}</small>
             </label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" v-model="form[name]" :placeholder="placeholder">
+                <input type="text" class="form-control" v-model="form[name]" :val="" :placeholder="placeholder" :id="id" :disabled="disabled">
                 <span class="help-block" v-show="form.errors.has(name)">
                     <strong>{{ form.errors.get(name) }}</strong>
                 </span>
@@ -19,7 +19,7 @@
 
 <script>
     export default{
-        props: ['display', 'placeholder', 'form', 'name', 'help']
+        props: ['display', 'placeholder', 'form', 'name', 'help','id','disabled']
     }
 </script>
 

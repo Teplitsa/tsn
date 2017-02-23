@@ -54,9 +54,27 @@ class HousesController extends Controller
     {
         $house = null;
         \DB::transaction(function () use (&$house, &$request) {
+            $city=City::where('name',implode(' ',$request->input('city')))->first();
+            if(is_null($city)){
+                $city=new City();
+
+                $city->name=implode(' ',$request->input('city'));
+
+                $city->save();
+            }
+
+            $street=Street::where('city_id',$city->id)
+                ->where('name',$request->input('street_id'))->first();
+            if(is_null($street)){
+                $street=new Street();
+                $street->city_id=$city->id;
+                $street->name=$request->input('street_id');
+
+                $street->save();
+            }
             $house = new House();
             $house->number = $request->input('number');
-            $house->street_id = $request->input('street_id');
+            $house->street_id =$street->id;
             $house->square = collect($request->input('flats', []))->sum('square');
             $house->company_id = auth()->user()->company_id;
             $house->save();
@@ -65,10 +83,13 @@ class HousesController extends Controller
                 $flat = new Flat();
                 $flat->number = $i + 1;
                 $flat->account_number = $item['account_number'];
-                $flat->square = $item['square'];
-                if(is_null($flat->square)){
+                if($item['square']){
+                    $flat->square = $item['square'];
+                }
+                else{
                     $flat->square=0;
                 }
+
                 $house->flats()->save($flat);
 
             });

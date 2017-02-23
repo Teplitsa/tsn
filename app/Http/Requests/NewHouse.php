@@ -25,7 +25,9 @@ class NewHouse extends FormRequest
     {
         return [
             'number_of_flats' => 'required',
-            'number' => 'required',
+            'city' => 'required',
+            'street_id' => 'required',
+            //'number' => 'required',
             'flats' => 'required',
         ];
     }
@@ -34,7 +36,8 @@ class NewHouse extends FormRequest
     {
         return [
             'number_of_flats' => 'Количество квартир',
-            'address' => 'Адрес',
+            'city' => 'Город',
+            'street_id' => 'Улица',
             'number' => 'Номер дома',
         ];
     }

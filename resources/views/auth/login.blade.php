@@ -32,10 +32,17 @@
                             <button
                                     type="submit"
                                     class="btn btn-primary block full-width m-b"
+                                    :disabled="form.busy"
                                     v-on:click.prevent="submit()"
                             >
-                                Войти
+                                <span v-if="form.busy">
+                        <i class="fa fa-btn fa-spinner fa-spin"></i>Авторизация
+                    </span>
+                                <span v-else>
+                     Войти
+                    </span>
                             </button>
+
                             <a type="submit" href="/register" class="btn btn-white block full-width m-b">
                                 Зарегистрироваться
                             </a>
