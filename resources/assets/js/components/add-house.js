@@ -7,6 +7,7 @@ Vue.component('add-house', {
         return {
             form:new AppForm({
                 city:'',
+                address:'',
                 street_id: '',
                 flats: [],
                 number:'',

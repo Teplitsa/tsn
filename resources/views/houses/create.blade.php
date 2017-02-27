@@ -17,31 +17,34 @@
                                         <input type="hidden" name="_method" value="POST"/>
 
                                         <div>
+                                            <app-text :class="ymaps-2-1-47-input__control"
+                                                    display="Адрес"
+                                                    :form="form"
+                                                    name="address"
+                                                    id="address"
+                                            ></app-text>
                                             <div name="map" id="map" style="width: 450px; height: 350px"></div>
                                             <div class="hr-line-dashed"></div>
 
-                                            <app-text
-                                                    display="Город"
+                                            <app-text-hidden
                                                     :form="form"
                                                     name="city"
                                                     id="city"
                                                     disabled="true"
-                                                    val=""
-                                            ></app-text>
-                                            <app-text
-                                                    display="Улица"
+                                            ></app-text-hidden>
+                                            <app-text-hidden
                                                     :form="form"
                                                     name="street_id"
                                                     id="street_id"
                                                     disabled="true"
-                                            ></app-text>
-                                            <app-text
-                                                    display="Дом"
+                                            ></app-text-hidden>
+                                            <app-text-hidden
                                                     :form="form"
                                                     name="number"
                                                     id="number"
                                                     disabled="true"
-                                            ></app-text>
+                                            ></app-text-hidden>
+                                            <br>
                                             <app-text
                                                     display="Количество квартир"
                                                     :form="form"
@@ -113,8 +116,36 @@
             let myPlacemark;
             let myMap = new ymaps.Map('map', {
                 center: [55.753994, 37.622093],
-                zoom: 12
+                zoom: 12,
+                controls: ['zoomControl','trafficControl']
+                });
+                $("#address").keyup(function() {
+                ymaps.geocode($("#address").val(), {
+                    results: 1
+                }).then(function (res) {
+                    let firstGeoObject = res.geoObjects.get(0);
+                    let coords = firstGeoObject.geometry.getCoordinates();
+                    App.House.form.city=firstGeoObject.getLocalities();
+                    App.House.form.street_id=firstGeoObject.getThoroughfare();
+                    App.House.form.number=firstGeoObject.getPremiseNumber();
+                    myMap.setCenter(coords, 16);
+                    // Если метка уже создана – просто передвигаем ее.
+                    if (myPlacemark) {
+                        myPlacemark.geometry.setCoordinates(coords);
+                    }
+                    // Если нет – создаем.
+                    else {
+                        myPlacemark = createPlacemark(coords);
+                        myMap.geoObjects.add(myPlacemark);
+                        // Слушаем событие окончания перетаскивания на метке.
+                        myPlacemark.events.add('dragend', function () {
+                            getAddress(myPlacemark.geometry.getCoordinates());
+                        });
+                    }
+                    getAddressFromInput(coords);
+                });
             });
+
             // Слушаем клик на карте.
             myMap.events.add('click', function (e) {
                 let coords = e.get('coords');
@@ -146,6 +177,22 @@
 
             }
             function getAddress(coords) {
+                myPlacemark.properties.set('iconCaption', 'поиск...');
+                ymaps.geocode(coords, {}).then(function (res) {
+                    let firstGeoObject = res.geoObjects.get(0);
+                    App.House.form.city=firstGeoObject.getLocalities();
+                    App.House.form.street_id=firstGeoObject.getThoroughfare();
+                    App.House.form.number=firstGeoObject.getPremiseNumber();
+                    App.House.form.address=firstGeoObject.getLocalities()+', '+firstGeoObject.getThoroughfare()+', '+firstGeoObject.getPremiseNumber();
+                    myPlacemark.properties
+                        .set({
+                            iconCaption: firstGeoObject.properties.get('name'),
+                            balloonContent: firstGeoObject.properties.get('text')
+                        });
+
+                });
+            }
+            function getAddressFromInput(coords) {
                 myPlacemark.properties.set('iconCaption', 'поиск...');
                 ymaps.geocode(coords, {}).then(function (res) {
                     let firstGeoObject = res.geoObjects.get(0);
