@@ -1,7 +1,7 @@
-var base = require('./can-load-streets');
-
 Vue.component('add-house', {
-    mixins: [base],
+    ready(){
+      App.House = this;
+    },
 
     data(){
         return {
@@ -9,9 +9,9 @@ Vue.component('add-house', {
                 city:'',
                 street_id: '',
                 flats: [],
-                house_number:'',
+                number:'',
                 number_of_flats: 0
-            }),
+            })
         }
     },
 

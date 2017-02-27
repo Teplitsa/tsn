@@ -102,6 +102,7 @@
                     </div>
                     <button type="submit"
                             class="btn btn-primary block full-width m-b"
+                            :disabled="form.busy"
                             v-on:click.prevent="submit()"
                     >
                         <span v-if="form.busy">

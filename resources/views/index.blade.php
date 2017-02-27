@@ -9,7 +9,7 @@
     <!-- Add Your favicon here -->
     <!--<link rel="icon" href="img/favicon.ico">-->
 
-    <title>Ананас.ТСН</title>
+    <title>Ананас.ТСН – бесплатное решение для заочного голосования собственников</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/landing/css/bootstrap.min.css" rel="stylesheet">
@@ -272,7 +272,7 @@
         <div class="row m-b-lg">
             <div class="col-lg-12 text-center">
                 <div class="navy-line"></div>
-                <h1>Прайс</h1>
+                <h1>Варианты установки</h1>
             </div>
         </div>
         <div class="row">

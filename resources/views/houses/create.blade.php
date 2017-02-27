@@ -6,42 +6,48 @@
             <div>
                 <form action="/houses" class="form-horizontal multipart-encoded">
                     <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="ibox float-e-margins">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="ibox float-e-margins">
 
                                     <div class="col-md-6">
 
-                                    <h3>Информация о доме</h3>
+                                        <h3>Информация о доме</h3>
 
-                                    <input type="hidden" name="_method" value="POST"/>
+                                        <input type="hidden" name="_method" value="POST"/>
 
-                                    <div>
-                                        <app-select
-                                        display="Город"
-                                        :form="form"
-                                        name="city"
-                                        class="select2"
-                                        :items="{{ json_encode($cities) }}"></app-select>
+                                        <div>
+                                            <div name="map" id="map" style="width: 450px; height: 350px"></div>
+                                            <div class="hr-line-dashed"></div>
 
-                                        <app-select v-if="streets.length>0"
+                                            <app-text
+                                                    display="Город"
+                                                    :form="form"
+                                                    name="city"
+                                                    id="city"
+                                                    disabled="true"
+                                                    val=""
+                                            ></app-text>
+                                            <app-text
                                                     display="Улица"
                                                     :form="form"
                                                     name="street_id"
-                                                    :items="streets"
-                                        ></app-select>
-
-                                        <app-text
-                                                display="Номер дома"
-                                                :form="form"
-                                                name="number"
-                                        ></app-text>
-                                        <app-text
-                                                display="Количество квартир"
-                                                :form="form"
-                                                name="number_of_flats"
-                                        ></app-text>
-                                    </div>
+                                                    id="street_id"
+                                                    disabled="true"
+                                            ></app-text>
+                                            <app-text
+                                                    display="Дом"
+                                                    :form="form"
+                                                    name="number"
+                                                    id="number"
+                                                    disabled="true"
+                                            ></app-text>
+                                            <app-text
+                                                    display="Количество квартир"
+                                                    :form="form"
+                                                    name="number_of_flats"
+                                            ></app-text>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <h3>Информация о квартире</h3>
@@ -53,10 +59,7 @@
 
                                             <tr v-for="(i, item) in form.flats">
                                                 <td>@{{ i+1 }}</td>
-                                                <app-input
-                                                        v-model="item.square" >
-
-                                                </app-input>
+                                                <td><input class="form-control" v-model="item.square"/></td>
                                             </tr>
                                         </table>
                                         <div v-else class="alert alert-info">
@@ -101,3 +104,65 @@
     </div>
 
 @stop
+@section('after_body')
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script type="text/javascript">
+        ymaps.ready(init);
+        let myMap;
+        function init() {
+            let myPlacemark;
+            let myMap = new ymaps.Map('map', {
+                center: [55.753994, 37.622093],
+                zoom: 12
+            });
+            // Слушаем клик на карте.
+            myMap.events.add('click', function (e) {
+                let coords = e.get('coords');
+                // Если метка уже создана – просто передвигаем ее.
+                if (myPlacemark) {
+                    myPlacemark.geometry.setCoordinates(coords);
+                }
+                // Если нет – создаем.
+                else {
+                    myPlacemark = createPlacemark(coords);
+                    myMap.geoObjects.add(myPlacemark);
+                    // Слушаем событие окончания перетаскивания на метке.
+                    myPlacemark.events.add('dragend', function () {
+                        getAddress(myPlacemark.geometry.getCoordinates());
+                    });
+                }
+                getAddress(coords);
+            });
+
+            // Создание метки.
+            function createPlacemark(coords) {
+
+                return new ymaps.Placemark(coords, {
+                    iconCaption: 'поиск...'
+                }, {
+                    preset: 'islands#violetDotIconWithCaption',
+                    draggable: true
+                });
+
+            }
+            function getAddress(coords) {
+                myPlacemark.properties.set('iconCaption', 'поиск...');
+                ymaps.geocode(coords, {}).then(function (res) {
+                    let firstGeoObject = res.geoObjects.get(0);
+                    App.House.form.city=firstGeoObject.getLocalities();
+                    App.House.form.street_id=firstGeoObject.getThoroughfare();
+                    App.House.form.number=firstGeoObject.getPremiseNumber();
+                    myPlacemark.properties
+                        .set({
+                            iconCaption: firstGeoObject.properties.get('name'),
+                            balloonContent: firstGeoObject.properties.get('text')
+                        });
+
+                });
+            }
+        }
+    </script>
+    <script type="text/javascript">
+
+    </script>
+@endsection

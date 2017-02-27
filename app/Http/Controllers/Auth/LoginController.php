@@ -62,6 +62,7 @@ class LoginController extends Controller
         $credentials = $this->credentials($request);
 
         if ($this->guard()->attempt($credentials, $request->has('remember'))) {
+            $this->addToastr('success',  'Вы авторизовались!' , 'Успех');
             return [
                 'redirect' => route('index')
             ];

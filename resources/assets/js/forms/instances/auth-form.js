@@ -33,7 +33,7 @@ Vue.component('auth-form', {
                 .then(function (response) {
                     setTimeout(function(){
                         location.href = response.data.redirect;
-                    }, 3000);
+                    }, 500);
                 }, function (response) {
                     // error
                 });

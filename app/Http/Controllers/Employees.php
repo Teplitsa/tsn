@@ -38,7 +38,6 @@ class Employees extends Controller
         $employee = new User();
 
         $this->addActionButton('Назад', route('employees.index'), 'btn btn-default', 'fa-arrow-left');
-
         $data = array_merge(['component' => 'app-employees'], compact('pageTitle', 'method', 'handler', 'employee'));
         return view('employees.manage', $data);
     }
