@@ -272,7 +272,7 @@
         <div class="row m-b-lg">
             <div class="col-lg-12 text-center">
                 <div class="navy-line"></div>
-                <h1>Варианты установки</h1>
+                <h1>Варианты использования</h1>
             </div>
         </div>
         <div class="row">

@@ -29,6 +29,7 @@ class NewHouse extends FormRequest
             'street_id' => 'required',
             //'number' => 'required',
             'flats' => 'required',
+            'address'=>'required',
         ];
     }
 
@@ -39,6 +40,7 @@ class NewHouse extends FormRequest
             'city' => 'Город',
             'street_id' => 'Улица',
             'number' => 'Номер дома',
+            'address' => 'Адрес',
         ];
     }
 }
