@@ -18,7 +18,7 @@
 
         </div>
         <div class="logo-element">
-            ERP
+            ТСН
         </div>
     </li>
 </template>
