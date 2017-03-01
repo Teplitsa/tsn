@@ -16,16 +16,14 @@
                                     :items="{{ json_encode($house->users)}}"
                             >
                             </app-select-multiple>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">
-                                    Название
-                                </label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" v-model="form.name"
-                                           placeholder="Введите понятное название для собственников">
-                                </div>
-                            </div>
-                            <div class="hr-line-dashed"></div>
+                                <app-text
+                                          display="Название"
+                                          :form="form"
+                                          name="name"
+                                          placeholder="Введите понятное название для собственников">
+                                ></app-text>
+
+
                             <app-select
                                     display="Вид общего собрания"
                                     :form="form"

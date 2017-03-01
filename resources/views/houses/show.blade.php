@@ -10,8 +10,11 @@
                 </div>
                 <div class="ibox-content">
                     <h2>
+                        @if($house->square!=0)
                         {!! round($house->connectedFlatsSquare() / $house->square*100) !!}%
-
+                        @else
+                            0%
+                        @endif
                         <small> подключено к системе</small>
                     </h2>
                     @foreach( $house->flats as $flat)

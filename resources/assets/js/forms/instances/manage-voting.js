@@ -1,7 +1,7 @@
-var base = require('../../components/can-load-streets');
+let base = require('../../components/can-load-streets');
 
 Vue.component('app-manage-voting', {
-    mixins: [base],
+    //mixins: [base],
 
     props: ['init'],
 
@@ -12,6 +12,7 @@ Vue.component('app-manage-voting', {
 
         if (this.init) {
             this.form.closed_at = this.init.closed_at;
+            this.form.city = this.init.city;
             this.form.name = this.init.name;
             this.form.items = this.init.items;
         }
@@ -37,7 +38,7 @@ Vue.component('app-manage-voting', {
 
     computed: {
         hasErrors : function(){
-            var result = false;
+            let result = false;
             if(this.form.items.length == 0)
                 return true;
 

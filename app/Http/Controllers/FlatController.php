@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\City;
 use App\Company;
 use App\Flat;
+use App\House;
 use App\RegisteredFlat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -46,8 +47,9 @@ class FlatController extends Controller
             }
         );
         $component = 'update-flat';
+        $currentFlat=$flat->id;
 
-        return view('flats.edit', compact('pageTitle', 'component', 'cities', 'flat'));
+        return view('flats.edit', compact('currentFlat','pageTitle', 'component', 'cities', 'flat'));
     }
 
     public function update(RegisteredFlat $flat, Requests\UpdateFlatRequest $request)
@@ -93,7 +95,13 @@ class FlatController extends Controller
         $flat = Flat::inTheHouse($request->input('city'), $request->input('street_id'), $request->input('number'))
             ->where('number', $request->input('flat'))
             ->first();
+        $house=House::where('street_id',$request->input('street_id'))
+            ->where('number',$request->input('number'))
+            ->first();
 
+        if ($house===null){
+            return response()->json(['number' => ['Дом не прикреплен']], 422);
+        }
         if ($flat === null) {
             return response()->json(['flat' => ['Такой квартиры не существует']], 422);
         }
@@ -131,8 +139,8 @@ class FlatController extends Controller
         $template = 'active';
 
         $votings = $flat->flat->activeVotings;
-
-        return view('flats.'.$template, compact('flat', 'pageTitle', 'votings'));
+        $currentFlat=$flat->id;
+        return view('flats.'.$template, compact('currentFlat','flat', 'pageTitle', 'votings'));
 
     }
 

@@ -56,8 +56,9 @@ class VotingController extends Controller
                 ];
             }
         );
+        $currentHouse = $house->id;
 
-        return view('votings.create', compact('cities', 'house', 'component', 'pageTitle'));
+        return view('votings.create', compact('currentHouse', 'cities', 'house', 'component', 'pageTitle'));
     }
 
     /**
@@ -67,59 +68,72 @@ class VotingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, House $house)
+    public function store(Requests\VotingRequest $request, House $house)
     {
         $voting = null;
-        \DB::transaction(
-            function () use ($request, &$voting, &$house) {
-                $voting = new Voting(
-                    $request->only(
-                        [
-                            'name',
-                            'kind',
-                            'closed_at',
-                            'opened_at',
-                            'public_at',
-                            'end_at',
-                            'protocol_at',
-                            'election_place',
-                            'voting_type',
-                            'public_house_id',
-                        ]
-                    )
-                );
-                $voting->house_id = $house->id;
-                $voting->public_house_id = $house->id;
-                $voting->protocol_number = str_random(5);
-                $voting->election_place = str_random(5);
-                $voting->save();
-                collect($request->input('initiators'))->each(
-                    function ($item) use ($voting) {
-                        $initiator = new UserVoting();
-                        $initiator->voting_id = $voting->id;
-                        $initiator->user_id = $item;
-                        $initiator->role = RoleTypesInVoting::TENANT;
-                        $initiator->is_initiator = true;
-                        $initiator->save();
-                    }
-                );
-
-                collect($request->input('items', []))->each(
-                    function ($item) use ($voting) {
-                        $voteItem = new VoteItem(collect($item)->only(['name', 'description', 'text'])->all());
-                        $voteItem->user_id = auth()->id();
-                        $voting->vote_items()->save($voteItem);
-                    }
-                );
-            }
+        $validator = \Validator::make(
+            $request->all(),
+            [
+                'closed_at' => 'required',
+                'opened_at' => 'required',
+                'public_at' => 'required',
+                'end_at' => 'required',
+            ]
         );
 
-        if ($request->user()->company_id == null) {
-            return ['redirect' => route('flat.voting', [$request->user()->getFlatIn($house), $voting])];
+        if ($validator->fails()) {
+            $this->addToastr('error', 'Заполните все поля даты!', 'Ошибка');
         } else {
-            return ['redirect' => route('houses.votings.show', [$house, $voting])];
-        }
+            \DB::transaction(
+                function () use ($request, &$voting, &$house) {
+                    $voting = new Voting(
+                        $request->only(
+                            [
+                                'name',
+                                'kind',
+                                'closed_at',
+                                'opened_at',
+                                'public_at',
+                                'end_at',
+                                'protocol_at',
+                                'election_place',
+                                'voting_type',
+                                'public_house_id',
+                            ]
+                        )
+                    );
+                    $voting->house_id = $house->id;
+                    $voting->public_house_id = $house->id;
+                    $voting->protocol_number = str_random(5);
+                    $voting->election_place = str_random(5);
+                    $voting->save();
+                    collect($request->input('initiators'))->each(
+                        function ($item) use ($voting) {
+                            $initiator = new UserVoting();
+                            $initiator->voting_id = $voting->id;
+                            $initiator->user_id = $item;
+                            $initiator->role = RoleTypesInVoting::TENANT;
+                            $initiator->is_initiator = true;
+                            $initiator->save();
+                        }
+                    );
 
+                    collect($request->input('items', []))->each(
+                        function ($item) use ($voting) {
+                            $voteItem = new VoteItem(collect($item)->only(['name', 'description', 'text'])->all());
+                            $voteItem->user_id = auth()->id();
+                            $voting->vote_items()->save($voteItem);
+                        }
+                    );
+                }
+            );
+
+            if ($request->user()->company_id == null) {
+                return ['redirect' => route('flat.voting', [$request->user()->getFlatIn($house), $voting])];
+            } else {
+                return ['redirect' => route('houses.votings.show', [$house, $voting])];
+            }
+        }
     }
 
     /**
@@ -337,15 +351,17 @@ class VotingController extends Controller
             $predsed = UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::CHAIRMAN)->first();
             $flat = $house->connectedFlats->where('user_id', $predsed->user_id)->first();
             $suffix = '';
-            if (!is_null($flat))
+            if (!is_null($flat)) {
                 $suffix = ',собственник кв.'.$flat->number;
+            }
 
             $document->setValue('predsed', $predsed->user->full_name.$suffix);
             $secret = UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::SECRETARY)->first();
             $flat = $house->connectedFlats->where('user_id', $secret->user_id)->first();
             $suffix = '';
-            if (!is_null($flat))
+            if (!is_null($flat)) {
                 $suffix = ',собственник кв.'.$flat->number;
+            }
             $document->setValue('secret', $secret->user->full_name.$suffix);
 
             $square = 0;
@@ -371,29 +387,47 @@ class VotingController extends Controller
                     .$item->user->full_name.'<w:br />'.'ПРЕДЛОЖЕНО по пункту №'.$k.' повестки дня: <w:br />'.$item->description.
                     '<w:br />Результаты голосования по пункту №'.$k.' повестки дня: <w:br />'.
                     '     - ЗА '.$item->votes->where('pro', 1)->count().' голосов, что составляет '.
-                    number_format($item->votes->where('pro',
-                        1)->count() * 100 / $uniq,2).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    number_format(
+                        $item->votes->where(
+                            'pro',
+                            1
+                        )->count() * 100 / $uniq,
+                        2
+                    ).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
                     '     - ПРОТИВ '.$item->votes->where('contra', 1)->count().' голосов, что составляет '.
-                    number_format($item->votes->where('contra',
-                        1)->count() * 100 / $uniq,2).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    number_format(
+                        $item->votes->where(
+                            'contra',
+                            1
+                        )->count() * 100 / $uniq,
+                        2
+                    ).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
                     '     - ВОЗДЕРЖАЛСЯ '.$item->votes->where('refrained', 1)->count().' голосов, что составляет '.
-                        number_format($item->votes->where('refrained',
-                        1)->count() * 100 / $uniq,2).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
+                    number_format(
+                        $item->votes->where(
+                            'refrained',
+                            1
+                        )->count() * 100 / $uniq,
+                        2
+                    ).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
                     //'РЕШИЛИ: <w:br />'.$item->solution;
-                '<w:br />';
+                    '<w:br />';
                 $vote_items = $vote_items.'5.'.$k.' '.$item->name.'<w:br />';
                 $vote_items_new = $vote_items_new.$k.'. '.$item->name.'<w:br />';
             }
 
             $initiators = '';
-            foreach (UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::TENANT)->get() as $key => $initiator) {
+            foreach (UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::TENANT)->get(
+            ) as $key => $initiator) {
                 $k = $key + 1;
                 $flat = $initiator->user->registeredFlats->first();
                 $prefix = 'Сотрудник ТСН: ';
                 $suffix = '';
-                if(!is_null($flat)){
+                if (!is_null($flat)) {
                     $prefix = ' Собственник кв. №'.$flat->flat->number.' - ';
-                    $suffix = '(свидетельство о государственной регистрации права '.$flat->number_doc.' от '.$flat->date_doc->format('d.m.Y').'г.)';
+                    $suffix = '(свидетельство о государственной регистрации права '.$flat->number_doc.' от '.$flat->date_doc->format(
+                            'd.m.Y'
+                        ).'г.)';
                 }
 
                 $initiators = $initiators.'1.'.$k.$prefix.$initiator->user->full_name.$suffix
@@ -411,17 +445,18 @@ class VotingController extends Controller
             }
             $document->setValue('is_success', $result);
 
-            $countPeople = UserVoting::where('voting_id', $voting->id)->where('role', RoleTypesInVoting::COUNTER)->limit(3)->get();
-            foreach ($countPeople as $key=>$person)
-            {
+            $countPeople = UserVoting::where('voting_id', $voting->id)->where(
+                'role',
+                RoleTypesInVoting::COUNTER
+            )->limit(3)->get();
+            foreach ($countPeople as $key => $person) {
                 $num = $key + 1;
-                $document->setValue('schet'.$num.'line','___ _______________ 201__ г.	_____________/ ____________');
-                $document->setValue('schet'.$num,$person->user->full_name);
+                $document->setValue('schet'.$num.'line', '___ _______________ 201__ г.	_____________/ ____________');
+                $document->setValue('schet'.$num, $person->user->full_name);
             }
-            for($i=count($countPeople)+1; $i <= 3; $i++)
-            {
-                $document->setValue('schet'.$i.'line','');
-                $document->setValue('schet'.$i,'');
+            for ($i = count($countPeople) + 1; $i <= 3; $i++) {
+                $document->setValue('schet'.$i.'line', '');
+                $document->setValue('schet'.$i, '');
             }
 
             $document->saveAs($name);

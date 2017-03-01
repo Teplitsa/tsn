@@ -14,6 +14,11 @@ use App\Http\Requests;
 
 class HousesController extends Controller
 {
+    public function __construct()
+    {
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -108,7 +113,8 @@ class HousesController extends Controller
      */
     public function show(House $house)
     {
-        return view('houses.show', compact('house'));
+        $currentHouse=$house->id;
+        return view('houses.show', compact('house','currentHouse'));
     }
 
     /**

@@ -57,12 +57,13 @@
                                         <table class="table table-bordered" v-if="form.flats.length > 0">
                                             <tr>
                                                 <td>№</td>
-                                                <td>Площадь</td>
+                                                <td colspan="2">Площадь</td>
                                             </tr>
 
                                             <tr v-for="(i, item) in form.flats">
                                                 <td>@{{ i+1 }}</td>
                                                 <td><input class="form-control" v-model="item.square"/></td>
+                                                <td>кв.м.</td>
                                             </tr>
                                         </table>
                                         <div v-else class="alert alert-info">
