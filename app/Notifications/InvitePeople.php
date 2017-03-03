@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\Users;
+namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class Registered extends Notification implements ShouldQueue
+class InvitePeople extends Notification
 {
     use Queueable;
 
@@ -41,11 +41,10 @@ class Registered extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Добро пожаловть в ' . config('app.name'))
-                    ->line('Вы были зарегистрированы в системе ' . config('app.name'))
-                    ->line('Для начала работы Вам необходимо активировать аккаунт и установить пароль')
-                    ->action('Активировать аккаунт', 'https://laravel.com')
-                    ->line('Надеемся на плодотворное сотрудничество!');
+                     ->subject('Добро пожаловть в ' . config('app.name'))
+                    ->line('Вы приглашены в Ананас.ТСН')
+                    ->action('Зарегистрироваться', 'https://tsn.ananas-web.ru/register')
+                    ->line('Если Вы не отправляли запрос на изменение пароля, не требуется никаких дополнительных действий.');
     }
 
     /**

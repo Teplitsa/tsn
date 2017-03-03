@@ -57,6 +57,7 @@ $router->group(['middleware'=>'auth'], function(Router $router){
     $router->get('/stub-avatar/{email}', ['as'=>'employees.stub-avatar', 'uses' => 'Employees@stubAvatar']);
 
     $router->get('dictionaries', ['as'=>'dictionary.index', 'uses'=>'Dictionaries@index']);
+    $router->get('send_invite', ['as'=>'send_invite', 'uses'=>'HousesController@send_invite']);
     $router->post('dictionaries', ['as'=>'dictionary.save', 'uses'=>'Dictionaries@save']);
 
 
