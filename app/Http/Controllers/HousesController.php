@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\City;
 use App\Flat;
 use App\House;
+use App\Models\User;
+use App\Notifications\InvitePeople;
 use App\RegisteredFlat;
 use App\Sensor;
 use App\Street;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class HousesController extends Controller
 {
@@ -170,6 +173,13 @@ class HousesController extends Controller
     {
         $flat->active=true;
         $flat->save();
+        return redirect()->back();
+    }
+    public function send_invite(Request $request){
+        $user=new User();
+        $user->email=$request->get('email');
+        \Notification::send($user, new InvitePeople());
+        $this->addToastr('success', 'Приглашение отправлено', 'Успех');
         return redirect()->back();
     }
 }
