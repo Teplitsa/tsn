@@ -43,8 +43,7 @@ class InvitePeople extends Notification
         return (new MailMessage)
                      ->subject('Добро пожаловть в ' . config('app.name'))
                     ->line('Вы приглашены в Ананас.ТСН')
-                    ->action('Зарегистрироваться', 'https://tsn.ananas-web.ru/register')
-                    ->line('Если Вы не отправляли запрос на изменение пароля, не требуется никаких дополнительных действий.');
+                    ->action('Зарегистрироваться', 'https://tsn.ananas-web.ru/register');
     }
 
     /**
