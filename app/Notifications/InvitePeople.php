@@ -41,7 +41,7 @@ class InvitePeople extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                     ->subject('Добро пожаловть в ' . config('app.name'))
+                     ->subject('Вас пригласили в ' . config('app.name'))
                     ->line('Вы приглашены в Ананас.ТСН')
                     ->action('Зарегистрироваться', 'https://tsn.ananas-web.ru/register');
     }

@@ -45,6 +45,7 @@ class ResetPassword extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+            ->subject('Сброс пароля')
             ->line('Вы получили данное письмо, потому что мы получили запрос на смену пароля для вашего аккаунта.')
             ->action('Сброс пароля', url('password/reset', $this->token))
             ->line('Если вы не посылали данный запрос на смену пароля, проигнорируйте данное письмо.');
