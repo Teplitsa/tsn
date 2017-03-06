@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Company;
 use App\Notifications\Users\NewColleague;
 use App\Notifications\Users\Registered;
+use App\Notifications\Users\ResetPassword;
 use App\RegisteredFlat;
 use App\Role;
 use App\Traits\Encryptable;
@@ -131,5 +132,10 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
     }
 }

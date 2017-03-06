@@ -8,3 +8,4 @@ Homestead.json
 .phpstorm.meta.php
 _ide*.php
 npm-debug.log*
+storage/key*

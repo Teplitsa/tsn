@@ -64,10 +64,8 @@ Vue.component('attach-flat', {
             this.$http[method](action, data)
                 .then(function (response) {
                     $vm.form.finishProcessing();
+                    location.href = response.data.data.redirect;
 
-                    setTimeout(function () {
-                        location.href = response.data.data.redirect;
-                    }, 3000);
                 }).catch(function (response) {
                     let error = response.data;
 

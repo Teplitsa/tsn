@@ -25,7 +25,7 @@ class AttachFlat extends FormRequest
     public function rules()
     {
         return [
-            'city'       => 'required|exists:cities,id',
+            'city'       => 'required|exists:N,id',
             'street_id'  => [
                 'required',
                 Rule::exists('streets', 'id')->where(

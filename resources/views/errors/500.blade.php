@@ -15,7 +15,7 @@
 
     <link href="/landing/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="/landing/css/style.css" rel="stylesheet">
+    <link href="/landing/css/style_my.css" rel="stylesheet">
 
 </head>
 

@@ -6,12 +6,12 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
     /**
      * A list of the exception types that should not be reported.
-     *
      * @var array
      */
     protected $dontReport = [
@@ -24,10 +24,10 @@ class Handler extends ExceptionHandler
 
     /**
      * Report or log an exception.
-     *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
      * @param  \Exception $exception
+     *
      * @return void
      */
     public function report(Exception $exception)
@@ -40,6 +40,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Exception $exception
+     *
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function render($request, Exception $exception)
@@ -50,6 +51,7 @@ class Handler extends ExceptionHandler
             }
 
             $code = $this->isHttpException($exception) ? $exception->getStatusCode() : 500;
+
             return (new JsonException($exception, $code))->getResponse();
         } else {
             return parent::render($request, $exception);
@@ -61,6 +63,7 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Illuminate\Auth\AuthenticationException $exception
+     *
      * @return \Illuminate\Http\Response
      */
     protected function unauthenticated($request, AuthenticationException $exception)
@@ -70,5 +73,14 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest('login');
+    }
+
+    public function convertExceptionToResponse(Exception $e)
+    {
+        if (!config('app.debug')) {
+            $e = new HttpException(500);
+            return $this->renderHttpException($e);
+        }
+        return parent::convertExceptionToResponse($e);
     }
 }
