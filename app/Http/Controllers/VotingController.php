@@ -470,6 +470,7 @@ class VotingController extends Controller
 
     public function people(House $house, Voting $voting, Request $request)
     {
+
         UserVoting::where('voting_id', $voting->id)->where('role', '!=', RoleTypesInVoting::TENANT)->delete();
         $predsed = new UserVoting();
         $predsed->voting_id = $voting->id;
@@ -490,6 +491,15 @@ class VotingController extends Controller
             $counter->role = RoleTypesInVoting::COUNTER;
             $counter->user_id = $count;
             $counter->save();
+        }
+
+        foreach ($request->get('solution') as $key => $item) {
+            foreach ($voting->vote_items as $voteKey => $voteItem) {
+                if ($key == $voteKey) {
+                    $voteItem->solution = $item;
+                    $voteItem->save();
+                }
+            }
         }
 
         return redirect()->back();
