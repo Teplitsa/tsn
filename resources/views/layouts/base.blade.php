@@ -95,6 +95,7 @@
 <script src="/js/pace.min.js"></script>
 <script src="/js/bootstrap-datepicker.js"></script>
 <script src="/js/jquery.maskedinput.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="/plugins/select2/select2.min.js" type="text/javascript"></script>
 
 

@@ -48,12 +48,14 @@
 
                                         <input type="text" class="form-control pull-right datetimepicker"
                                                v-model="form.public_at"
+                                               id="public_at"
                                                name="deadline" placeholder="Введите дату">
 
                                         <div class="input-group-addon">До</div>
 
                                         <input type="text" class="form-control pull-right datetimepicker"
                                                v-model="form.end_at"
+                                               id="end_at"
                                                name="deadline" placeholder="Введите дату">
                                     </div>
                                 </div>
@@ -70,12 +72,14 @@
 
                                         <input type="text" class="form-control pull-right datetimepicker"
                                                v-model="form.opened_at"
+                                               id="opened_at"
                                                name="deadline" placeholder="Введите дату">
 
                                         <div class="input-group-addon">До</div>
 
                                         <input type="text" class="form-control pull-right datetimepicker"
                                                v-model="form.closed_at"
+                                               id="closed_at"
                                                name="deadline" placeholder="Введите дату">
                                     </div>
                                 </div>
@@ -206,9 +210,22 @@
             format: 'DD.MM.YYYY HH:mm',
             locale: 'ru'
         });
+        $('.datetimepicker').mask('99.99.9999 99:99');
 
-        $('.datetimepicker').mask('99.99.9999 99:99')
+        $("#public_at").on("dp.change",function (e) {
+            $("#end_at").data("DateTimePicker").minDate(e.date);
+        });
 
+        $("#end_at").on("dp.change",function (e) {
+            $("#public_at").data("DateTimePicker").maxDate(e.date);
+        });
+        $("#opened_at").on("dp.change",function (e) {
+            $("#closed_at").data("DateTimePicker").minDate(e.date);
+        });
+
+        $("#closed_at").on("dp.change",function (e) {
+            $("#opened_at").data("DateTimePicker").maxDate(e.date);
+        });
     </script>
 @stop
 
