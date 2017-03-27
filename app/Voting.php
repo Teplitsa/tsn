@@ -95,31 +95,31 @@ class Voting extends Model
 
     public function setClosedAtAttribute($value = null)
     {
-        $this->attributes['closed_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
+        $this->attributes['closed_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:i',
             $value);
     }
     public function setProtocolAtAttribute($value = null)
     {
         if($value == null)
             $value = new Carbon();
-        $this->attributes['protocol_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
+        $this->attributes['protocol_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:i',
             $value);
     }
     public function setPublicAtAttribute($value = null)
     {
-        $this->attributes['public_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
+        $this->attributes['public_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:i',
             $value);
     }
 
     public function setOpenedAtAttribute($value = null)
     {
-        $this->attributes['opened_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
+        $this->attributes['opened_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:i',
             $value);
     }
 
     public function setEndAtAttribute($value = null)
     {
-        $this->attributes['end_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:m',
+        $this->attributes['end_at'] = is_object($value) ? $value : \Carbon\Carbon::createFromFormat('d.m.Y H:i',
             $value);
     }
 

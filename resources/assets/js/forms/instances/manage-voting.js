@@ -39,6 +39,8 @@ Vue.component('app-manage-voting', {
     computed: {
         hasErrors : function(){
             let result = false;
+            if($.trim(this.form.name).length == 0)
+                return true;
             if(this.form.items.length == 0)
                 return true;
 
@@ -62,6 +64,8 @@ Vue.component('app-manage-voting', {
 
         error : function(){
 
+            if($.trim(this.form.name).length == 0)
+                return 'Заполните название';
             if(this.form.items.length == 0)
                 return 'Добавьте хотя бы один вопрос в повестку дня';
 
@@ -96,7 +100,7 @@ Vue.component('app-manage-voting', {
                         location.href = response.data.redirect;
                     }, 3000);
                 }, function (response) {
-                    // error
+                    App.Toastr("error", $vm.form.errors.all().join(","), "Ошибка");
                 });
         },
 
@@ -112,6 +116,12 @@ Vue.component('app-manage-voting', {
                 'description': '',
                 'text': '',
             });
+
+            this.active = _.last(this.form.items);
+        },
+
+        removeItem(i){
+            this.form.items.splice(i, 1);
 
             this.active = _.last(this.form.items);
         }

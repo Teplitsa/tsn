@@ -64,9 +64,10 @@ class VotingController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param Requests\VotingRequest|Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @param House $house
+     * @return array
      */
     public function store(Requests\VotingRequest $request, House $house)
     {
