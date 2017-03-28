@@ -93,6 +93,7 @@
                                     display="Председатель"
                                     :form="form"
                                     name="predsed"
+                                    value="{{$voting}}"
                                     placeholder="Выберете председателя голосования"
                                     :items="{{ json_encode($users)}}"
                             ></app-select>
