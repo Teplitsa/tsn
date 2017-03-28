@@ -100,13 +100,39 @@
                             @endforelse
                         </div>
                         <div class="tab-pane" id="tab-2">
+                            <div class="form-group">
+                                <h4>Вы можете выслать приглашение на электроную почту</h4>
+                            </div>
+
+                            <form action="/send_invite" class="form-horizontal multipart-encoded">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">
+                                            Электронная почта
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input class="form-control" name="email"
+                                                   placeholder="Введите электронную почту"/>
+                                        </div>
+                                    </div>
+                                    <input type="submit" class="btn btn-primary btn-block" value="Отправить"/>
+                                </div>
+                            </form>
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+                                <h4>Или распечатать инструкцию</h4>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <h4>Инструкция по подключению к {{config('app.name')}}</h4>
                             <ol>
                                 <li>
                                     Пройдите по ссылке <a href="https://tsn.ananas-web.ru/register">tsn.ananas-web.ru/register</a>
                                 </li>
                                 <li>
                                     Введите свои контактные данные
-                                </li><li>
+                                </li>
+                                <li>
                                     В настройках пользователя укажите, жильцом какого дома Вы являетесь
                                 </li>
                                 <li>
@@ -117,28 +143,14 @@
                                 </li>
                             </ol>
                             <div class="hr-line-dashed"></div>
-                            <h4>Вы можете выслать приглашение на электроную почту</h4>
-
-                            <form action="/send_invite" class="form-horizontal multipart-encoded">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">
-                                    Электронная почта
-                                </label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" name="email"
-                                              placeholder="Введите электронную почту"/>
-                                </div>
-                                <input type="submit"  class="btn btn-white btn-block" value="Отправить"/>
+                            <div align="center">
+                                <h4>QR-Code</h4>
                             </div>
-                            </form>
-                            <br>
-                            <div class="hr-line-dashed"></div>
-                            <h4>Или распечатать QR-Code</h4>
                             <div style="text-align: center">
                                 <img src="/img/chart.png" width="50%">
                             </div>
 
-                            <input type="submit"   class="btn btn-white btn-block" value="Печать" onclick="print()"/>
+                            <input type="submit" class="btn btn-primary btn-block" value="Печать" onclick="print()"/>
                         </div>
                     </div>
 
@@ -148,17 +160,35 @@
     </div>
 @stop
 @section('after_body')
-<script>
-    function print() {
-        let newWin = open('','Печать CR-Code','','status=no,toolbar=no,menubar=no,location=no,scrollbar=0,resizable=yes');
-        newWin.document.writeln('<html><head></head><body>' +'<h1>QR-Code для Ананас.ТСН</h1>'+
-            '<img src="/img/chart.png" width="50%"></body>' +
-            '</html>');
-        newWin.document.close();
-        newWin.focus();
-        newWin.print();
-        newWin.close();
-    }
+    <script>
+        function print() {
+            let newWin = open('', 'Печать инструкции по подключению к {{config('app.name')}}', '', 'status=no,toolbar=no,menubar=no,location=no,scrollbar=0,resizable=yes');
+            newWin.document.writeln('<html><head></head><body>' + '<h1>Инструкция по подключению к {{config('app.name')}}</h1>' +
+                '<ol style="font-size: 25px;">' +
+                '<li>' +
+                'Пройдите по ссылке <a href="https://tsn.ananas-web.ru/register">tsn.ananas-web.ru/register</a>' +
+                '</li>' +
+                '<li>' +
+                'Введите свои контактные данные' +
+                '</li>' +
+                '<li>' +
+                'В настройках пользователя укажите, жильцом какого дома Вы являетесь' +
+                '</li>' +
+                '<li>' +
+                'Ждите подтверждения от вашего управляющего' +
+                '</li>' +
+                '<li>' +
+                'Вы можете участвовать в голосовании' +
+                '</li>' +
+                '</ol>' +
+                '<h1>QR-Code для {{config('app.name')}}</h1>' +
+                '<img src="/img/chart.png" width="50%"></body>' +
+                '</html>');
+            newWin.document.close();
+            newWin.focus();
+            newWin.print();
+            newWin.close();
+        }
 
-</script>
+    </script>
 @stop

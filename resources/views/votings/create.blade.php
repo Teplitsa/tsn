@@ -167,6 +167,8 @@
                             <h3>Повестка дня</h3>
                             <ul class="list-group">
                                 <li class="list-group-item" v-for="(i, item) in form.items" @click.prevent="selectItem(item)">
+                                    <a @click.prevent="removeItem(i)" v-if="form.items.length > 1"><i class="fa fa-trash"></i></a>
+                                    &nbsp;
                                     @{{ i+1 }}. @{{ item.name }}
                                 </li>
                             </ul>

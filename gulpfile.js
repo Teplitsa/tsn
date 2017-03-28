@@ -1,4 +1,5 @@
 const elixir = require('laravel-elixir');
+require('laravel-elixir-webpack-official-fixed');
 
 require('laravel-elixir-vue');
 
