@@ -5,6 +5,7 @@ namespace App;
 use App\Enums\RoleTypesInVoting;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
 
 class Voting extends Model
 {
@@ -21,6 +22,8 @@ class Voting extends Model
         'public_at',
         'public_length',
         'protocol_at',
+        'predsed',
+        'secretar',
     ];
 
 
@@ -80,8 +83,8 @@ class Voting extends Model
             ];
         }
 
-//        $data['predsed'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::CHAIRMAN)->first()->user_id;
-//        $data['secretar'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::SECRETARY)->first()->user_id;
+        $data['predsed'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::CHAIRMAN)->first()->user_id;
+        $data['secretar'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::SECRETARY)->first()->user_id;
         //$data['count[]'] = ;
 
         return $data;
@@ -131,5 +134,13 @@ class Voting extends Model
 
         $square = RegisteredFlat::whereIn('id', $ids)->sum('square');
         return number_format($square / $this->house->square * 100, 2);
+    }
+    public function predsed()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function secretar()
+    {
+        return $this->belongsTo(User::class);
     }
 }
