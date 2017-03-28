@@ -2,63 +2,6 @@
 
 @section ('content')
     <div>
-
-        @if($voting->closed_at < \Carbon\Carbon::now())
-            <form class="form-horizontal" action="{!! route('houses.votings.peoples',[$house, $voting]) !!}">
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>Информация по голосованию</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <app-select
-                                        display="Председатель"
-                                        :form="form"
-                                        name="predsed"
-                                        placeholder="Выберете председателя голосования"
-                                        :items="{{ json_encode($users)}}"
-                                ></app-select>
-                                <app-select
-                                        display="Секретарь"
-                                        :form="form"
-                                        name="secretar"
-                                        placeholder="Выберете секретаря голосования"
-                                        :items="{{ json_encode($users)}}"
-                                ></app-select>
-
-                                <div>
-                                    <div :class="{'row form-group': true, 'has-error': form.errors.has(name) }">
-                                        <label class="col-sm-2 control-label">
-                                            Счетная коммисия
-                                        </label>
-                                        <div class="col-sm-10">
-
-                                            <select class="form-control select2-my" name="count[]" style="width:100%"
-                                                    multiple>
-                                                @foreach($house->users as $key=>$user)
-                                                    <option value="{{ $key }}" @if($voting->isCounter($key)) selected @endif>
-                                                        {{ $user }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="hr-line-dashed"></div>
-                                </div>
-
-                                <button class="btn-block btn btn-success">
-                                    <i class="fa fa-check"></i> Сохранить
-                                </button>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            </form>
-
-        @endif
         <form class="form-horizontal" action="{!! route('houses.votings.store', $house) !!}">
             <div class="row">
                 <div class="col-md-8 col-sm-6">
@@ -137,31 +80,83 @@
         </form>
     </div>
 
-
-    <form class="form-horizontal" action="{!! route('houses.votings.solution',[$house, $voting]) !!}">
-        <div class="row">
-            <div class="col-md-12 col-sm-12">
-                @foreach($voting->vote_items as $key=>$item)
-                    @if($voting->closed_at < \Carbon\Carbon::now())
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">
-                                Решение по вопросу {{$key+1}}
-                            </label>
-                            <div class="col-sm-8">
-                                    <textarea class="form-control" name="solution[]" data-voting="{{$item->id}}"
-                                              placeholder="Введите решение"></textarea>
-                            </div>
+    @if($voting->closed_at < \Carbon\Carbon::now())
+        <form class="form-horizontal" action="{!! route('houses.votings.peoples',[$house, $voting]) !!}" method="PATCH">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Информация по голосованию</h5>
                         </div>
-                    @endif
-                @endforeach
-                @if($voting->closed_at < \Carbon\Carbon::now())
-                    <button class="btn-block btn btn-success">
-                        <i class="fa fa-check"></i> Сохранить
-                    </button>
-                @endif
+                        <div class="ibox-content">
+                            <app-select
+                                    display="Председатель"
+                                    :form="form"
+                                    name="predsed"
+                                    placeholder="Выберете председателя голосования"
+                                    :items="{{ json_encode($users)}}"
+                            ></app-select>
+                            <app-select
+                                    display="Секретарь"
+                                    :form="form"
+                                    name="secretar"
+                                    placeholder="Выберете секретаря голосования"
+                                    :items="{{ json_encode($users)}}"
+                            ></app-select>
+
+                            <div>
+                                <div :class="{'row form-group': true, 'has-error': form.errors.has(name) }">
+                                    <label class="col-sm-2 control-label">
+                                        Счетная коммисия
+                                    </label>
+                                    <div class="col-sm-10">
+
+                                        <select class="form-control select2-my" name="count[]" style="width:100%"
+                                                multiple>
+                                            @foreach($house->users as $key=>$user)
+                                                <option value="{{ $key }}"
+                                                        @if($voting->isCounter($key)) selected @endif>
+                                                    {{ $user }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                @foreach($voting->vote_items as $key=>$item)
+                                    @if($voting->closed_at < \Carbon\Carbon::now())
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">
+                                                Решение по вопросу {{$key+1}}
+                                            </label>
+                                            <div class="col-sm-10">
+                                                @if(isset($item->solution))
+                                                    <textarea class="form-control" name="solution[]"
+                                                              data-voting="{{$item->id}}"
+                                                              placeholder="Введите решение">{{$item->solution}}</textarea>
+                                                @else
+                                                    <textarea class="form-control" name="solution[]"
+                                                              data-voting="{{$item->id}}"
+                                                              placeholder="Введите решение"></textarea>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            <button class="btn-block btn btn-success">
+                                <i class="fa fa-check"></i> Сохранить
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+
+    @endif
 
 @stop
 
