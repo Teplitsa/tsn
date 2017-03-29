@@ -408,7 +408,7 @@ class VotingController extends Controller
                         $item->votes->where(
                             'refrained',
                             1
-                        )->count() * 100 / $uniq,
+                        )->count() * 100 / max(1, $uniq),
                         2
                     ).'% от общего числа голосов собственников, принявших участие в голосовании. <w:br />'.
                     //'РЕШИЛИ: <w:br />'.$item->solution;
