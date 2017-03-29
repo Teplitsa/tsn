@@ -10,6 +10,7 @@
                 <select class="form-control" :name="name" v-model="form[name]">
                     <option v-for="item in items" :value="item.value">
                         {{ item.text }}
+
                     </option>
                 </select>
                 <span class="help-block" v-show="form.errors.has(name)">
@@ -23,10 +24,15 @@
 
 <script>
     export default{
-        props: ['display', 'placeholder', 'form', 'name', 'help', 'items', 'value','class'],
+        props: ['display', 'placeholder', 'form', 'name', 'help', 'items', 'value', 'class'],
         ready(){
             let val = this.form[this.name];
-            if (this.items[val] == undefined && this.items.length > 0) {
+            for (let i  in this.items) {
+                if (this.items[i].value == val) {
+                    return;
+                }
+            }
+            if (this.items.length > 0) {
                 this.form[this.name] = _.first(this.items).value;
             }
         }
