@@ -82,6 +82,53 @@ class Voting extends Model
                 'v' => $v,
             ];
         }
+        if (!is_null(UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::CHAIRMAN)->first())){
+            $data['predsed'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::CHAIRMAN)->first()->user_id;
+        }
+        if(!is_null(UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::SECRETARY)->first())){
+            $data['secretar'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::SECRETARY)->first()->user_id;
+        }
+        //$data['count[]'] = ;
+
+        return $data;
+    }
+    public function getInfo2()
+    {
+        $data = [
+            'name'      => $this->name,
+            'closed_at' => $this->closed_at->format('d.m.Y H:m'),
+            'items'     => [],
+        ];
+
+        foreach ($this->vote_items as $i => $vote_item) {
+            $vote = $vote_item->votes->first(function ($vote) {
+                return $vote->user_id == auth()->user()->id;
+            });
+
+            if ($vote == null) {
+                $v = '';
+            }
+            else
+            {
+                $v = $vote->pro + (-1)  * $vote->contra;
+            }
+
+
+            $data['items'][] = [
+                'i'           => $i,
+                'id'          => $vote_item->id,
+                'name'        => $vote_item->name,
+                'description' => $vote_item->description,
+                'text'        => $vote_item->text,
+
+                'pro'       => $vote_item->votes->sum('pro'),
+                'contra'    => $vote_item->votes->sum('contra'),
+                'refrained' => $vote_item->votes->sum('refrained'),
+                'total'     => $vote_item->votes->count(),
+
+                'v' => $v,
+            ];
+        }
 
         $data['predsed'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::CHAIRMAN)->first()->user_id;
         $data['secretar'] = UserVoting::where('voting_id', $this->id)->where('role', RoleTypesInVoting::SECRETARY)->first()->user_id;
