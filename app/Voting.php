@@ -190,16 +190,19 @@ class Voting extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function isFullForCurrentUser(){
+    public function isFullForCurrentUser(RegisteredFlat $flat){
         $vote_items=$this->vote_items->count();
-        dd();
-        $user_vote_items=$this->vote_items->first()->votes;
-            //->map(function ($item){
-           // if ($item->)
-       // });
-        dd($user_vote_items);
-
-        dd();
+        $user_vote_items=0;
+        $u=$this->vote_items->map(function ($item) use ($flat,$user_vote_items){
+            if (count($item->votes()->where('registered_flat_id',$flat->id)->get())>0){
+                $user_vote_items=$user_vote_items+1;
+            };
+            return $user_vote_items;
+        });
+        if($vote_items!=$u->sum()){
+            return false;
+        }
+        return true;
 
     }
 }

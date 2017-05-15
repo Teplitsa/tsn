@@ -20,7 +20,7 @@ add('writable_dirs', ['public']);
 
 server('production', 'tsn.ananas-web.ru')
     ->user('root')
-    ->identityFile()
+    ->identityFile('storage/key.pub', 'storage/key')
     ->set('deploy_path', '/web/tsn_ananas-web_ru');
 
 server('staging', 'tsn.dev.ananas-web.ru')
