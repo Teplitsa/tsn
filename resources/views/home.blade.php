@@ -24,14 +24,14 @@
                                 </div>
                             @empty
                                 <div class="alert alert-info">
-                                    Активных голосований нет по данному адресу
+                                    Активных голосований нет по данному адресу. Вы можете их создать.
                                 </div>
                             @endforelse
                         @endif
                         </div>
                 @empty
                     <div class="alert alert-info">
-                        Активных голосований нет
+                        Активных голосований нет. Вы можете их создать.
                     </div>
                 @endforelse
             </div>
