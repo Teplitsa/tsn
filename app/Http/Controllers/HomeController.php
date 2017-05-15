@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Vote;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -21,6 +22,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home', ['pageTitle'=>'Главная']);
+        $flats=[];
+        if (auth()->user()->isUser()){
+            $flats=auth()->user()->registeredFlats;
+         }
+         
+        return view('home', ['pageTitle'=>'Главная','flats'=>$flats]);
     }
 }
