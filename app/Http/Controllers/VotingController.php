@@ -159,7 +159,6 @@ class VotingController extends Controller
 
             }
         )->values();
-
         return view('votings.show', compact('voting', 'house', 'pageTitle', 'component', 'users'));
     }
 

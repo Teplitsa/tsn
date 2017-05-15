@@ -190,4 +190,16 @@ class Voting extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function isFullForCurrentUser(){
+        $vote_items=$this->vote_items->count();
+        dd();
+        $user_vote_items=$this->vote_items->first()->votes;
+            //->map(function ($item){
+           // if ($item->)
+       // });
+        dd($user_vote_items);
+
+        dd();
+
+    }
 }

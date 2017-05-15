@@ -20,7 +20,6 @@ class VoteController extends Controller
         abort_if($flat->flat->house_id != $voting->house_id, 403);
         $component = 'app-voting';
         $pageTitle = 'Голосование';
-
         return view('votes.show', compact('flat', 'voting', 'component', 'pageTitle'));
     }
 

@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-md-8 col-sm-6">
                     <div class="ibox float-e-margins">
-                        <div class="ibox-title">
+                        <div class="ibox-title" style="background-color: #1ab394;color: #ffffff;">
                             <h5>Вопрос № @{{ active.i + 1 }}</h5>
                         </div>
                         <div class="ibox-content">
@@ -60,10 +60,18 @@
 
                             <h3>Повестка дня</h3>
                             <ul class="list-group">
-                                <li class="list-group-item" v-for="(i, item) in form.items"
+                                <div v-for="(i, item) in form.items">
+                                <li class="list-group-item"
+                                    v-if="item.id==active.id" style="background-color: #1ab394;color: #ffffff;"
                                     v-on:click.prevent="selectItem(item)">
                                     @{{ i+1 }}. @{{ item.name }}
                                 </li>
+                                    <li class="list-group-item"
+                                        v-else
+                                        v-on:click.prevent="selectItem(item)">
+                                        @{{ i+1 }}. @{{ item.name }}
+                                    </li>
+                                </div>
                             </ul>
                         </div>
                     </div>
