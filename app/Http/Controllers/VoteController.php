@@ -45,6 +45,15 @@ class VoteController extends Controller
         $vote->refrained = $result == '0';
         $vote->save();
         $this->addToastr('success', 'Ваш голос учтен', 'Спасибо!');
-        return ['success'=>'true'];
+        if($voting->isFullForCurrentUser($flat)){
+            return [
+                'data' => [
+                    'redirect' => route('index'),
+                ],
+            ];
+        }else{
+            return ['success'=>'true'];
+        }
+
     }
 }

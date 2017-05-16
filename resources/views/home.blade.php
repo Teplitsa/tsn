@@ -18,7 +18,8 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <a href="{!! route('flat.voting', [$flat, $voting]) !!}"
-                                           class="btn btn-block btn-primary">Проголосовать</a>
+                                           class="btn btn-block btn-primary">
+                                            @if($voting->isFullForCurrentUser($flat))Переголосовать @else Проголосовать@endif</a>
                                     </div>
 
                                 </div>
