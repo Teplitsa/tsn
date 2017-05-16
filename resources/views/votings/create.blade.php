@@ -39,7 +39,13 @@
                             </app-select>
 
                             <app-select
-                                    display="Форма проведения собрания"
+                                    display="Форма проведения собрания <small
+                                    data-toggle='tooltip'
+                            data-placement='top'
+                            title='Заочное - голосование в письменной форме, без встречи жильцов. Очно-заочное - сочетания голосования в устной и письменной форме'
+                            >
+                            <i class='fa fa-info-circle'></i>
+                            </small>"
                                     :form="form"
                                     name="kind"
                                     :items="{{ json_encode(\App\Enums\VotingForms::humanValuesForVue()) }}">
