@@ -6,6 +6,9 @@ use App\City;
 use App\Company;
 use App\Flat;
 use App\House;
+use App\Models\User;
+use App\Notifications\ActivateFlat;
+use App\Notifications\NewFlat;
 use App\RegisteredFlat;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -115,6 +118,10 @@ class FlatController extends Controller
         $registeredFlat->user_share = $registeredFlat->square / $registeredFlat->down_part * $registeredFlat->up_part;
         $registeredFlat->date_doc = Carbon::createFromFormat('d.m.Y', $request->date_doc);
         $registeredFlat->scan = $request->scan->store('scans_of_documents');
+        $company=$house->company;
+        User::where('company_id',$company->id)->each(function ($user) use ($registeredFlat){
+            \Notification::send($user, new NewFlat($registeredFlat));
+        });
         $registeredFlat->active = 0;
         $registeredFlat->save();
 
@@ -163,6 +170,7 @@ class FlatController extends Controller
         }
 
         $flat->active = true;
+
         $flat->save();
         $this->addToastr(
             'success',

@@ -6,6 +6,7 @@ use App\City;
 use App\Flat;
 use App\House;
 use App\Models\User;
+use App\Notifications\ActivateFlat;
 use App\Notifications\InvitePeople;
 use App\RegisteredFlat;
 use App\Sensor;
@@ -116,6 +117,7 @@ class HousesController extends Controller
      */
     public function show(House $house)
     {
+        abort_if((auth()->user()->isUser()), 403);
         $currentHouse=$house->id;
         return view('houses.show', compact('house','currentHouse'));
     }
@@ -173,12 +175,16 @@ class HousesController extends Controller
     {
         $flat->active=true;
         $flat->save();
+        $user=$flat->user;
+        \Notification::send($user, new ActivateFlat($flat));
         return redirect()->back();
     }
     public function send_invite(Request $request){
         $user=new User();
         $user->email=$request->get('email');
-        \Notification::send($user, new InvitePeople());
+        $house_id=$request->get('house_id');
+        $house=House::find($house_id);
+        \Notification::send($user, new InvitePeople(auth()->user(),$house));
         $this->addToastr('success', 'Приглашение отправлено', 'Успех');
         return redirect()->back();
     }

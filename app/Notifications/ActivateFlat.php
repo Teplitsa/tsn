@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class InvitePeople extends Notification
+class ActivateFlat extends Notification
 {
     use Queueable;
 
@@ -16,10 +16,9 @@ class InvitePeople extends Notification
      *
      * @return void
      */
-    public function __construct($user,$house)
+    public function __construct($flat)
     {
-        $this->user=$user;
-        $this->house=$house;
+        $this->flat=$flat;
     }
 
     /**
@@ -42,10 +41,9 @@ class InvitePeople extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                     ->subject('Вас пригласили в ' . config('app.name'))
-                    ->line('Вы приглашены в Ананас.ТСН')
-                    ->line($this->user->full_name.' пригласил(a) вас стать участником ТСН по адресу: '.$this->house->address.'. Зарегистрируйтесь, чтобы принять участие в голосованиях вашего дома')
-                    ->action('Зарегистрироваться', 'https://tsn.ananas-web.ru/register');
+                    ->subject('Активация квартиры в ' . config('app.name'))
+                    ->line('Ваша квартира по адресу '. $this->flat->address.' активирована!')
+                    ->action('Перейти на сайт', 'https://tsn.ananas-web.ru');
     }
 
     /**
