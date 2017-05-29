@@ -19,7 +19,7 @@
 
 <script>
     export default{
-        props: ['display', 'placeholder', 'form', 'name', 'help','id','disabled']
+        props: ['display', 'placeholder', 'form', 'name', 'help','id','disabled','class']
     }
 </script>
 

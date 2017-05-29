@@ -109,6 +109,14 @@
         $(this).find('[type="submit"]').prop('disabled', true);
     });
 </script>
+<script>
+    $(function() {
+        //задание заполнителя с помощью параметра placeholder
+        $("#date").mask("99.99.9999", {placeholder: "дд.мм.гггг" });
+        //задание заполнителя с помощью параметра placeholder
+        $("#index").mask("999999", {placeholder: " " });
+    });
+</script>
 
 </body>
 

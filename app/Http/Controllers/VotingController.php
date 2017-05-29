@@ -8,6 +8,7 @@ use App\Enums\RoleTypesInVoting;
 use App\Enums\VotingTypes;
 use App\House;
 use App\Http\Controllers\InternalApi\User;
+use App\Notifications\NewVoting;
 use App\RegisteredFlat;
 use App\Street;
 use App\UserVoting;
@@ -126,6 +127,18 @@ class VotingController extends Controller
                             $voting->vote_items()->save($voteItem);
                         }
                     );
+                    $house->connectedFlats->each(
+                        function ($flat) use ($house) {
+                            $flat->registered_flats->each(
+                                function ($reg_flat) use ($house) {
+                                    if (!is_null($reg_flat->user)) {
+                                        \Notification::send($reg_flat->user, new NewVoting($house));
+                                    }
+                                }
+                            );
+                        }
+                    );
+
                 }
             );
 
@@ -159,6 +172,7 @@ class VotingController extends Controller
 
             }
         )->values();
+
         return view('votings.show', compact('voting', 'house', 'pageTitle', 'component', 'users'));
     }
 

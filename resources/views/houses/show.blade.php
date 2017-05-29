@@ -114,6 +114,7 @@
                                             <input class="form-control" name="email"
                                                    placeholder="Введите электронную почту"/>
                                         </div>
+                                        <input type="hidden" value="{{$house->id}}" name="house_id">
                                     </div>
                                     <input type="submit" class="btn btn-primary btn-block" value="Отправить"/>
                                 </div>
