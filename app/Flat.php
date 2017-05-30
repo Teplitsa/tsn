@@ -20,7 +20,7 @@ class Flat extends Model
 
     public function getAddressFullAttribute()
     {
-        return $this->address.', кв. '.$this->number;
+        return $this->house->street->city->name.', '.$this->address.', кв. '.$this->number;
     }
 
     public function votings()

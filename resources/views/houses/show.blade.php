@@ -86,7 +86,7 @@
                                                 @endif
                                             </td>
                                             <td class="project-title">
-                                                <a href="{!! route('flat.voting', [$flat, $voting]) !!}">{!! $voting->name !!}</a>
+                                                <a href="javascript:void(0)">{!! $voting->name !!}</a>
                                                 <br>
                                                 <small>с: {!! $voting->created_at->format('d.m.Y') !!}</small><br>
                                                 <small>по: {!! $voting->end_at->format('d.m.Y') !!}</small>
