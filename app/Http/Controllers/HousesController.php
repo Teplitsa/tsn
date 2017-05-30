@@ -119,7 +119,8 @@ class HousesController extends Controller
     {
         abort_if((auth()->user()->isUser()), 403);
         $currentHouse=$house->id;
-        return view('houses.show', compact('house','currentHouse'));
+        $pageTitle=$house->address;
+        return view('houses.show', compact('house','currentHouse','pageTitle'));
     }
 
     /**
