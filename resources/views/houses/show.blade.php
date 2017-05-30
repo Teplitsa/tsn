@@ -5,7 +5,7 @@
         <div class="col-md-6 col-sm-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Собственники дома &nbsp;</h5> {{$house->address}},
+                    <h5>Собственники дома</h5>,
                     <small>площадью {{$house->square}} м <sup>2</sup></small>
                 </div>
                 <div class="ibox-content">
@@ -72,32 +72,50 @@
                                class="btn btn-block btn-primary">
                                 <i class="fa fa-plus"></i> Добавить голосование
                             </a>
-                            @forelse($house->votings as $voting)
-                                <div class="hr-line-dashed"></div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! $voting->name !!}
-                                    </div>
-                                    <div class="col-md-3">
-                                        @if($voting->closed_at > \Carbon\Carbon::now())
-                                            <span class="label label-warning">Идет</span>
-                                        @else
-                                            <span class="label label-success">Завершено</span>
-                                        @endif
-                                    </div>
-                                    <div class="col-md-3"><a
-                                                href="{!! route('houses.votings.show', [$house, $voting]) !!}"
-                                                class="btn btn-white btn-block"
-                                        >
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="alert alert-info">
-                                    Голосований не найдено
-                                </div>
-                            @endforelse
+                            <div class="project-list">
+
+                                <table class="table table-hover">
+                                    <tbody>
+                                    @forelse($house->votings as $voting)
+                                        <tr>
+                                            <td class="project-status">
+                                                @if($voting->isOpen())
+                                                    <span class="label label-primary">Идет</span>
+                                                @else
+                                                    <span class="label label-default">Завершено</span>
+                                                @endif
+                                            </td>
+                                            <td class="project-title">
+                                                <a href="{!! route('flat.voting', [$flat, $voting]) !!}">{!! $voting->name !!}</a>
+                                                <br>
+                                                <small>с: {!! $voting->created_at->format('d.m.Y') !!}</small><br>
+                                                <small>по: {!! $voting->end_at->format('d.m.Y') !!}</small>
+                                            </td>
+                                            <td class="project-completion">
+                                                <small>Прошло времени: {!! $voting->current_percent !!}%</small>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: {!! $voting->current_percent !!}%;"
+                                                         class="progress-bar"></div>
+                                                </div>
+                                            </td>
+                                            <td><a
+                                                        href="{!! route('houses.votings.show', [$house, $voting]) !!}"
+                                                        class="btn btn-white btn-block"
+                                                >
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7">
+                                                Активных голосований нет
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="tab-pane" id="tab-2">
                             <div class="form-group">

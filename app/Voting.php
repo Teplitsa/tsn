@@ -205,4 +205,14 @@ class Voting extends Model
         return true;
 
     }
+    public function getCurrentPercentAttribute(){
+    return round(Carbon::now()->diffInHours($this->end_at)/$this->created_at->diffInHours($this->end_at)*100);
+}
+    public function isOpen(){
+        if(round(Carbon::now()->diffInHours($this->end_at)/$this->created_at->diffInHours($this->end_at)*100)<100){
+            return true;
+        }
+        return false;
+
+    }
 }
