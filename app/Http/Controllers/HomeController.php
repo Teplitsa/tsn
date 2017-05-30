@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\Vote;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,15 @@ class HomeController extends Controller
         if (auth()->user()->isUser()){
             $flats=auth()->user()->registeredFlats;
          }
-         
+         else{
+            $user=auth()->user();
+            $company=Company::find($user->id);
+            $flats=$company->houses->flatMap(function($house){
+               return $house->connectedFlats->flatMap(function ($flat){
+                   return $flat->registered_flats;
+               });
+            });
+         }
         return view('home', ['pageTitle'=>'Главная','flats'=>$flats]);
     }
 }
