@@ -35,7 +35,7 @@ class AttachFlat extends FormRequest
                 ),
             ],
             'number'     => 'required',
-            'flat'       => 'required|numeric',
+            'flat'       => 'required',
             'square'     => 'numeric|required|min:0.001',
             'up_part'    => 'required|min:1',
             'down_part'  => 'required',
