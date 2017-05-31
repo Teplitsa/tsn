@@ -178,7 +178,7 @@ class HousesController extends Controller
         $flat->save();
         $user=$flat->user;
         \Notification::send($user, new ActivateFlat($flat));
-        return redirect()->back();
+        return redirect()->route('houses.show',$house);
     }
     public function send_invite(Request $request){
         $user=new User();

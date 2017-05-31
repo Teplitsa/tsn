@@ -50,6 +50,8 @@ $router->group(['middleware' => 'auth'], function (Router $router) {
         ['as' => 'houses.votings.download', 'uses' => 'VotingController@download']);
 
     $router->resource('houses', 'HousesController');
+    $router->get('houses/{house}/flat/{flat}',
+        ['as' => 'houses.flat.show', 'uses' => 'HomeController@show']);
     $router->get('houses/{house}/{flat}/download',
         ['as' => 'houses.flat.download', 'uses' => 'HousesController@download']);
     $router->get('houses/{house}/{flat}/active', ['as' => 'houses.flat.active', 'uses' => 'HousesController@active']);
