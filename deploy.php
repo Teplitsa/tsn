@@ -12,7 +12,6 @@ set('writable_mode', 'chown');
 add('shared_files', []);
 add('shared_dirs', [
     'public/upload',
-    'public/storage'
 ]);
 
 add('writable_dirs', ['public']);
