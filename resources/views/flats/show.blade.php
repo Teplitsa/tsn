@@ -8,7 +8,7 @@
                     <h5>Документ о праве собственности</h5>
                 </div>
                 <div class="ibox-content">
-                        <img src="/storage/{{$flat->scan}}">
+                        <img src="/storage/{{$flat->scan}}" width="100%">
                 </div>
             </div>
         </div>
