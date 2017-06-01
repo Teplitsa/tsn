@@ -62,7 +62,9 @@ task('deploy:migrate', function () {
     $output = run('{{bin/php}} {{release_path}}/artisan migrate --force');
     writeln('<info>' . $output . '</info>');
 })->desc('Migrate DB');
-
+task('symlink', function () {
+    run("ln -s {{deploy_path}}/shared/storage/app/public/scans_of_documents {{deploy_path}}/current/public/storage/scans_of_documents");
+})->desc('Symlink made');
 task('deploy', [
     'deploy:prepare',
     'deploy:lock',
@@ -83,4 +85,7 @@ task('deploy', [
     'artisan:queue:restart',
     'php-fpm:restart',
     'cleanup',
+    'symlink',
 ])->desc('Deploy your project');
+
+
