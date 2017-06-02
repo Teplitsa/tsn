@@ -12,6 +12,7 @@ set('writable_mode', 'chown');
 add('shared_files', []);
 add('shared_dirs', [
     'public/upload',
+    //'storage/app/public/scans_of_documents',
 ]);
 
 add('writable_dirs', ['public']);
@@ -63,7 +64,7 @@ task('deploy:migrate', function () {
     writeln('<info>' . $output . '</info>');
 })->desc('Migrate DB');
 task('symlink', function () {
-    run("ln -s {{deploy_path}}/shared/storage/app/public/scans_of_documents {{deploy_path}}/current/public/storage/scans_of_documents");
+    run("ln -s {{deploy_path}}/shared/storage/app/public {{deploy_path}}/current/public/storage");
 })->desc('Symlink made');
 task('deploy', [
     'deploy:prepare',
