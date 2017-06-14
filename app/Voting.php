@@ -252,18 +252,17 @@ class Voting extends Model
 
     public function getCurrentPercentAttribute()
     {
-        if (Carbon::now()->diffInHours($this->end_at) >= $this->created_at->diffInHours($this->end_at)) {
+
+        if (Carbon::now() >= $this->end_at) {
             return 100;
         }
 
-        return round(Carbon::now()->diffInHours($this->end_at) / $this->created_at->diffInHours($this->end_at) * 100);
+        return number_format(Carbon::now()->diffInMinutes($this->end_at) / $this->created_at->diffInMinutes($this->end_at) * 100,2);
     }
 
     public function isOpen()
     {
-        if (round(
-                Carbon::now()->diffInHours($this->end_at) / $this->created_at->diffInHours($this->end_at) * 100
-            ) < 100
+        if ($this->current_percent < 100
         ) {
             return true;
         }
