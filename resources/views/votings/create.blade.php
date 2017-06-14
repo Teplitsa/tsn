@@ -257,7 +257,7 @@
             code: '',
             city: {{ $house->city_id }},
             street_id: '{{ $house->street_id }}',
-            number: {{ $house->number }},
+            number: '{{ $house->number }}',
             name: '',
             initiators: [],
             kind: '',
