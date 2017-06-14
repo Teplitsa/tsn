@@ -65,6 +65,8 @@
                         ></app-text>
 
                         <app-text
+                                id="date"
+                                placeholder="дд.мм.гггг"
                                 display="Дата выдачи документа"
                                 :form="form"
                                 name="date_doc"

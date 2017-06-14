@@ -11,7 +11,8 @@ set('writable_mode', 'chown');
 
 add('shared_files', []);
 add('shared_dirs', [
-    'public/upload'
+    'public/upload',
+    //'storage/app/public/scans_of_documents',
 ]);
 
 add('writable_dirs', ['public']);
@@ -20,7 +21,7 @@ add('writable_dirs', ['public']);
 
 server('production', 'tsn.ananas-web.ru')
     ->user('root')
-    ->identityFile()
+    ->identityFile('storage/key.pub', 'storage/key')
     ->set('deploy_path', '/web/tsn_ananas-web_ru');
 
 server('staging', 'tsn.dev.ananas-web.ru')
@@ -62,7 +63,9 @@ task('deploy:migrate', function () {
     $output = run('{{bin/php}} {{release_path}}/artisan migrate --force');
     writeln('<info>' . $output . '</info>');
 })->desc('Migrate DB');
-
+task('symlink', function () {
+    run("ln -s {{deploy_path}}/shared/storage/app/public {{deploy_path}}/current/public/storage");
+})->desc('Symlink made');
 task('deploy', [
     'deploy:prepare',
     'deploy:lock',
@@ -83,4 +86,7 @@ task('deploy', [
     'artisan:queue:restart',
     'php-fpm:restart',
     'cleanup',
+    'symlink',
 ])->desc('Deploy your project');
+
+

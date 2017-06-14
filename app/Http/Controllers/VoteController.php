@@ -20,7 +20,6 @@ class VoteController extends Controller
         abort_if($flat->flat->house_id != $voting->house_id, 403);
         $component = 'app-voting';
         $pageTitle = 'Голосование';
-
         return view('votes.show', compact('flat', 'voting', 'component', 'pageTitle'));
     }
 
@@ -46,6 +45,15 @@ class VoteController extends Controller
         $vote->refrained = $result == '0';
         $vote->save();
         $this->addToastr('success', 'Ваш голос учтен', 'Спасибо!');
-        return ['success'=>'true'];
+        if($voting->isFullForCurrentUser($flat)){
+            return [
+                'data' => [
+                    'redirect' => route('index'),
+                ],
+            ];
+        }else{
+            return ['success'=>'true'];
+        }
+
     }
 }

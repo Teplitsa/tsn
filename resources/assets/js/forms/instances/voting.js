@@ -29,8 +29,16 @@ Vue.component('app-voting', {
             let action = $(this.$el).find('form').attr('action') + '/' + item.id + '/' + result;
             let method = $(this.$el).find('input[name="_method"]').val() || 'post';
             method = method.toLowerCase();
+            let $last = _.last(this.form.items);
+            if ($last.i >= item.i + 1) {
+                this.active = this.form.items[item.i + 1];
+            }
+            else {
+                this.active = _.first(this.form.items);
+            }
             App[method](action, this.form)
                 .then(function (response) {
+
                 }, function (response) {
                     // error
                 });

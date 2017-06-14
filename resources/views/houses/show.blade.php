@@ -3,50 +3,51 @@
 @section('content')
     <div class="row">
         <div class="col-md-6 col-sm-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Собственники дома &nbsp;</h5> {{$house->address}},
-                    <small>площадью {{$house->square}} м <sup>2</sup></small>
-                </div>
+            <div class="ibox">
                 <div class="ibox-content">
-                    <h2>
-                        @if($house->square!=0)
+                    <span class="text-muted small pull-right">@if($house->square!=0)
                             {!! round($house->connectedFlatsSquare() / $house->square*100) !!}%
                         @else
                             0%
                         @endif
                         <small> подключено к системе</small>
-                    </h2>
-                    @foreach( $house->flats as $flat)
-                        @foreach($flat->registered_flats as $registeredFlat)
-                            <div class="hr-line-dashed"></div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    {!! $registeredFlat->user->full_name !!}
-                                    <small>{!! $registeredFlat->flat->address_full !!} <br>
-                                        в собственности: {!! $registeredFlat->user_share !!} м <sup>2</sup>
-                                    </small>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href="{{route('houses.flat.download',[$house,$registeredFlat])}}"><i
-                                                class="fa fa-file"></i> </a>
-                                </div>
-                                <div class="col-md-3">
-                                    @if($registeredFlat->active)
-                                        <span class="label label-success">Подключена</span>
-                                    @else
-                                        <span class="label label-warning">Не подключена</span>
-                                    @endif
-                                </div>
-                                <div class="col-md-2">
-                                    @if(!$registeredFlat->active)
-                                        <a href="{{route('houses.flat.active',[$house,$registeredFlat])}}"><span
-                                                    class="label label-primary">Подключить</span></a>
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
-                    @endforeach
+                    </span>
+                    <h2>Собственники дома</h2>
+                    <p>
+                        площадью {{$house->square}} м <sup>2</sup>
+                    </p>
+                    <div class="clients-list">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <tbody>
+                                @foreach( $house->flats as $flat)
+                                    @foreach($flat->registered_flats as $registeredFlat)
+                                        <tr>
+                                            <td>{!! $registeredFlat->user->full_name !!}
+                                                </td>
+                                            <td><small>{!! $registeredFlat->flat->address_full !!} <br>
+                                                    в собственности: {!! $registeredFlat->user_share !!} м <sup>2</sup>
+                                                </small></a>
+                                            </td>
+                                            <td>  <a href="{{route('houses.flat.download',[$house,$registeredFlat])}}"><i
+                                                            class="fa fa-file"></i> </a></td>
+                                            <td>    @if($registeredFlat->active)
+                                                    <span class="label label-success">Подключена</span>
+                                                @else
+                                                    <span class="label label-warning">Не подключена</span>
+                                                @endif</td>
+                                            <td class="client-status"><a href="{{route('houses.flat.show',[$house,$registeredFlat])}}" class="label label-default">Просмотреть</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -72,32 +73,51 @@
                                class="btn btn-block btn-primary">
                                 <i class="fa fa-plus"></i> Добавить голосование
                             </a>
-                            @forelse($house->votings as $voting)
-                                <div class="hr-line-dashed"></div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! $voting->name !!}
-                                    </div>
-                                    <div class="col-md-3">
-                                        @if($voting->closed_at > \Carbon\Carbon::now())
-                                            <span class="label label-warning">Идет</span>
-                                        @else
-                                            <span class="label label-success">Завершено</span>
-                                        @endif
-                                    </div>
-                                    <div class="col-md-3"><a
-                                                href="{!! route('houses.votings.show', [$house, $voting]) !!}"
-                                                class="btn btn-white btn-block"
-                                        >
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="alert alert-info">
-                                    Голосований не найдено
-                                </div>
-                            @endforelse
+                            <div class="project-list">
+
+                                <table class="table table-hover">
+                                    <tbody>
+                                    @forelse($house->votings as $voting)
+                                        <tr>
+                                            <td class="project-status">
+                                                @if($voting->isOpen())
+                                                    <span class="label label-primary">Идет</span>
+                                                @else
+                                                    <span class="label label-default">Завершено</span>
+                                                @endif
+                                            </td>
+                                            <td class="project-title">
+                                                <a href="javascript:void(0)">{!! $voting->name !!}</a>
+                                                <br>
+                                                <small>с: {!! $voting->created_at->format('d.m.Y') !!}</small>
+                                                <br>
+                                                <small>по: {!! $voting->end_at->format('d.m.Y') !!}</small>
+                                            </td>
+                                            <td class="project-completion">
+                                                <small>Прошло времени: {!! $voting->current_percent !!}%</small>
+                                                <div class="progress progress-mini">
+                                                    <div style="width: {!! $voting->current_percent !!}%;"
+                                                         class="progress-bar"></div>
+                                                </div>
+                                            </td>
+                                            <td><a
+                                                        href="{!! route('houses.votings.show', [$house, $voting]) !!}"
+                                                        class="btn btn-white btn-block"
+                                                >
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7">
+                                                Активных голосований нет
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="tab-pane" id="tab-2">
                             <div class="form-group">
@@ -114,6 +134,7 @@
                                             <input class="form-control" name="email"
                                                    placeholder="Введите электронную почту"/>
                                         </div>
+                                        <input type="hidden" value="{{$house->id}}" name="house_id">
                                     </div>
                                     <input type="submit" class="btn btn-primary btn-block" value="Отправить"/>
                                 </div>
@@ -158,6 +179,7 @@
             </div>
         </div>
     </div>
+
 @stop
 @section('after_body')
     <script>
