@@ -83,7 +83,10 @@
                             <div class="col-sm-2"><label class="text-right">Скан документа</label></div>
                             <div class="col-sm-10">
                                 <img :src="form.scan" v-if="form.scan" style="height: 200px;" />
-                                <button class="btn btn-success" @click.prevent="openScan">
+                                <button class="btn btn-success" @click.prevent="openScan" v-if="form.scan">
+                                    Заменить изображение
+                                </button>
+                                <button class="btn btn-success" @click.prevent="openScan" v-else>
                                     Выбрать изображение
                                 </button>
                                 <input type="file" @change="previewImage" name="scan" style="display: none" />
