@@ -26,26 +26,16 @@
 
 
                             <app-select
-                                    display="Вид общего собрания    <small
-                                    data-toggle='tooltip'
-                            data-placement='top'
-                            title='Очередное - созывается, в соответствии с Уставом, определённое количество раз в год, но менее одного раза. Внеочередное - созывается в порядке и в соответствии с Уставом, а так же Жилищным кодексом РФ.'
-                            >
-                            <i class='fa fa-info-circle'></i>
-                            </small>"
+                                    display="Вид общего собрания    <i class='fa fa-info-circle'  data-container='body' data-toggle='popover' data-placement='right' data-content='Очередное - созывается, в соответствии с Уставом, определённое количество раз в год, но менее одного раза. Внеочередное - созывается в порядке и в соответствии с Уставом, а так же Жилищным кодексом РФ.'></i>"
                                     :form="form"
                                     name="voting_type"
                                     :items="{{ json_encode(\App\Enums\VotingTypes::humanValuesForVue()) }}">
                             </app-select>
 
+
                             <app-select
-                                    display="Форма проведения собрания <small
-                                    data-toggle='tooltip'
-                            data-placement='top'
-                            title='Заочное - голосование в письменной форме, без встречи жильцов. Очно-заочное - сочетания голосования в устной и письменной форме'
-                            >
-                            <i class='fa fa-info-circle'></i>
-                            </small>"
+                                    display="Форма проведения собрания
+                                    <i class='fa fa-info-circle'  data-container='body' data-toggle='popover' data-placement='right' data-content='Заочное - голосование в письменной форме, без встречи жильцов. Очно-заочное - сочетания голосования в устной и письменной форме'></i>"
                                     :form="form"
                                     name="kind"
                                     :items="{{ json_encode(\App\Enums\VotingForms::humanValuesForVue()) }}">
