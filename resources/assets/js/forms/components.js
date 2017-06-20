@@ -5,6 +5,7 @@ import Select from './components/select.vue';
 import EnumSelect from './components/enum-select.vue';
 import SelectMultiple from './components/select-multiple.vue';
 import Image from './components/image.vue';
+import ImageMy from './components/image-my.vue';
 import Contact from './components/contact.vue';
 import Input from './components/input.vue';
 import TextHidden from './components/text-hidden.vue';
@@ -48,6 +49,7 @@ Vue.component('app-enum-select', EnumSelect);
 Vue.component('app-select-multiple', SelectMultiple);
 Vue.component('app-inpit', Input);
 Vue.component('app-text-hidden', TextHidden);
+Vue.component('app-image-my', ImageMy);
 
 
 //Vue.component('app-markdown-editor', Marked);

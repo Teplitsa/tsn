@@ -42,6 +42,7 @@
                             </label>
                         </div>
                     </div>
+                    <input type="hidden" class="form-control" value="{{request('house')}}" v-model="form['house']"/>
                     <button type="submit"
                             class="btn btn-primary block full-width m-b"
                             :disabled="form.busy || form.agreed==false"

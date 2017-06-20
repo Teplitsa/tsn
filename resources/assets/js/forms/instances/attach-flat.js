@@ -7,6 +7,11 @@ Vue.component('attach-flat', {
      * Bootstrap the component. Load the initial data.
      */
     ready: function () {
+        if (App.form) {
+            this.form.city = App.form.city;
+            this.form.street_id = App.form.street_id;
+            this.form.number = App.form.number;
+        }
         $(function () {
             $('.first-field').filter(':visible:first').focus();
         });

@@ -76,8 +76,20 @@ class House extends Model
 
     public function getCityIdAttribute()
     {
-        return $this->street->city_id;
+        if(isset($this->city)){
+            return $this->city->id;
+        }
+        return null;
     }
+
+    public function getStreetForIdAttribute()
+    {
+        if(isset($this->street)){
+            return $this->street_id;
+        }
+        return null;
+    }
+
 
     public function getCityAttribute()
     {
