@@ -77,21 +77,11 @@
                                 :form="form"
                                 name="issuer_doc"
                         ></app-text>
-
-
-                        <div class="row">
-                            <div class="col-sm-2"><label class="text-right">Скан документа</label></div>
-                            <div class="col-sm-10">
-                                <img :src="form.scan" v-if="form.scan" style="height: 200px;" />
-                                <button class="btn btn-success" @click.prevent="openScan" v-if="form.scan">
-                                    Заменить изображение
-                                </button>
-                                <button class="btn btn-success" @click.prevent="openScan" v-else>
-                                    Выбрать изображение
-                                </button>
-                                <input type="file" @change="previewImage" name="scan" style="display: none" />
-                            </div>
-                        </div>
+                        <app-image-my
+                                display="Скан документа"
+                                :form="form"
+                                name="scan"
+                        ></app-image-my>
 
                         <hr class="hr-line-dashed"/>
 
@@ -128,4 +118,16 @@
             </div>
         </div>
     </div>
+@endsection
+@section('after_body')
+    @if(isset($house))
+        <script>
+            App.form = {
+                city: '{{$house->city->id}}',
+                street_id: '{{$house->street_id}}',
+                number: '{{ $house->number }}'
+            }
+
+        </script>
+    @endif
 @endsection

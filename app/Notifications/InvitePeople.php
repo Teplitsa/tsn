@@ -45,7 +45,7 @@ class InvitePeople extends Notification
                      ->subject('Вас пригласили в ' . config('app.name'))
                     ->line('Вы приглашены в Ананас.ТСН')
                     ->line($this->user->full_name.' пригласил(a) вас стать участником ТСН по адресу: '.$this->house->address.'. Зарегистрируйтесь, чтобы принять участие в голосованиях вашего дома')
-                    ->action('Зарегистрироваться', 'https://tsn.ananas-web.ru/register');
+                    ->action('Зарегистрироваться', 'https://tsn.ananas-web.ru/register?house='.$this->house->id);
     }
 
     /**

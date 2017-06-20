@@ -82,11 +82,14 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-
         event(new Registered($user = $this->create($request->all())));
         $this->addToastr('success',  'Вы зарегистрировались!' , 'Успех');
         $this->guard()->login($user);
 
+        $house=$request->get('house');
+        if(isset($house)){
+            return ['redirect' => 'flats/attach?house='.$house];
+        }
         return ['redirect' => $this->redirectTo];
     }
 

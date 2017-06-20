@@ -7,6 +7,11 @@ Vue.component('attach-flat', {
      * Bootstrap the component. Load the initial data.
      */
     ready: function () {
+        if (App.form) {
+            this.form.city = App.form.city;
+            this.form.street_id = App.form.street_id;
+            this.form.number = App.form.number;
+        }
         $(function () {
             $('.first-field').filter(':visible:first').focus();
         });
@@ -58,7 +63,10 @@ Vue.component('attach-flat', {
                 if(['scan', 'successful', 'busy', 'errors'].indexOf(key) == -1)
                     data.append(key, value);
             });
-            data.append('scan', $(this.$el).find("[name='scan']")[0].files[0]);
+            let input=$(this.$el).find("[name='scan']")[0];
+            if (input && input.files && input.files[0]) {
+                data.append('scan', input.files[0]);
+            }
 
             this.form.startProcessing();
             this.$http[method](action, data)

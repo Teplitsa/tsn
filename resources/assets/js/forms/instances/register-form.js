@@ -21,6 +21,7 @@ Vue.component('app-register-form', {
                 password_confirmation: '',
                 first_name: '',
                 agreed: '',
+                house: null,
             })
         }
     },

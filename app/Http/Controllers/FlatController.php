@@ -31,11 +31,12 @@ class FlatController extends Controller
                 ];
             }
         );
-
+        $house=null;
+        $house_id=request()->get('house');
+        $house=House::find($house_id);
 
         $component = 'attach-flat';
-
-        return view('flats.attach', compact('pageTitle', 'component', 'cities'));
+        return view('flats.attach', compact('pageTitle', 'component', 'cities','house'));
     }
 
     public function edit(RegisteredFlat $flat)
