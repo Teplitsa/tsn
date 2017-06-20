@@ -7,20 +7,22 @@
                 <small v-if="help != ''" class="text-navy">{{ help }}</small>
             </label>
             <div class="col-sm-10 dropzone dz-clickable">
+                <input type="file" style="display: none" name="scan" @change="onFileChange">
+
+                <div v-if="form[name]">
+                    <img :style="'height:200px; display: block; margin-bottom: 10px;'"
+                         :src="form[name]"/>
+                    <button class="btn btn-success" @click.prevent="selectImage()">Заменить изображение</button>
+
+                </div>
+                <div v-else>
+                    <button class="btn btn-success" @click.prevent="selectImage()">Выбрать изображение</button>
+                </div>
+
                 <span class="help-block" v-show="form.errors.has(name)">
                     <strong>{{ form.errors.get(name) }}</strong>
                 </span>
 
-                <div v-if="form[name]">
-                    <img :style="'height: 200px; display: block; margin-bottom: 10px;'"
-                         :src="form[name]"/>
-
-
-                    <button class="btn btn-success" @click.prevent="selectImage()">Заменить изображение</button>
-
-                </div>
-
-                <button class="btn btn-success" @click.prevent="selectImage()" v-else>Выбрать изображение</button>
 
             </div>
 
@@ -50,10 +52,18 @@
         },
         methods: {
             onFileChange(e) {
-                var files = e.target.files || e.dataTransfer.files;
-                if (!files.length)
-                    return;
-                this.createImage(files[0]);
+                var input = event.target;
+
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    var vm = this;
+
+                    reader.onload = function (e) {
+                        vm.form.scan = e.target.result;
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
             },
             createImage(file) {
                 var reader = new FileReader();
@@ -64,18 +74,9 @@
                 },
                     reader.readAsDataURL(file);
             },
-            removeImage: function (e) {
-                var vm = this;
-                Vue.http.get('/internal-api/getavatar/' + this.email).then(function (response) {
-                    vm.form[vm.name] = response.json().data.gravatar;
-                }, function (response) {
-
-                });
-            },
-
             selectImage()
             {
-                $(this.$el).find('input').click();
+                $(this.$el).find('[name="scan"]').click();
             }
         }
     }

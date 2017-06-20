@@ -24,7 +24,7 @@
                                 <tbody>
 
                                         <tr>
-                                            <td>Жилец</td>
+                                            <td>Собственник</td>
                                             <td>
                                                 {{$flat->user->full_name}}
                                             </td>
