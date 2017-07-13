@@ -118,7 +118,7 @@ class User extends Authenticatable
     {
         return $this->company_id === null;
     }
-    public function isNotNeedManager($house)
+    public function isNeedManager($house)
     {
         return $this->company_id === $house->company_id;
     }
