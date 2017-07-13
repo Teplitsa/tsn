@@ -117,7 +117,7 @@ class HousesController extends Controller
      */
     public function show(House $house)
     {
-        abort_if((auth()->user()->isUser() && !auth()->user()->isNeedManager($house)), 403);
+        abort_if((auth()->user()->isUser() || auth()->user()->isNeedNotManager($house)), 403);
         $currentHouse=$house->id;
         $pageTitle=$house->address;
         return view('houses.show', compact('house','currentHouse','pageTitle'));

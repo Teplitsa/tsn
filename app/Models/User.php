@@ -118,12 +118,12 @@ class User extends Authenticatable
     {
         return $this->company_id === null;
     }
-    public function isNeedManager($house)
+    public function isNeedNotManager($house)
     {
         if($this->company_id != $house->company_id){
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public function getFlatIn($house)
