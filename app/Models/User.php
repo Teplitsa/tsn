@@ -72,17 +72,21 @@ class User extends Authenticatable
 
     public function getRenderedContactsAttribute()
     {
-        return $this->contacts->map(function (Contact $contact) {
-            return $contact->renderedAttributes();
-        });
+        return $this->contacts->map(
+            function (Contact $contact) {
+                return $contact->renderedAttributes();
+            }
+        );
     }
 
     public function registered()
     {
         $this->notify(new Registered());
-        User::notMe()->not($this)->get()->each(function ($notifiable) {
-            $notifiable->notify(new NewColleague($this));
-        });
+        User::notMe()->not($this)->get()->each(
+            function ($notifiable) {
+                $notifiable->notify(new NewColleague($this));
+            }
+        );
     }
 
     public function scopeNotMe(Builder $builder)
@@ -104,6 +108,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(RegisteredFlat::class);
     }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
@@ -113,20 +118,26 @@ class User extends Authenticatable
     {
         return $this->company_id === null;
     }
+    public function isNotNeedManager($house)
+    {
+        return $this->company_id === $house->company_id;
+    }
 
     public function getFlatIn($house)
     {
-        return RegisteredFlat::whereHas('flat', function(Builder $builder) use ($house){
-            $builder->where('house_id', $house->id);
-        })->first();
+        return RegisteredFlat::whereHas(
+            'flat',
+            function (Builder $builder) use ($house) {
+                $builder->where('house_id', $house->id);
+            }
+        )->first();
     }
 
-    public function wasImportantChanged() {
+    public function wasImportantChanged()
+    {
         $fields = ['first_name', 'last_name', 'middle_name'];
-        foreach ($fields as $field)
-        {
-            if($this->original[$field] != $this->attributes[$field])
-            {
+        foreach ($fields as $field) {
+            if ($this->original[$field] != $this->attributes[$field]) {
                 return true;
             }
         }
