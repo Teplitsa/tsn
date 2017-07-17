@@ -53,7 +53,7 @@
                                         <input type="text" class="form-control pull-right datetimepicker"
                                                v-model="form.public_at"
                                                id="public_at"
-                                               value="{{\Carbon\Carbon::now()->format('d.m.Y H:m')}}"
+                                               value="{{\Carbon\Carbon::now()->addDays(10)->format('d.m.Y H:m')}}"
                                                name="deadline" placeholder="Введите дату">
 
                                         <div class="input-group-addon">До</div>
@@ -61,7 +61,7 @@
                                         <input type="text" class="form-control pull-right datetimepicker"
                                                v-model="form.end_at"
                                                id="end_at"
-                                               value="{{\Carbon\Carbon::now()->addDay()->format('d.m.Y H:m')}}"
+                                               value="{{\Carbon\Carbon::now()->addDays(13)->format('d.m.Y H:m')}}"
                                                name="deadline" placeholder="Введите дату">
                                     </div>
                                 </div>
@@ -79,7 +79,7 @@
                                         <input type="text" class="form-control pull-right datetimepicker"
                                                v-model="form.opened_at"
                                                id="opened_at"
-                                               value="{{\Carbon\Carbon::now()->format('d.m.Y H:m')}}"
+                                               value="{{\Carbon\Carbon::now()->addDays(10)->format('d.m.Y H:m')}}"
                                                name="deadline" placeholder="Введите дату">
 
                                         <div class="input-group-addon">До</div>
@@ -87,7 +87,7 @@
                                         <input type="text" class="form-control pull-right datetimepicker"
                                                v-model="form.closed_at"
                                                id="closed_at"
-                                               value="{{\Carbon\Carbon::now()->addDay()->format('d.m.Y H:m')}}"
+                                               value="{{\Carbon\Carbon::now()->addDays(13)->format('d.m.Y H:m')}}"
                                                name="deadline" placeholder="Введите дату">
                                     </div>
                                 </div>
@@ -224,19 +224,45 @@
         });
         $('.datetimepicker').mask('99.99.9999 99:99');
 
+        $("#public_at").data('DateTimePicker').minDate(new Date().getDate()+10);
+        date=new Date().getTime()+1000 * 60 * 60 * 24 * 15;
+        $("#end_at").data('DateTimePicker').minDate(new Date().getDate()+13);
+        $("#end_at").data('DateTimePicker').maxDate(new Date(date));
+
+
+
+        $("#opened_at").data('DateTimePicker').minDate(new Date().getDate()+10);
+        $("#closed_at").data('DateTimePicker').minDate(new Date().getDate()+13);
+        $("#closed_at").data('DateTimePicker').maxDate(new Date(date));
+
         $("#public_at").on("dp.change", function (e) {
-            $("#end_at").data("DateTimePicker").minDate(e.date);
+            var tr=e;
+            $("#public_at").data('DateTimePicker').minDate(new Date().getDate()+10);
+            $("#end_at").data("DateTimePicker").maxDate(new Date(new Date(tr.date).getTime()+1000 * 60 * 60 * 24*5));
+            $("#end_at").data("DateTimePicker").minDate(new Date(new Date(tr.date).getTime()+1000 * 60 * 60 * 24*3));
+
         });
 
         $("#end_at").on("dp.change", function (e) {
-            $("#public_at").data("DateTimePicker").maxDate(e.date);
+            var tr=e;
+            $("#end_at").data('DateTimePicker').minDate(new Date().getDate()+13);
+            $("#public_at").data('DateTimePicker').minDate(new Date().getDate()+10);
+            $("#public_at").data("DateTimePicker").maxDate(new Date(new Date(tr.date).getTime()-1000 * 60 * 60 * 24*3));
+
         });
         $("#opened_at").on("dp.change", function (e) {
-            $("#closed_at").data("DateTimePicker").minDate(e.date);
+            var dt=e;
+            $("#opened_at").data('DateTimePicker').minDate(new Date().getDate()+10);
+            $("#closed_at").data('DateTimePicker').minDate(new Date().getDate()+13);
+            $("#closed_at").data("DateTimePicker").maxDate(new Date(new Date(dt.date).getTime()+1000 * 60 * 60 * 24*5));
+            $("#closed_at").data("DateTimePicker").minDate(new Date(new Date(dt.date).getTime()+1000 * 60 * 60 * 24*3));
         });
 
         $("#closed_at").on("dp.change", function (e) {
-            $("#opened_at").data("DateTimePicker").maxDate(e.date);
+            var dt=e;
+            $("#closed_at").data('DateTimePicker').minDate(new Date().getDate()+13);
+            $("#opened_at").data('DateTimePicker').minDate(new Date().getDate()+10);
+            $("#opened_at").data("DateTimePicker").maxDate(new Date(new Date(dt.date).getTime()-1000 * 60 * 60 * 24*3));
         });
     </script>
 @stop
